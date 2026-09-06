@@ -1,0 +1,22 @@
+{
+	"name": "worker",
+	"version": "1.0.0",
+	"description": "Background worker for VeriBot",
+	"main": "src/index.ts",
+	"scripts": {
+		"dev": "tsx watch src/index.ts",
+		"build": "tsc",
+		"start": "node dist/index.js",
+		"lint": "tsc --noEmit",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"type": "module",
+	"dependencies": {
+		"@autonomiq/database": "workspace:*",
+		"@autonomiq/ai": "workspace:*"
+	},
+	"devDependencies": {
+		"tsx": "^4.0.0",
+		"typescript": "^5.4.0"
+	}
+}

@@ -1,0 +1,22 @@
+{
+  "name": "VeriBot",
+  "private": true,
+  "version": "1.0.0",
+  "description": "VeriBot - AI-powered verification bot",
+  "scripts": {
+    "dev": "pnpm --filter api dev",
+    "build": "pnpm --filter \"@autonomiq/*\" build && pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r exec rm -rf node_modules dist .turbo"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.3.4",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@12.3.4",
+  "type": "module"
+}
