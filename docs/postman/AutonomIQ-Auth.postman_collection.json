@@ -14,6 +14,7 @@
     { "key": "userId", "value": "" },
     { "key": "orgId", "value": "" },
     { "key": "memberUserId", "value": "" },
+    { "key": "sessionId", "value": "paste-session-id-from-list" },
     { "key": "apiKeyId", "value": "" },
     { "key": "apiKeyPlaintext", "value": "" },
     { "key": "projectId", "value": "replace-with-project-id" },
@@ -74,6 +75,10 @@
           "name": "Refresh session",
           "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/auth/refresh", "description": "Checks the current Redis session and extends its TTL. The cookie remains the session credential." },
           "event": [{ "listen": "test", "script": { "exec": ["pm.test('Session refreshed', function () { pm.response.to.have.status(200); });"] } }]
+        },
+        {
+          "name": "List active sessions",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/users/me/sessions", "description": "Lists Redis sessions without exposing cookie tokens. Save a returned sessionId to revoke one device." }
         }
       ]
     },
@@ -113,6 +118,14 @@
         {
           "name": "Delete account (run last for this user)",
           "request": { "method": "DELETE", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"password\": \"{{password}}\"\n}" }, "url": "{{baseUrl}}/auth/account", "description": "Soft-deletes the authenticated user. Run this only after all other requests for this test user." }
+        },
+        {
+          "name": "Start Google browser OAuth",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/auth/google", "description": "Redirects to Google when GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are configured. Send without following redirects to inspect the Location header." }
+        },
+        {
+          "name": "Start GitHub browser OAuth",
+          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/auth/github", "description": "Redirects to GitHub when GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET are configured." }
         }
       ]
     },
@@ -123,7 +136,9 @@
         { "name": "Update profile", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Ada\",\n  \"lastName\": \"Lovelace\",\n  \"avatarUrl\": null\n}" }, "url": "{{baseUrl}}/users/me/profile" } },
         { "name": "Update settings", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"timezone\": \"UTC\",\n  \"emailNotifications\": true,\n  \"slackNotifications\": false\n}" }, "url": "{{baseUrl}}/users/me/settings" } },
         { "name": "Enable 2FA and receive QR data URL", "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/users/me/enable-2fa", "description": "Stores a pending TOTP secret and returns a QR data URL. Scan it, then put the six-digit code in totpCode." } },
-        { "name": "Verify and enable 2FA", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"totpCode\": \"{{totpCode}}\"\n}" }, "url": "{{baseUrl}}/users/me/verify-2fa" } }
+        { "name": "Verify and enable 2FA", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"totpCode\": \"{{totpCode}}\"\n}" }, "url": "{{baseUrl}}/users/me/verify-2fa" } },
+        { "name": "Revoke one session", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/users/me/sessions/{{sessionId}}", "description": "Revokes one Redis session by its opaque sessionId." } },
+        { "name": "Revoke other sessions", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/users/me/sessions", "description": "Keeps the current cookie session and removes all other Redis sessions." } }
       ]
     },
     {
@@ -136,6 +151,7 @@
           "event": [{ "listen": "test", "script": { "exec": ["pm.test('API key created', function () { pm.response.to.have.status(201); });", "const body = pm.response.json();", "if (body.apiKey && body.apiKey.id) pm.collectionVariables.set('apiKeyId', body.apiKey.id);", "if (body.key) pm.collectionVariables.set('apiKeyPlaintext', body.key);"] } }]
         },
         { "name": "List API keys", "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api-keys", "description": "Returns metadata only; plaintext keys cannot be recovered." } },
+        { "name": "Queue test run with API key", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "x-api-key", "value": "{{apiKeyPlaintext}}" }], "body": { "mode": "raw", "raw": "{\n  \"projectId\": \"{{projectId}}\"\n}" }, "url": "{{baseUrl}}/tests/run", "description": "Uses x-api-key authentication and requires the test:run permission. Returns HTTP 202 with a queued TestRun." } },
         { "name": "Create encrypted test credential", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Admin User\",\n  \"username\": \"admin@example.com\",\n  \"password\": \"bot-password-never-returned\",\n  \"role\": \"admin\",\n  \"environment\": \"DEVELOPMENT\"\n}" }, "url": "{{baseUrl}}/projects/{{projectId}}/test-credentials" } },
         { "name": "Revoke API key", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api-keys/{{apiKeyId}}" } }
       ]
@@ -152,6 +168,7 @@
         { "name": "Invite member", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"teammate@example.com\",\n  \"role\": \"TESTER\"\n}" }, "url": "{{baseUrl}}/organizations/{{orgId}}/members/invite", "description": "Creates a 24-hour invitation and an audit log. In production, email the tokenized invite link." } },
         { "name": "Change member role", "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"role\": \"DEVELOPER\"\n}" }, "url": "{{baseUrl}}/organizations/{{orgId}}/members/{{memberUserId}}", "description": "Requires OWNER or ADMIN and creates a ROLE_CHANGE audit log." } },
         { "name": "Accept invitation", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{invitationToken}}\"\n}" }, "url": "{{baseUrl}}/organizations/accept-invite" } },
+        { "name": "Switch active organization", "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/orgs/switch/{{orgId}}", "description": "Updates the active orgId and role inside the current Redis session cookie." } },
         { "name": "Remove member", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/organizations/{{orgId}}/members/{{memberUserId}}" } },
         { "name": "Delete organization (run last for this organization)", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/organizations/{{orgId}}", "description": "Soft-deletes the organization, archives projects, and revokes its API keys. Requires OWNER." } }
       ]

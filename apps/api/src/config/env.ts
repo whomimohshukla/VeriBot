@@ -15,4 +15,10 @@ export const env = {
   smtpUser: process.env.SMTP_USER ?? "",
   smtpPassword: process.env.SMTP_PASSWORD ?? "",
   emailFrom: process.env.EMAIL_FROM ?? "AutonomIQ <no-reply@localhost>",
+  googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+  googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL ?? "http://localhost:3001/api/v1/auth/google/callback",
+  githubClientId: process.env.GITHUB_CLIENT_ID ?? "",
+  githubClientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+  githubCallbackUrl: process.env.GITHUB_CALLBACK_URL ?? "http://localhost:3001/api/v1/auth/github/callback",
 };

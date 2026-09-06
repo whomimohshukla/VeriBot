@@ -1,6 +1,6 @@
 import { Router, type Router as ExpressRouter } from "express";
 import { requireAuth } from "../middleware/auth";
-import { createApplicationController, listApplicationsController } from "../controllers/application.controller";
+import { createApplicationController, listApplicationsController } from "../features/applications/controllers/application.controller";
 
 const router: ExpressRouter = Router();
 

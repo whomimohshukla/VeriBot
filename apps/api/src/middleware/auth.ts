@@ -6,6 +6,7 @@ import crypto from "node:crypto";
 export interface AuthenticatedRequest extends Request {
 	user?: { id: string; email: string; orgId?: string; role?: string };
 	sessionToken?: string;
+	apiKeyPermissions?: string[];
 }
 
 export const authMiddleware = async (
@@ -70,6 +71,12 @@ export const apiKeyAuthMiddleware = async (
 		email: apiKey.user.email,
 		orgId: apiKey.organizationId,
 	};
+	req.apiKeyPermissions = Array.isArray(apiKey.permissions) ? apiKey.permissions.filter((permission): permission is string => typeof permission === "string") : [];
+	return next();
+};
+
+export const requireApiKeyPermission = (permission: string) => (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+	if (!req.apiKeyPermissions?.includes(permission) && !req.apiKeyPermissions?.includes("*")) return res.status(403).json({ message: "API key permission denied" });
 	return next();
 };
 

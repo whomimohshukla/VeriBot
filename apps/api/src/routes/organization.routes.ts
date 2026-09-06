@@ -11,21 +11,13 @@ import {
 	listOrganizationsController,
 	removeMemberController,
 	updateOrganizationController,
-} from "../controllers/organization.controller";
+} from "../features/organizations/controllers/organization.controller";
 
 const router: ExpressRouter = Router();
 
 router.use(requireAuth);
 router.get(
 	"/",
-	requireOrgRole([
-		"OWNER",
-		"ADMIN",
-		"QA_MANAGER",
-		"DEVELOPER",
-		"TESTER",
-		"VIEWER",
-	]),
 	listOrganizationsController,
 );
 router.post("/", createOrganizationController);

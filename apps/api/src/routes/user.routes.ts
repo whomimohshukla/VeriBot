@@ -11,7 +11,12 @@ import {
 	revokeApiKeyController,
 	updateProfileController,
 	verifyTwoFactorController,
-} from "../controllers/user.controller";
+} from "../features/users/controllers/user.controller";
+import {
+	listSessionsController,
+	revokeOtherSessionsController,
+	revokeSessionController,
+} from "../features/auth/controllers/auth.controller";
 
 const router: ExpressRouter = Router();
 router.use(authMiddleware);
@@ -21,6 +26,9 @@ router.patch("/me/settings", changeSettingsController);
 router.post("/me/enable-2fa", enableTwoFactorController);
 router.post("/me/verify-2fa", verifyTwoFactorController);
 router.delete("/me/account", deleteAccountController);
+router.get("/me/sessions", listSessionsController);
+router.delete("/me/sessions/:sessionId", revokeSessionController);
+router.delete("/me/sessions", revokeOtherSessionsController);
 router.post("/api-keys", createApiKeyController);
 router.get("/api-keys", listApiKeysController);
 router.delete("/api-keys/:keyId", revokeApiKeyController);

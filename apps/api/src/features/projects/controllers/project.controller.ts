@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { projectSchema } from "../validators/schemas";
+import { projectSchema } from "../../../validators/schemas";
 import {
 	createProject,
 	listProjectsForOrganization,

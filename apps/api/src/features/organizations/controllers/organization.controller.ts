@@ -5,7 +5,7 @@ import {
 	memberRoleSchema,
 	organizationSchema,
 	organizationUpdateSchema,
-} from "../validators/schemas";
+} from "../../../validators/schemas";
 import {
 	acceptInvitation,
 	changeMemberRole,

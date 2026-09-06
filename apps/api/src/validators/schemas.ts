@@ -95,3 +95,9 @@ export const testCredentialSchema = z.object({
 	role: z.string().max(80).optional(),
 	environment: z.enum(["DEVELOPMENT", "STAGING", "PRODUCTION", "CUSTOM"]),
 });
+export const sessionIdSchema = z.object({
+	sessionId: z.string().min(10).max(100),
+});
+export const switchOrganizationSchema = z.object({
+	organizationId: z.string().min(1),
+});

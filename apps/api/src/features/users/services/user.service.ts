@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import { prisma } from "@autonomiq/database";
 import { generateSecret, generateURI, verify } from "otplib";
 import QRCode from "qrcode";
-import { comparePassword, hashPassword } from "../lib/auth";
+import { comparePassword, hashPassword } from "../../../lib/auth";
 
 export const getProfile = async (userId: string) =>
 	prisma.user.findFirst({

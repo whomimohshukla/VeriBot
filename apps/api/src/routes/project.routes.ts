@@ -3,7 +3,7 @@ import { requireAuth } from "../middleware/auth";
 import {
 	createProjectController,
 	listProjectsController,
-} from "../controllers/project.controller";
+} from "../features/projects/controllers/project.controller";
 
 const router: ExpressRouter = Router();
 

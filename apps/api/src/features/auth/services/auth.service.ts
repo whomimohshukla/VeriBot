@@ -4,16 +4,19 @@ import {
 	comparePassword,
 	generateSecureToken,
 	hashPassword,
-} from "../lib/auth";
+} from "../../../lib/auth";
 import {
 	createSession,
+	deleteOtherSessions,
+	deleteSessionById,
 	deleteSession,
 	getSession,
+	listSessionsForUser,
 	SESSION_TTL_SECONDS,
 	updateSession,
-} from "../lib/session";
-import { env } from "../config/env";
-import { sendVerificationEmail } from "../lib/email";
+} from "../../../lib/session";
+import { env } from "../../../config/env";
+import { sendVerificationEmail } from "../../../lib/email";
 
 const publicUser = (user: {
 	id: string;
@@ -41,6 +44,7 @@ const sessionForUser = async (
 		select: { organizationId: true, role: true },
 	});
 	const session = await createSession({
+		sessionId: crypto.randomUUID(),
 		userId: user.id,
 		email: user.email,
 		orgId: membership?.organizationId,
@@ -147,6 +151,33 @@ export const refreshUserSession = async (sessionToken: string) => {
 export const logoutUser = async (sessionToken: string) => {
 	await deleteSession(sessionToken);
 	return { message: "Logged out successfully" };
+};
+
+export const listUserSessions = async (userId: string) => {
+	const sessions = await listSessionsForUser(userId);
+	return sessions.map(({ token: _token, ...session }) => session);
+};
+
+export const revokeUserSession = async (userId: string, sessionId: string) => {
+	const revoked = await deleteSessionById(userId, sessionId);
+	if (!revoked) throw new Error("Session not found");
+	return { message: "Session revoked" };
+};
+
+export const revokeOtherUserSessions = async (userId: string, currentToken: string) => {
+	const count = await deleteOtherSessions(userId, currentToken);
+	return { message: "Other sessions revoked", revokedCount: count };
+};
+
+export const switchUserOrganization = async (userId: string, sessionToken: string, organizationId: string) => {
+	const membership = await prisma.membership.findUnique({
+		where: { userId_organizationId: { userId, organizationId } },
+		select: { role: true },
+	});
+	if (!membership) throw new Error("Organization access denied");
+	const session = await updateSession(sessionToken, { orgId: organizationId, role: membership.role });
+	if (!session) throw new Error("Session not found");
+	return { organizationId, role: membership.role, expiresAt: session.expiresAt };
 };
 
 export const requestPasswordReset = async (input: { email: string }) => {

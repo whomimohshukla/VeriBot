@@ -1,12 +1,12 @@
 import type { Response } from "express";
 import { z } from "zod";
-import type { AuthenticatedRequest } from "../middleware/auth";
+import type { AuthenticatedRequest } from "../../../middleware/auth";
 import {
 	apiKeySchema,
 	profileSchema,
 	settingsSchema,
 	testCredentialSchema,
-} from "../validators/schemas";
+} from "../../../validators/schemas";
 import {
 	createApiKey,
 	createTestCredential,

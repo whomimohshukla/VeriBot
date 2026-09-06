@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { applicationSchema } from "../validators/schemas";
+import { applicationSchema } from "../../../validators/schemas";
 import {
 	createApplication,
 	listApplicationsForProject,
