@@ -2,8 +2,14 @@ import express, { type Express } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
 import { env } from "./config/env.js";
+import {
+	authRateLimiter,
+	loginRateLimiter,
+	registerRateLimiter,
+	resetRateLimiter,
+	verificationRateLimiter,
+} from "./lib/rate-limit.js";
 import router from "./routes/index.js";
 
 const app: Express = express();
@@ -13,15 +19,12 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors({ origin: env.frontendUrl, credentials: true }));
 app.use(cookieParser(env.cookieSecret));
-app.use(
-	"/api/v1/auth",
-	rateLimit({
-		windowMs: 60 * 1000,
-		max: 10,
-		standardHeaders: true,
-		legacyHeaders: false,
-	}),
-);
+app.use("/api/v1/auth", authRateLimiter);
+app.use("/api/v1/auth/register", registerRateLimiter);
+app.use("/api/v1/auth/login", loginRateLimiter);
+app.use("/api/v1/auth/password-reset", resetRateLimiter);
+app.use("/api/v1/auth/password-reset/request", resetRateLimiter);
+app.use("/api/v1/auth/verify-email", verificationRateLimiter);
 app.use("/api/v1", router);
 
 app.listen(PORT, () => {

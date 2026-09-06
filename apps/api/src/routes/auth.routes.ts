@@ -12,6 +12,7 @@ import {
 	meController,
 } from "../controllers/auth.controller";
 import { requireAuth } from "../middleware/auth";
+import { deleteAccountController } from "../controllers/user.controller";
 
 const router: ExpressRouter = Router();
 
@@ -22,6 +23,7 @@ router.post("/logout", requireAuth, logoutController);
 router.post("/password-reset/request", requestPasswordResetController);
 router.post("/password-reset", resetPasswordController);
 router.post("/password/change", requireAuth, changePasswordController);
+router.delete("/account", requireAuth, deleteAccountController);
 router.post("/verify-email", verifyEmailController);
 router.get("/me", requireAuth, meController);
 router.post("/oauth/:provider", oauthController);

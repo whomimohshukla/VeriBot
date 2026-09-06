@@ -1,4 +1,5 @@
 import { prisma } from "@autonomiq/database";
+import crypto from "node:crypto";
 import {
 	comparePassword,
 	generateSecureToken,
@@ -12,6 +13,7 @@ import {
 	updateSession,
 } from "../lib/session";
 import { env } from "../config/env";
+import { sendVerificationEmail } from "../lib/email";
 
 const publicUser = (user: {
 	id: string;
@@ -68,6 +70,7 @@ export const registerUser = async (
 	const passwordHash = await hashPassword(input.password);
 	const name = `${input.firstName} ${input.lastName}`.trim();
 	const verificationToken = generateSecureToken(24);
+	const verificationCode = String(crypto.randomInt(100000, 1000000));
 	const user = await prisma.$transaction(async (tx) => {
 		const created = await tx.user.create({
 			data: {
@@ -77,6 +80,7 @@ export const registerUser = async (
 				lastName: input.lastName,
 				name,
 				emailVerificationToken: verificationToken,
+				emailVerificationCode: verificationCode,
 				emailVerificationExpiry: new Date(Date.now() + 1000 * 60 * 60 * 24),
 				settings: { create: {} },
 			},
@@ -98,9 +102,20 @@ export const registerUser = async (
 		});
 		return created;
 	});
+	await sendVerificationEmail({
+		email,
+		firstName: input.firstName,
+		token: verificationToken,
+		code: verificationCode,
+	});
 
 	const { session } = await sessionForUser(user, request);
-	return { user: publicUser(user), session, verificationToken };
+	return {
+		user: publicUser(user),
+		session,
+		verificationToken,
+		...(env.nodeEnv !== "production" ? { verificationCode } : {}),
+	};
 };
 
 export const loginUser = async (
@@ -195,10 +210,13 @@ export const changePassword = async (input: {
 	return { message: "Password changed successfully" };
 };
 
-export const verifyEmail = async (token: string) => {
+export const verifyEmail = async (input: { token?: string; code?: string }) => {
 	const user = await prisma.user.findFirst({
 		where: {
-			emailVerificationToken: token,
+			OR: [
+				...(input.token ? [{ emailVerificationToken: input.token }] : []),
+				...(input.code ? [{ emailVerificationCode: input.code }] : []),
+			],
 			emailVerificationExpiry: { gt: new Date() },
 		},
 	});
@@ -208,6 +226,7 @@ export const verifyEmail = async (token: string) => {
 		data: {
 			emailVerified: true,
 			emailVerificationToken: null,
+			emailVerificationCode: null,
 			emailVerificationExpiry: null,
 		},
 	});

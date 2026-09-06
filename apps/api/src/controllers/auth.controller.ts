@@ -49,7 +49,12 @@ export const registerController = async (req: Request, res: Response) => {
 			ipAddress: req.ip,
 		});
 		setSessionCookie(res, result.session);
-		return res.status(201).json({ user: result.user });
+		return res.status(201).json({
+			user: result.user,
+			...(result.verificationCode
+				? { verificationCode: result.verificationCode }
+				: {}),
+		});
 	} catch (error) {
 		const validation = validationError(error);
 		return res
@@ -156,7 +161,15 @@ export const verifyEmailController = async (req: Request, res: Response) => {
 	try {
 		return res.json(
 			await verifyEmail(
-				z.object({ token: z.string().min(20) }).parse(req.body).token,
+				z
+					.object({
+						token: z.string().min(20).optional(),
+						code: z.string().length(6).optional(),
+					})
+					.refine((value) => value.token || value.code, {
+						message: "A verification token or code is required",
+					})
+					.parse(req.body),
 			),
 		);
 	} catch (error) {

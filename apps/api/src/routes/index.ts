@@ -20,5 +20,6 @@ router.use("/organizations", organizationRoutes);
 router.use("/projects", projectRoutes);
 router.use("/applications", applicationRoutes);
 router.use("/", userRoutes);
+router.use("/users", userRoutes);
 
 export default router;

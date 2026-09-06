@@ -84,6 +84,7 @@ model User {
   avatarUrl               String?
   emailVerified           Boolean   @default(false)
   emailVerificationToken  String?
+  emailVerificationCode   String?
   emailVerificationExpiry DateTime?
   resetPasswordToken      String?
   resetPasswordExpiry     DateTime?
