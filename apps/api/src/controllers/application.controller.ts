@@ -34,14 +34,12 @@ export const createApplicationController = async (
 				.json({ message: "Validation failed", errors: error.flatten() });
 		}
 
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error
-						? error.message
-						: "Application creation failed",
-			});
+		return res.status(400).json({
+			message:
+				error instanceof Error
+					? error.message
+					: "Application creation failed",
+		});
 	}
 };
 

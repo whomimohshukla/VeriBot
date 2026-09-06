@@ -43,14 +43,12 @@ export const createOrganizationController = async (
 				.json({ message: "Validation failed", errors: error.flatten() });
 		}
 
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error
-						? error.message
-						: "Failed to create organization",
-			});
+		return res.status(400).json({
+			message:
+				error instanceof Error
+					? error.message
+					: "Failed to create organization",
+		});
 	}
 };
 
@@ -81,11 +79,9 @@ export const getOrganizationController = async (
 			? res.json(result)
 			: res.status(404).json({ message: "Organization not found" });
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message: error instanceof Error ? error.message : "Request failed",
-			});
+		return res.status(400).json({
+			message: error instanceof Error ? error.message : "Request failed",
+		});
 	}
 };
 export const updateOrganizationController = async (
@@ -100,11 +96,9 @@ export const updateOrganizationController = async (
 			),
 		);
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message: error instanceof Error ? error.message : "Update failed",
-			});
+		return res.status(400).json({
+			message: error instanceof Error ? error.message : "Update failed",
+		});
 	}
 };
 export const deleteOrganizationController = async (
@@ -116,11 +110,9 @@ export const deleteOrganizationController = async (
 			await deleteOrganization(req.params.orgId, (req as any).user?.id),
 		);
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message: error instanceof Error ? error.message : "Delete failed",
-			});
+		return res.status(400).json({
+			message: error instanceof Error ? error.message : "Delete failed",
+		});
 	}
 };
 export const inviteMemberController = async (req: Request, res: Response) => {
@@ -135,11 +127,9 @@ export const inviteMemberController = async (req: Request, res: Response) => {
 				),
 			);
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message: error instanceof Error ? error.message : "Invite failed",
-			});
+		return res.status(400).json({
+			message: error instanceof Error ? error.message : "Invite failed",
+		});
 	}
 };
 export const listMembersController = async (req: Request, res: Response) =>
@@ -158,24 +148,19 @@ export const changeMemberRoleController = async (
 			),
 		);
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error ? error.message : "Role update failed",
-			});
+		return res.status(400).json({
+			message: error instanceof Error ? error.message : "Role update failed",
+		});
 	}
 };
 export const removeMemberController = async (req: Request, res: Response) => {
 	try {
 		return res.json(await removeMember(req.params.orgId, req.params.userId));
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error ? error.message : "Member removal failed",
-			});
+		return res.status(400).json({
+			message:
+				error instanceof Error ? error.message : "Member removal failed",
+		});
 	}
 };
 export const acceptInvitationController = async (
@@ -190,13 +175,11 @@ export const acceptInvitationController = async (
 			),
 		);
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error
-						? error.message
-						: "Invitation acceptance failed",
-			});
+		return res.status(400).json({
+			message:
+				error instanceof Error
+					? error.message
+					: "Invitation acceptance failed",
+		});
 	}
 };

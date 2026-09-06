@@ -25,16 +25,14 @@ const userId = (req: AuthenticatedRequest) => {
 	return req.user.id;
 };
 const sendError = (res: Response, error: unknown) =>
-	res
-		.status(error instanceof z.ZodError ? 400 : 400)
-		.json({
-			message:
-				error instanceof z.ZodError
-					? "Validation failed"
-					: error instanceof Error
-						? error.message
-						: "Request failed",
-		});
+	res.status(error instanceof z.ZodError ? 400 : 400).json({
+		message:
+			error instanceof z.ZodError
+				? "Validation failed"
+				: error instanceof Error
+					? error.message
+					: "Request failed",
+	});
 
 export const profileController = async (
 	req: AuthenticatedRequest,

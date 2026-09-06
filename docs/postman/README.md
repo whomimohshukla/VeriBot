@@ -8,7 +8,9 @@ Import `AutonomIQ-Auth.postman_collection.json` into Postman.
 2. Run `00 - Health`.
 3. Run `01 - AuthN: register and login` in order. Postman stores the signed `autonomiq_session` cookie automatically.
 4. Run the profile, API-key, credential, and organization folders.
-5. Run `06 - Session end` last. The final request proves protected routes reject the logged-out session.
+5. Run `07 - Projects and applications` while logged in. It creates a project and application and stores the project ID automatically.
+6. Run the organization delete and account delete requests only when you are finished with the test data.
+7. Run `06 - Session end` last. The final request proves protected routes reject the logged-out session.
 
 ## Important variables
 
@@ -22,3 +24,5 @@ Import `AutonomIQ-Auth.postman_collection.json` into Postman.
 The API uses HTTP-only signed cookies, so do not add a bearer token. Make sure Postman's cookie jar is enabled. The plaintext API key is saved only into the collection variable by the create request and is not returned by list requests.
 
 Redis must be running for sessions and rate limiting. Auth requests use Redis-backed limits: 5/minute for registration, 10/minute for login, 5/minute for password reset, and 5/minute for email verification, with a 60/minute auth-wide limit.
+
+The collection currently contains 8 folders and 38 requests and covers every route currently registered by the API. Features from the larger product specification that do not yet have API routes, such as session listing/revocation, organization switching, OAuth browser redirects, and API-key external endpoint examples, are intentionally not included as runnable requests.

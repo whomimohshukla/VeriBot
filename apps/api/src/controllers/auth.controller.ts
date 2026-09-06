@@ -57,16 +57,12 @@ export const registerController = async (req: Request, res: Response) => {
 		});
 	} catch (error) {
 		const validation = validationError(error);
-		return res
-			.status(validation?.status ?? 400)
-			.json(
-				validation?.body ?? {
-					message:
-						error instanceof Error
-							? error.message
-							: "Registration failed",
-				},
-			);
+		return res.status(validation?.status ?? 400).json(
+			validation?.body ?? {
+				message:
+					error instanceof Error ? error.message : "Registration failed",
+			},
+		);
 	}
 };
 
@@ -83,13 +79,11 @@ export const loginController = async (req: Request, res: Response) => {
 		});
 	} catch (error) {
 		const validation = validationError(error);
-		return res
-			.status(validation?.status ?? 401)
-			.json(
-				validation?.body ?? {
-					message: error instanceof Error ? error.message : "Login failed",
-				},
-			);
+		return res.status(validation?.status ?? 401).json(
+			validation?.body ?? {
+				message: error instanceof Error ? error.message : "Login failed",
+			},
+		);
 	}
 };
 
@@ -104,11 +98,9 @@ export const refreshController = async (
 		setSessionCookie(res, req.sessionToken);
 		return res.json({ expiresAt: session.expiresAt });
 	} catch (error) {
-		return res
-			.status(401)
-			.json({
-				message: error instanceof Error ? error.message : "Refresh failed",
-			});
+		return res.status(401).json({
+			message: error instanceof Error ? error.message : "Refresh failed",
+		});
 	}
 };
 
@@ -144,16 +136,12 @@ export const resetPasswordController = async (req: Request, res: Response) => {
 		return res.json(await resetPassword(resetPasswordSchema.parse(req.body)));
 	} catch (error) {
 		const validation = validationError(error);
-		return res
-			.status(validation?.status ?? 400)
-			.json(
-				validation?.body ?? {
-					message:
-						error instanceof Error
-							? error.message
-							: "Password reset failed",
-				},
-			);
+		return res.status(validation?.status ?? 400).json(
+			validation?.body ?? {
+				message:
+					error instanceof Error ? error.message : "Password reset failed",
+			},
+		);
 	}
 };
 
@@ -173,12 +161,10 @@ export const verifyEmailController = async (req: Request, res: Response) => {
 			),
 		);
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error ? error.message : "Verification failed",
-			});
+		return res.status(400).json({
+			message:
+				error instanceof Error ? error.message : "Verification failed",
+		});
 	}
 };
 
@@ -197,16 +183,14 @@ export const changePasswordController = async (
 		);
 	} catch (error) {
 		const validation = validationError(error);
-		return res
-			.status(validation?.status ?? 400)
-			.json(
-				validation?.body ?? {
-					message:
-						error instanceof Error
-							? error.message
-							: "Password change failed",
-				},
-			);
+		return res.status(validation?.status ?? 400).json(
+			validation?.body ?? {
+				message:
+					error instanceof Error
+						? error.message
+						: "Password change failed",
+			},
+		);
 	}
 };
 
@@ -219,11 +203,9 @@ export const meController = async (
 			return res.status(401).json({ message: "Authentication required" });
 		return res.json(await getCurrentUser(req.user.id));
 	} catch (error) {
-		return res
-			.status(404)
-			.json({
-				message: error instanceof Error ? error.message : "User not found",
-			});
+		return res.status(404).json({
+			message: error instanceof Error ? error.message : "User not found",
+		});
 	}
 };
 
@@ -239,11 +221,8 @@ export const oauthController = async (req: Request, res: Response) => {
 		setSessionCookie(res, result.session);
 		return res.json({ message: "OAuth login successful" });
 	} catch (error) {
-		return res
-			.status(400)
-			.json({
-				message:
-					error instanceof Error ? error.message : "OAuth login failed",
-			});
+		return res.status(400).json({
+			message: error instanceof Error ? error.message : "OAuth login failed",
+		});
 	}
 };
