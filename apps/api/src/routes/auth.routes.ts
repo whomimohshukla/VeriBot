@@ -8,6 +8,8 @@ import {
 	registerController,
 	requestPasswordResetController,
 	resetPasswordController,
+	verifyEmailController,
+	meController,
 } from "../controllers/auth.controller";
 import { requireAuth } from "../middleware/auth";
 
@@ -20,6 +22,8 @@ router.post("/logout", requireAuth, logoutController);
 router.post("/password-reset/request", requestPasswordResetController);
 router.post("/password-reset", resetPasswordController);
 router.post("/password/change", requireAuth, changePasswordController);
+router.post("/verify-email", verifyEmailController);
+router.get("/me", requireAuth, meController);
 router.post("/oauth/:provider", oauthController);
 
 export default router;

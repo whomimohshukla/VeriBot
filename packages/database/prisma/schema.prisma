@@ -32,6 +32,7 @@ enum EnvironmentType {
   DEVELOPMENT
   STAGING
   PRODUCTION
+  CUSTOM
 }
 
 enum TestStatus {
@@ -75,39 +76,56 @@ enum AgentStatus {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String
-  passwordHash  String?
-  emailVerified Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                      String    @id @default(cuid())
+  email                   String    @unique
+  passwordHash            String?
+  firstName               String
+  lastName                String
+  avatarUrl               String?
+  emailVerified           Boolean   @default(false)
+  emailVerificationToken  String?
+  emailVerificationExpiry DateTime?
+  resetPasswordToken      String?
+  resetPasswordExpiry     DateTime?
+  twoFactorSecret         String?
+  twoFactorEnabled        Boolean   @default(false)
+  name                    String
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  deletedAt               DateTime?
 
-  memberships   Membership[]
-  projects      Project[]
-  applications  Application[]
-  apiKeys       ApiKey[]
-  integrations  Integration[]
-  auditLogs     AuditLog[]
-  agentRuns     AgentRun[]
-  bugComments   BugComment[]
-  bugs          Bug[]
-  subscriptions Subscription[]
-  webhooks      Webhook[]
-  sessions      Session[]
-  oauthAccounts OAuthAccount[]
+  memberships         Membership[]
+  projects            Project[]
+  applications        Application[]
+  apiKeys             ApiKey[]
+  integrations        Integration[]
+  auditLogs           AuditLog[]
+  agentRuns           AgentRun[]
+  bugComments         BugComment[]
+  bugs                Bug[]
+  subscriptions       Subscription[]
+  webhooks            Webhook[]
+  sessions            Session[]
+  oauthAccounts       OAuthAccount[]
   passwordResetTokens PasswordResetToken[]
+  settings            UserSettings?
+  invitedMemberships  Membership[]         @relation("MembershipInviter")
+  invitations         Invitation[]
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  tokenHash String   @unique
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-  lastUsed  DateTime @default(now())
+  id             String            @id @default(cuid())
+  sessionToken   String            @unique
+  createdAt      DateTime          @default(now())
+  expiresAt      DateTime
+  lastUsed       DateTime          @default(now())
+  userAgent      String?
+  ipAddress      String?
+  organizationId String?
+  role           OrganizationRole?
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OAuthAccount {
@@ -121,104 +139,140 @@ model OAuthAccount {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
-  userId            String
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@unique([userId, provider])
 }
 
 model PasswordResetToken {
-  id         String   @id @default(cuid())
-  token      String   @unique
-  expiresAt  DateTime
-  usedAt     DateTime?
-  createdAt  DateTime @default(now())
+  id        String    @id @default(cuid())
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
 
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Organization {
-  id          String       @id @default(cuid())
-  name        String
-  slug        String       @unique
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  logoUrl   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
-  memberships Membership[]
-  projects    Project[]
-  integrations Integration[]
+  memberships   Membership[]
+  projects      Project[]
+  integrations  Integration[]
   subscriptions Subscription[]
-  webhooks    Webhook[]
+  webhooks      Webhook[]
+  invitations   Invitation[]
+  apiKeys       ApiKey[]
+  auditLogs     AuditLog[]
+  AgentRun      AgentRun[]
 }
 
 model Membership {
-  id             String           @id @default(cuid())
-  role           OrganizationRole
-  joinedAt       DateTime         @default(now())
+  id          String           @id @default(cuid())
+  role        OrganizationRole
+  invitedById String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
   userId         String
   organizationId String
 
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy    User?        @relation("MembershipInviter", fields: [invitedById], references: [id], onDelete: SetNull)
 
   @@unique([userId, organizationId])
 }
 
+model Invitation {
+  id             String           @id @default(cuid())
+  email          String
+  organizationId String
+  role           OrganizationRole
+  token          String           @unique
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime         @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  User         User?        @relation(fields: [userId], references: [id])
+  userId       String?
+
+  @@index([organizationId, createdAt])
+}
+
+model UserSettings {
+  id                 String  @id @default(cuid())
+  userId             String  @unique
+  timezone           String  @default("UTC")
+  emailNotifications Boolean @default(true)
+  slackNotifications Boolean @default(false)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Project {
-  id             String         @id @default(cuid())
-  name           String
-  slug           String
-  description    String?
-  status         ProjectStatus  @default(DRAFT)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id          String        @id @default(cuid())
+  name        String
+  slug        String
+  description String?
+  status      ProjectStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   organizationId String
   createdById    String?
 
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdBy      User?          @relation(fields: [createdById], references: [id])
-  applications   Application[]
-  testSuites     TestSuite[]
-  testRuns       TestRun[]
-  bugs           Bug[]
-  aiTraces       AITrace[]
-  agentRuns      AgentRun[]
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy       User?            @relation(fields: [createdById], references: [id])
+  applications    Application[]
+  testSuites      TestSuite[]
+  testRuns        TestRun[]
+  bugs            Bug[]
+  aiTraces        AITrace[]
+  agentRuns       AgentRun[]
+  testCredentials TestCredential[]
 
   @@unique([organizationId, slug])
 }
 
 model Application {
-  id            String            @id @default(cuid())
-  name          String
-  url           String
-  status        ApplicationStatus @default(PENDING)
-  description   String?
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  id          String            @id @default(cuid())
+  name        String
+  url         String
+  status      ApplicationStatus @default(PENDING)
+  description String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 
-  projectId     String
-  createdById   String?
+  projectId   String
+  createdById String?
 
-  project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdBy     User?             @relation(fields: [createdById], references: [id])
-  environments  Environment[]
-  testUsers     TestUser[]
-  pages         Page[]
-  workflows     Workflow[]
-  testRuns      TestRun[]
-  bugs          Bug[]
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy    User?         @relation(fields: [createdById], references: [id])
+  environments Environment[]
+  testUsers    TestUser[]
+  pages        Page[]
+  workflows    Workflow[]
+  testRuns     TestRun[]
+  bugs         Bug[]
 }
 
 model Environment {
-  id          String          @id @default(cuid())
-  name        String
-  type        EnvironmentType
-  baseUrl     String
-  createdAt   DateTime        @default(now())
+  id        String          @id @default(cuid())
+  name      String
+  type      EnvironmentType
+  baseUrl   String
+  createdAt DateTime        @default(now())
 
   applicationId String
 
@@ -229,12 +283,12 @@ model Environment {
 }
 
 model TestUser {
-  id          String   @id @default(cuid())
-  username    String
-  email       String?
-  password    String
-  role        String?
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  username  String
+  email     String?
+  password  String
+  role      String?
+  createdAt DateTime @default(now())
 
   applicationId String
 
@@ -244,13 +298,13 @@ model TestUser {
 }
 
 model Page {
-  id          String   @id @default(cuid())
-  path        String
-  title       String?
-  url         String
-  metadata    Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  path      String
+  title     String?
+  url       String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   applicationId String
 
@@ -262,16 +316,16 @@ model Page {
 }
 
 model Component {
-  id          String   @id @default(cuid())
-  name        String
-  type        String
-  selector    String?
-  attributes  Json?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  name       String
+  type       String
+  selector   String?
+  attributes Json?
+  createdAt  DateTime @default(now())
 
-  pageId      String
+  pageId String
 
-  page        Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
 
 model Workflow {
@@ -284,77 +338,77 @@ model Workflow {
   applicationId String
   pageId        String?
 
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  page          Page?       @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  page        Page?       @relation(fields: [pageId], references: [id], onDelete: SetNull)
 }
 
 model TestSuite {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
   description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  projectId   String
+  projectId String
 
-  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  testCases   TestCase[]
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  testCases TestCase[]
 }
 
 model TestCase {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   description String?
-  priority    String    @default("MEDIUM")
-  type        String    @default("FUNCTIONAL")
+  priority    String   @default("MEDIUM")
+  type        String   @default("FUNCTIONAL")
   steps       Json?
   expected    String?
   tags        String[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  suiteId     String?
+  suiteId String?
 
-  suite       TestSuite? @relation(fields: [suiteId], references: [id], onDelete: SetNull)
-  testRuns    TestRun[]
+  suite    TestSuite? @relation(fields: [suiteId], references: [id], onDelete: SetNull)
+  testRuns TestRun[]
 }
 
 model TestRun {
-  id           String      @id @default(cuid())
-  status       TestStatus  @default(QUEUED)
+  id           String     @id @default(cuid())
+  status       TestStatus @default(QUEUED)
   startedAt    DateTime?
   finishedAt   DateTime?
   errorMessage String?
-  createdAt    DateTime    @default(now())
+  createdAt    DateTime   @default(now())
 
-  projectId    String
+  projectId     String
   applicationId String?
   environmentId String?
-  testCaseId   String?
+  testCaseId    String?
 
-  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  application  Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
-  environment  Environment? @relation(fields: [environmentId], references: [id], onDelete: SetNull)
-  testCase     TestCase?    @relation(fields: [testCaseId], references: [id], onDelete: SetNull)
-  results      TestResult[]
-  bugs         Bug[]
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  environment Environment? @relation(fields: [environmentId], references: [id], onDelete: SetNull)
+  testCase    TestCase?    @relation(fields: [testCaseId], references: [id], onDelete: SetNull)
+  results     TestResult[]
+  bugs        Bug[]
 }
 
 model TestResult {
-  id             String    @id @default(cuid())
-  passed         Boolean
-  durationMs     Int?
-  screenshotUrl  String?
-  videoUrl       String?
-  domSnapshot    Json?
-  consoleLogs    Json?
-  networkLogs    Json?
+  id            String   @id @default(cuid())
+  passed        Boolean
+  durationMs    Int?
+  screenshotUrl String?
+  videoUrl      String?
+  domSnapshot   Json?
+  consoleLogs   Json?
+  networkLogs   Json?
   traceUrl      String?
-  createdAt      DateTime  @default(now())
+  createdAt     DateTime @default(now())
 
-  testRunId      String
+  testRunId String
 
-  testRun        TestRun @relation(fields: [testRunId], references: [id], onDelete: Cascade)
+  testRun TestRun @relation(fields: [testRunId], references: [id], onDelete: Cascade)
 }
 
 model Bug {
@@ -370,17 +424,17 @@ model Bug {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  projectId      String
-  applicationId  String?
-  testRunId      String?
-  createdById    String?
+  projectId     String
+  applicationId String?
+  testRunId     String?
+  createdById   String?
 
-  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  application    Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
-  testRun        TestRun?     @relation(fields: [testRunId], references: [id], onDelete: SetNull)
-  createdBy      User?        @relation(fields: [createdById], references: [id])
-  comments       BugComment[]
-  attachments    Attachment[]
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  application Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  testRun     TestRun?     @relation(fields: [testRunId], references: [id], onDelete: SetNull)
+  createdBy   User?        @relation(fields: [createdById], references: [id])
+  comments    BugComment[]
+  attachments Attachment[]
 }
 
 model BugComment {
@@ -388,11 +442,11 @@ model BugComment {
   content   String   @db.Text
   createdAt DateTime @default(now())
 
-  bugId     String
-  userId    String?
+  bugId  String
+  userId String?
 
-  bug       Bug   @relation(fields: [bugId], references: [id], onDelete: Cascade)
-  user      User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  bug  Bug   @relation(fields: [bugId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model Attachment {
@@ -403,9 +457,9 @@ model Attachment {
   sizeBytes Int?
   createdAt DateTime @default(now())
 
-  bugId     String?
+  bugId String?
 
-  bug       Bug? @relation(fields: [bugId], references: [id], onDelete: SetNull)
+  bug Bug? @relation(fields: [bugId], references: [id], onDelete: SetNull)
 }
 
 model Integration {
@@ -416,132 +470,169 @@ model Integration {
   connectedAt DateTime        @default(now())
   status      String          @default("ACTIVE")
 
-  userId      String?
+  userId         String?
   organizationId String?
 
-  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
   @@unique([organizationId, type])
 }
 
 model Webhook {
-  id          String   @id @default(cuid())
-  name        String
-  url         String
-  secret      String?
-  events      String[]
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  secret    String?
+  events    String[]
+  createdAt DateTime @default(now())
 
   organizationId String
   createdById    String?
 
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdBy      User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
 }
 
 model ApiKey {
-  id          String   @id @default(cuid())
-  name        String
-  keyHash     String
-  lastUsedAt  DateTime?
-  createdAt   DateTime @default(now())
-  revokedAt   DateTime?
+  id         String    @id @default(cuid())
+  name       String
+  keyHash    String
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime?
+  revokedAt  DateTime?
 
-  userId      String
+  userId         String
+  organizationId String
+  permissions    Json
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
 }
 
 model Subscription {
-  id          String   @id @default(cuid())
-  plan        String
-  status      String
-  startedAt   DateTime @default(now())
-  endsAt      DateTime?
+  id        String    @id @default(cuid())
+  plan      String
+  status    String
+  startedAt DateTime  @default(now())
+  endsAt    DateTime?
 
   organizationId String
-  userId        String?
+  userId         String?
 
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model UsageRecord {
-  id          String   @id @default(cuid())
-  type        String
-  quantity    Int
-  unit        String?
-  recordedAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  type       String
+  quantity   Int
+  unit       String?
+  recordedAt DateTime @default(now())
 
-  metadata    Json?
+  metadata Json?
 }
 
 model AITrace {
-  id          String   @id @default(cuid())
-  traceId     String   @unique
-  prompt      String?  @db.Text
-  response    String?  @db.Text
-  model       String?
-  tokensUsed  Int?
-  latencyMs   Int?
-  cost        Decimal? @db.Decimal(10, 6)
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  traceId    String   @unique
+  prompt     String?  @db.Text
+  response   String?  @db.Text
+  model      String?
+  tokensUsed Int?
+  latencyMs  Int?
+  cost       Decimal? @db.Decimal(10, 6)
+  createdAt  DateTime @default(now())
 
-  projectId   String?
-  project     Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+}
+
+model TestCredential {
+  id                String          @id @default(cuid())
+  name              String
+  username          String
+  encryptedPassword String
+  passwordIv        String
+  passwordAuthTag   String
+  role              String?
+  environment       EnvironmentType
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, environment])
 }
 
 model AgentRun {
-  id          String      @id @default(cuid())
-  name        String
-  status      AgentStatus @default(QUEUED)
-  input       Json?
-  output      Json?
-  createdAt   DateTime    @default(now())
-  finishedAt  DateTime?
+  id         String    @id @default(cuid())
+  name       String
+  resource   String
+  resourceId String
+  output     Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
 
-  userId      String?
-  projectId   String?
+  organizationId String?
+  userId         String?
+  projectId      String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
-  user        User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
-  project     Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  messages    AgentMessage[]
-  toolCalls   AgentToolCall[]
+  user      User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  project   Project?        @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  messages  AgentMessage[]
+  toolCalls AgentToolCall[]
+
+  @@index([organizationId, createdAt])
+  @@index([userId, createdAt])
 }
 
 model AgentMessage {
-  id          String   @id @default(cuid())
-  role        String
-  content     String   @db.Text
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  role      String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
 
-  agentRunId  String
+  agentRunId String
 
-  agentRun    AgentRun @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  agentRun AgentRun @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
 }
 
 model AgentToolCall {
-  id          String   @id @default(cuid())
-  toolName    String
-  arguments   Json?
-  result      Json?
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  toolName  String
+  arguments Json?
+  result    Json?
+  createdAt DateTime @default(now())
 
-  agentRunId  String
+  agentRunId String
 
-  agentRun    AgentRun @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  agentRun AgentRun @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
 }
 
 model AuditLog {
-  id          String   @id @default(cuid())
-  action      String
-  entityType  String
-  entityId    String
-  details     Json?
-  createdAt   DateTime @default(now())
+  id             String   @id @default(cuid())
+  action         String
+  resource       String
+  resourceId     String
+  details        Json?
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+  userId         String?
+  organizationId String?
 
-  userId      String?
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
-  user        User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  @@index([organizationId, createdAt])
+  @@index([userId, createdAt])
 }

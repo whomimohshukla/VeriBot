@@ -1,6 +1,9 @@
 import { Router, type Router as ExpressRouter } from "express";
 import { requireAuth } from "../middleware/auth";
-import { createProjectController, listProjectsController } from "../controllers/project.controller";
+import {
+	createProjectController,
+	listProjectsController,
+} from "../controllers/project.controller";
 
 const router: ExpressRouter = Router();
 
