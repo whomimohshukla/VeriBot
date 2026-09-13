@@ -4,6 +4,7 @@ import { testRunRepository } from '../../repositories/testRun.repository';
 import { testResultRepository } from '../../repositories/testResult.repository';
 import { browserService } from '../browser/browserService';
 import { pageService } from '../browser/pageService';
+import { usageService } from '../billing/usageService';
 import { logger } from '../../config/logger';
 import { aiQueue } from '../../queues/aiQueue';
 import { webhookService } from '../webhook/webhookService';
@@ -69,6 +70,11 @@ export const testExecutionService = {
     const failedCount = results.filter((r) => r.status === 'FAILED').length;
     const skippedTests = results.filter((r) => r.status === 'SKIPPED').length;
     const finalStatus: 'PASSED' | 'FAILED' = failedCount > 0 ? 'FAILED' : 'PASSED';
+
+    await usageService.increment(context.organizationId, {
+      testsRun: results.length,
+      apiRequests: 1,
+    });
 
     await testRunRepository.update(context.testRunId, {
       status: failedCount > 0 ? 'FAILED' : 'PASSED',

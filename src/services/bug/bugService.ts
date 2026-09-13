@@ -1,4 +1,4 @@
-import type { Bug, Prisma } from '@prisma/client';
+import type { Bug, BugComment, Prisma } from '@prisma/client';
 import { bugRepository } from '../../repositories/bug.repository';
 import { NotFoundError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
@@ -66,6 +66,16 @@ export const bugService = {
       userId,
       content,
     });
+  },
+
+  async listComments(bugId: string, page = 1, pageSize = 50): Promise<ListResponse<BugComment>> {
+    await bugService.get(bugId);
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      bugRepository.listComments(bugId, skip, pageSize),
+      bugRepository.countComments(bugId),
+    ]);
+    return pagination(items, total, { page, pageSize });
   },
 
   async list(

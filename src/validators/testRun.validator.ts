@@ -35,4 +35,35 @@ export const listTestRunsQuerySchema = z.object({
   status: z.enum(['PENDING', 'RUNNING', 'PASSED', 'FAILED', 'SKIPPED', 'CANCELLED']).optional(),
 });
 
+export const listTestSuitesQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  projectId: z.string().min(1),
+});
+
+export const updateTestSuiteSchema = z.object({
+  name: z.string().min(1).max(120).optional(),
+  description: z.string().max(1000).nullable().optional(),
+  type: z.enum(['regression', 'smoke', 'sanity', 'custom']).optional(),
+});
+
+export const addSuiteItemSchema = z.object({
+  testCaseId: z.string().min(1),
+  order: z.coerce.number().int().min(0).optional(),
+});
+
+export const suiteItemParamsSchema = z.object({
+  testSuiteId: z.string().min(1),
+  suiteItemId: z.string().min(1),
+});
+
+export const testSuiteParamsSchema = z.object({
+  testSuiteId: z.string().min(1),
+});
+
+export const runTestSuiteSchema = z.object({
+  environmentId: z.string().optional(),
+  testUserId: z.string().optional(),
+});
+
 export type RunTestsInput = z.infer<typeof runTestsSchema>;

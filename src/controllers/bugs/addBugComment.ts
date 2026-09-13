@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { bugService } from '../../services/bug/bugService';
+import { auditService } from '../../services/audit/auditTrailService';
 import { UnauthorizedError, ForbiddenError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
 import { created } from '../../utils/formatters';
@@ -17,5 +18,17 @@ export const addBugComment = async (req: Request, res: Response): Promise<void> 
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
   const comment = await bugService.addComment(bugId, req.user.id, content);
+  await auditService.log(
+    {
+      organizationId: req.orgId ?? existing.organizationId,
+      userId: req.user.id,
+      projectId: existing.projectId,
+      actionType: 'CREATE',
+      resourceType: 'bug_comment',
+      resourceId: comment.id,
+      changes: { bugId },
+    },
+    req
+  );
   res.status(201).json(created(comment, { message: Messages.BUG.COMMENT_ADDED }));
 };

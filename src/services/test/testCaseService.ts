@@ -15,6 +15,12 @@ export interface CreateSuiteParams {
   testCaseIds: string[];
 }
 
+type SuiteWithItems = Prisma.TestSuiteGetPayload<{
+  include: {
+    testSuiteItems: { include: { testCase: true }; orderBy: { order: 'asc' } };
+  };
+}>;
+
 export interface GenerateTestsParams {
   applicationId: string;
   projectId: string;
@@ -125,6 +131,58 @@ export const testCaseService = {
     );
 
     return suite;
+  },
+
+  async getSuite(suiteId: string): Promise<SuiteWithItems> {
+    const suite = await testCaseRepository.findSuite(suiteId);
+    if (!suite) {
+      throw new NotFoundError('Test suite not found.');
+    }
+    return suite;
+  },
+
+  async listSuites(projectId: string, page = 1, pageSize = 20): Promise<ListResponse<TestSuite>> {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      testCaseRepository.listSuites(projectId, skip, pageSize),
+      testCaseRepository.countSuites(projectId),
+    ]);
+    return pagination(items, total, { page, pageSize });
+  },
+
+  async updateSuite(suiteId: string, params: Prisma.TestSuiteUpdateInput): Promise<TestSuite> {
+    await testCaseService.getSuite(suiteId);
+    return testCaseRepository.updateSuite(suiteId, params);
+  },
+
+  async hardDeleteSuite(suiteId: string): Promise<void> {
+    await testCaseService.getSuite(suiteId);
+    await testCaseRepository.hardDeleteSuite(suiteId);
+  },
+
+  async addSuiteItem(suiteId: string, testCaseId: string, order?: number): Promise<SuiteWithItems> {
+    const suite = await testCaseService.getSuite(suiteId);
+    if (suite.testSuiteItems.some((item) => item.testCaseId === testCaseId)) {
+      return suite;
+    }
+    const testCase = await testCaseRepository.findById(testCaseId);
+    if (!testCase) {
+      throw new NotFoundError(Messages.TEST.NOT_FOUND);
+    }
+    await testCaseRepository.addSuiteItems(suiteId, [
+      { testCaseId, order: order ?? suite.testSuiteItems.length },
+    ]);
+    return testCaseService.getSuite(suiteId);
+  },
+
+  async removeSuiteItem(suiteId: string, suiteItemId: string): Promise<SuiteWithItems> {
+    const suite = await testCaseService.getSuite(suiteId);
+    const item = await testCaseRepository.findSuiteItem(suiteItemId);
+    if (!item || item.testSuiteId !== suite.id) {
+      throw new NotFoundError('Suite item not found.');
+    }
+    await testCaseRepository.removeSuiteItem(suiteItemId);
+    return testCaseService.getSuite(suiteId);
   },
 
   async generate(params: GenerateTestsParams): Promise<{ queued: boolean }> {

@@ -31,6 +31,17 @@ export const bugRepository = {
 
   addComment: (data: Prisma.BugCommentUncheckedCreateInput) => prisma.bugComment.create({ data }),
 
+  listComments: (bugId: string, skip = 0, take = 50) =>
+    prisma.bugComment.findMany({
+      where: { bugId },
+      skip,
+      take,
+      orderBy: { createdAt: 'asc' },
+      include: { user: { select: { id: true, email: true, name: true } } },
+    }),
+
+  countComments: (bugId: string) => prisma.bugComment.count({ where: { bugId } }),
+
   list: (projectId: string, skip = 0, take = 20, status?: string, severity?: string) =>
     prisma.bug.findMany({
       where: {

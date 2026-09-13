@@ -7,6 +7,7 @@ import {
   changeBugStatus,
   assignBug,
   addBugComment,
+  listBugComments,
   listBugs,
 } from '../../../controllers/bugs';
 import { authenticate, tenantMiddleware, validate, requirePermission } from '../../../middleware';
@@ -61,6 +62,12 @@ router.post(
   validate(bugParamsSchema, 'params'),
   validate(addBugCommentSchema),
   addBugComment
+);
+router.get(
+  '/:bugId/comments',
+  requirePermission(Permissions.BUG_READ),
+  validate(bugParamsSchema, 'params'),
+  listBugComments
 );
 
 export default router;

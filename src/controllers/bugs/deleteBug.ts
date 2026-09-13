@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { bugService } from '../../services/bug/bugService';
+import { auditService } from '../../services/audit/auditTrailService';
 import { ForbiddenError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
 import { ok } from '../../utils/formatters';
@@ -13,5 +14,19 @@ export const deleteBug = async (req: Request, res: Response): Promise<void> => {
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
   await bugService.hardDelete(bugId);
+  if (req.orgId && req.user) {
+    await auditService.log(
+      {
+        organizationId: req.orgId,
+        userId: req.user.id,
+        projectId: existing.projectId,
+        actionType: 'DELETE',
+        resourceType: 'bug',
+        resourceId: bugId,
+        changes: { title: existing.title },
+      },
+      req
+    );
+  }
   res.status(200).json(ok(null, { message: Messages.BUG.DELETED }));
 };

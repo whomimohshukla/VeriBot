@@ -8,6 +8,7 @@ import {
   removeMember,
   changeMemberRole,
   listMembers,
+  listAuditLogs,
 } from '../../../controllers/organizations';
 import { authenticate, validate, requirePermission } from '../../../middleware';
 import { Permissions } from '../../../constants/permissions';
@@ -67,6 +68,12 @@ router.delete(
   validate(getOrganizationParamsSchema, 'params'),
   validate(memberParamsSchema, 'params'),
   removeMember
+);
+router.get(
+  '/:organizationId/audit-logs',
+  requirePermission(Permissions.ORG_MANAGE),
+  validate(getOrganizationParamsSchema, 'params'),
+  listAuditLogs
 );
 
 export default router;

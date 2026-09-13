@@ -18,6 +18,11 @@ export const webhookParamsSchema = z.object({
   webhookId: z.string().min(1),
 });
 
+export const webhookDeliveryParamsSchema = z.object({
+  webhookId: z.string().min(1),
+  deliveryId: z.string().min(1),
+});
+
 export const testWebhookSchema = z.object({
   webhookId: z.string().min(1),
 });

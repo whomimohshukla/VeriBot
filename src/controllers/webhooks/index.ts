@@ -4,3 +4,5 @@ export { updateWebhook } from './updateWebhook';
 export { deleteWebhook } from './deleteWebhook';
 export { listWebhooks } from './listWebhooks';
 export { testWebhook } from './testWebhook';
+export { listWebhookDeliveries } from './listWebhookDeliveries';
+export { redeliverWebhookDelivery } from './redeliverWebhookDelivery';

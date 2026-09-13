@@ -20,9 +20,4 @@ export const listProjectsQuerySchema = z.object({
   includeArchived: z.union([z.literal('true'), z.literal('false')]).default('false'),
 });
 
-export const testSuiteParamsSchema = z.object({
-  projectId: z.string().min(1),
-  suiteId: z.string().min(1),
-});
-
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;

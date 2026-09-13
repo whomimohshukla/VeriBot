@@ -5,4 +5,5 @@ export { deleteBug } from './deleteBug';
 export { changeBugStatus } from './changeBugStatus';
 export { assignBug } from './assignBug';
 export { addBugComment } from './addBugComment';
+export { listBugComments } from './listBugComments';
 export { listBugs } from './listBugs';

@@ -4,6 +4,7 @@ import { Messages } from '../../constants/messages';
 import { created } from '../../utils/formatters';
 import { prisma } from '../../config/database';
 import { tokenService } from '../../services/auth/tokenService';
+import { auditService } from '../../services/audit/auditTrailService';
 
 export const createApiKey = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -23,6 +24,20 @@ export const createApiKey = async (req: Request, res: Response): Promise<void> =
       expiresAt: expiresAt ? new Date(expiresAt) : null,
     },
   });
+
+  if (req.orgId) {
+    await auditService.log(
+      {
+        organizationId: req.orgId,
+        userId: req.user.id,
+        actionType: 'CREATE',
+        resourceType: 'api_key',
+        resourceId: apiKey.id,
+        changes: { name, prefix: apiKey.prefix },
+      },
+      req
+    );
+  }
 
   res.status(201).json(created({ ...apiKey, plainKey }, { message: Messages.API_KEY.CREATED }));
 };

@@ -5,4 +5,5 @@ export { deleteOrganization } from './deleteOrganization';
 export { inviteMember } from './inviteMember';
 export { removeMember } from './removeMember';
 export { changeMemberRole } from './changeMemberRole';
+export { listAuditLogs } from './listAuditLogs';
 export { listMembers } from './listMembers';

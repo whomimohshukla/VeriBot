@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { bugService } from '../../services/bug/bugService';
+import { auditService } from '../../services/audit/auditTrailService';
 import { UnauthorizedError, ForbiddenError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
 import { created } from '../../utils/formatters';
@@ -57,6 +58,18 @@ export const createBug = async (req: Request, res: Response): Promise<void> => {
     },
     req.orgId,
     req.user.id
+  );
+  await auditService.log(
+    {
+      organizationId: req.orgId,
+      userId: req.user.id,
+      projectId,
+      actionType: 'CREATE',
+      resourceType: 'bug',
+      resourceId: bug.id,
+      changes: { title, severity, priority, status },
+    },
+    req
   );
   res.status(201).json(created(bug, { message: Messages.BUG.CREATED }));
 };

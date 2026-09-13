@@ -3,6 +3,7 @@ import { NotFoundError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
 import { ok } from '../../utils/formatters';
 import { prisma } from '../../config/database';
+import { auditService } from '../../services/audit/auditTrailService';
 
 export const revokeApiKey = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
@@ -15,6 +16,18 @@ export const revokeApiKey = async (req: Request, res: Response): Promise<void> =
   });
   if (apiKey.count === 0) {
     throw new NotFoundError(Messages.API_KEY.NOT_FOUND);
+  }
+  if (req.orgId) {
+    await auditService.log(
+      {
+        organizationId: req.orgId,
+        userId: req.user.id,
+        actionType: 'DELETE',
+        resourceType: 'api_key',
+        resourceId: apiKeyId,
+      },
+      req
+    );
   }
   res.status(200).json(ok(null, { message: Messages.API_KEY.REVOKED }));
 };

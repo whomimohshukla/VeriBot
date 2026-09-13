@@ -25,7 +25,6 @@ export {
   updateProjectSchema,
   projectParamsSchema,
   listProjectsQuerySchema,
-  testSuiteParamsSchema,
   type CreateProjectInput,
 } from './project.validator';
 export {
@@ -51,6 +50,12 @@ export {
   scheduleTestRunSchema,
   testRunParamsSchema,
   listTestRunsQuerySchema,
+  listTestSuitesQuerySchema,
+  updateTestSuiteSchema,
+  addSuiteItemSchema,
+  suiteItemParamsSchema,
+  testSuiteParamsSchema,
+  runTestSuiteSchema,
   type RunTestsInput,
 } from './testRun.validator';
 export {
@@ -80,6 +85,7 @@ export {
   createWebhookSchema,
   updateWebhookSchema,
   webhookParamsSchema,
+  webhookDeliveryParamsSchema,
   testWebhookSchema,
   type CreateWebhookInput,
 } from './webhook.validator';

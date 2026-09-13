@@ -12,6 +12,8 @@ export const Messages = {
     RESET_EMAIL_SENT: 'If that account exists, a reset link has been sent.',
     PASSWORD_RESET: 'Password has been reset successfully.',
     INVALID_TOKEN: 'Invalid or expired token.',
+    INVALID_API_KEY: 'Invalid API key.',
+    API_KEY_ORG_REQUIRED: 'Organization context required: send an X-Org-Id header with the API key.',
     UNAUTHORIZED: 'Authentication required.',
     FORBIDDEN: 'You do not have permission to perform this action.',
   },
@@ -76,6 +78,9 @@ export const Messages = {
     NOT_FOUND: 'Webhook not found.',
     TESTED: 'Webhook test delivery queued.',
     TEST_SENT: 'Webhook test delivery sent.',
+    DELIVERY_NOT_FOUND: 'Webhook delivery not found.',
+    DELIVERY_REDELIVERED: 'Webhook delivery requeued for redelivery.',
+    INACTIVE: 'Webhook is inactive.',
   },
   API_KEY: {
     CREATED: 'API key created successfully. Store it securely, it will not be shown again.',

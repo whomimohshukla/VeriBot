@@ -33,4 +33,16 @@ export const webhookRepository = {
 
   updateDelivery: (id: string, data: Prisma.WebhookDeliveryUpdateInput) =>
     prisma.webhookDelivery.update({ where: { id }, data }),
+
+  findDelivery: (id: string) => prisma.webhookDelivery.findUnique({ where: { id } }),
+
+  listDeliveries: (webhookId: string, skip = 0, take = 20) =>
+    prisma.webhookDelivery.findMany({
+      where: { webhookId },
+      skip,
+      take,
+      orderBy: { createdAt: 'desc' },
+    }),
+
+  countDeliveries: (webhookId: string) => prisma.webhookDelivery.count({ where: { webhookId } }),
 };

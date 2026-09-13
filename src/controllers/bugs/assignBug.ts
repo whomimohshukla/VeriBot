@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { bugService } from '../../services/bug/bugService';
+import { auditService } from '../../services/audit/auditTrailService';
 import { ForbiddenError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
 import { ok } from '../../utils/formatters';
@@ -14,5 +15,19 @@ export const assignBug = async (req: Request, res: Response): Promise<void> => {
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
   const bug = await bugService.assign(bugId, assigneeId);
+  if (req.orgId && req.user) {
+    await auditService.log(
+      {
+        organizationId: req.orgId,
+        userId: req.user.id,
+        projectId: existing.projectId,
+        actionType: 'UPDATE',
+        resourceType: 'bug',
+        resourceId: bugId,
+        changes: { assigneeId },
+      },
+      req
+    );
+  }
   res.status(200).json(ok(bug, { message: Messages.BUG.ASSIGNED }));
 };

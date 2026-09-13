@@ -4,6 +4,7 @@ import { Messages } from '../constants/messages';
 import { verifyToken } from '../utils/jwt';
 import { getRedis } from '../config/redis';
 import { prisma } from '../config/database';
+import { tokenService } from '../services/auth/tokenService';
 import type { AuthUser } from '../types/auth.types';
 import { ROLE_PERMISSIONS, roleHasPermission } from '../constants/roles';
 
@@ -13,66 +14,128 @@ export interface AuthenticateOptions {
 
 export const authenticate = (options: AuthenticateOptions = {}) => {
   return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const header = req.headers.authorization;
-      if (!header || !header.startsWith('Bearer ')) {
-        if (options.optional) return next();
-        throw new UnauthorizedError(Messages.AUTH.UNAUTHORIZED);
-      }
-      const token = header.slice('Bearer '.length).trim();
-      if (!token) {
-        if (options.optional) return next();
-        throw new UnauthorizedError(Messages.AUTH.UNAUTHORIZED);
-      }
+    const apiKeyHeader = req.headers['x-api-key'];
+    const header = req.headers.authorization;
 
-      const payload = verifyToken(token, 'access');
-      const redis = getRedis();
-      const blacklisted = await redis.get(`auth:blacklist:${payload.jti ?? ''}`);
-      if (blacklisted) {
-        throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
-      }
-
-      const user = await prisma.user.findUnique({
-        where: { id: payload.sub },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          avatar: true,
-          deletedAt: true,
-          memberships: { where: { organizationId: payload.orgId } },
-        },
-      });
-
-      if (!user || user.deletedAt) {
-        throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
-      }
-
-      const membership = user.memberships[0];
-      if (!membership) {
-        throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
-      }
-
-      const roles = payload.roles.length > 0 ? payload.roles : [membership.role];
-      const permissions = Array.from(new Set(roles.flatMap((role) => ROLE_PERMISSIONS[role] ?? [])));
-
-      const authUser: AuthUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        avatar: user.avatar,
-        orgId: payload.orgId,
-        roles,
-        permissions,
-      };
-
-      req.user = authUser;
-      req.orgId = payload.orgId;
-      return next();
-    } catch (error) {
-      return next(error);
+    if (apiKeyHeader && typeof apiKeyHeader === 'string' && apiKeyHeader.startsWith('vrb_')) {
+      return authenticateWithApiKey(req, next, options, apiKeyHeader);
     }
+
+    if (!header || !header.startsWith('Bearer ')) {
+      if (options.optional) return next();
+      throw new UnauthorizedError(Messages.AUTH.UNAUTHORIZED);
+    }
+    const token = header.slice('Bearer '.length).trim();
+    if (!token) {
+      if (options.optional) return next();
+      throw new UnauthorizedError(Messages.AUTH.UNAUTHORIZED);
+    }
+
+    const payload = verifyToken(token, 'access');
+    const redis = getRedis();
+    const blacklisted = await redis.get(`auth:blacklist:${payload.jti ?? ''}`);
+    if (blacklisted) {
+      throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.sub },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatar: true,
+        deletedAt: true,
+        memberships: { where: { organizationId: payload.orgId } },
+      },
+    });
+
+    if (!user || user.deletedAt) {
+      throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
+    }
+
+    const membership = user.memberships[0];
+    if (!membership) {
+      throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
+    }
+
+    const roles = payload.roles.length > 0 ? payload.roles : [membership.role];
+    const permissions = Array.from(new Set(roles.flatMap((role) => ROLE_PERMISSIONS[role] ?? [])));
+
+    const authUser: AuthUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+      orgId: payload.orgId,
+      roles,
+      permissions,
+    };
+
+    req.user = authUser;
+    req.orgId = payload.orgId;
+    return next();
   };
+};
+
+const authenticateWithApiKey = async (
+  req: Request,
+  next: NextFunction,
+  options: AuthenticateOptions,
+  apiKeyPlain: string
+): Promise<void> => {
+  try {
+    const hash = await tokenService.hashApiKey(apiKeyPlain);
+    const record = await prisma.apiKey.findUnique({
+      where: { key: hash },
+      include: {
+        user: { select: { id: true, email: true, name: true, avatar: true, deletedAt: true } },
+      },
+    });
+
+    if (
+      !record ||
+      record.revokedAt ||
+      (record.expiresAt && record.expiresAt.getTime() < Date.now()) ||
+      record.user.deletedAt
+    ) {
+      if (options.optional) return next();
+      throw new UnauthorizedError(Messages.AUTH.INVALID_API_KEY);
+    }
+
+    const headerOrg = req.headers['x-org-id'];
+    const orgId = typeof headerOrg === 'string' && headerOrg.length > 0 ? headerOrg : undefined;
+    if (!orgId) {
+      if (options.optional) return next();
+      throw new UnauthorizedError(Messages.AUTH.API_KEY_ORG_REQUIRED);
+    }
+
+    const membership = await prisma.membership.findFirst({
+      where: { userId: record.user.id, organizationId: orgId, deletedAt: null },
+    });
+    if (!membership) {
+      if (options.optional) return next();
+      throw new UnauthorizedError(Messages.AUTH.INVALID_API_KEY);
+    }
+
+    const permissions = Array.from(new Set(ROLE_PERMISSIONS[membership.role] ?? []));
+    req.user = {
+      id: record.user.id,
+      email: record.user.email,
+      name: record.user.name,
+      avatar: record.user.avatar,
+      orgId,
+      roles: [membership.role],
+      permissions,
+    };
+    req.orgId = orgId;
+
+    void prisma.apiKey.update({ where: { id: record.id }, data: { lastUsedAt: new Date() } });
+    return next();
+  } catch (error) {
+    if (options.optional) return next();
+    return next(error);
+  }
 };
 
 export const requireAuth = (req: Request, _res: Response, next: NextFunction): void => {

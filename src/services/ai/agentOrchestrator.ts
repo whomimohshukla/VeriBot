@@ -6,6 +6,7 @@ import { bugDetectionAgent } from './bugDetectionAgent';
 import { healingAgent } from './healingAgent';
 import { codeAnalysisAgent } from './codeAnalysisAgent';
 import { agentRunRepository } from '../../repositories/agentRun.repository';
+import { usageService } from '../billing/usageService';
 import { logger } from '../../config/logger';
 import { NotFoundError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
@@ -55,6 +56,12 @@ export const agentOrchestrator = {
         toolCalls: 0,
         duration: Date.now() - startedAt,
         completedAt: new Date(),
+      });
+
+      await usageService.increment(organizationId, {
+        agentRunsExecuted: 1,
+        aiTokensUsed: result.usage.totalTokens,
+        estimatedCostUsd: result.usage.costUsd,
       });
 
       logger.info({ agentRunId, agentType: agentRun.agentType }, 'agent run completed');

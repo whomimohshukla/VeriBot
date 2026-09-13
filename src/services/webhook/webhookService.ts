@@ -3,8 +3,10 @@ import { webhookRepository } from '../../repositories/webhook.repository';
 import { webhookQueue } from '../../queues/webhookQueue';
 import { NotFoundError } from '../../utils/errors';
 import { Messages } from '../../constants/messages';
+import { pagination } from '../../utils/formatters';
 import { logger } from '../../config/logger';
-import type { Prisma, Webhook, WebhookEventType } from '@prisma/client';
+import type { Prisma, Webhook, WebhookDelivery, WebhookEventType } from '@prisma/client';
+import type { ListResponse } from '../../types/api.types';
 import type { CreateWebhookInput } from '../../validators/webhook.validator';
 
 export interface WebhookPayload {
@@ -104,6 +106,29 @@ export const webhookService = {
       payload: { message: 'This is a test delivery from VeriBot.' },
       organizationId: webhook.organizationId,
     });
+    return { queued: true };
+  },
+
+  async listDeliveries(webhookId: string, page = 1, pageSize = 20): Promise<ListResponse<WebhookDelivery>> {
+    await webhookService.get(webhookId);
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      webhookRepository.listDeliveries(webhookId, skip, pageSize),
+      webhookRepository.countDeliveries(webhookId),
+    ]);
+    return pagination(items, total, { page, pageSize });
+  },
+
+  async redeliver(deliveryId: string): Promise<{ queued: boolean }> {
+    const delivery = await webhookRepository.findDelivery(deliveryId);
+    if (!delivery) {
+      throw new NotFoundError(Messages.WEBHOOK.DELIVERY_NOT_FOUND);
+    }
+    const webhook = await webhookService.get(delivery.webhookId);
+    if (!webhook.isActive) {
+      throw new NotFoundError(Messages.WEBHOOK.INACTIVE);
+    }
+    await webhookService.deliver(webhook.id, delivery.eventType, delivery.payload);
     return { queued: true };
   },
 

@@ -38,6 +38,28 @@ export const testCaseRepository = {
 
   createSuite: (data: Prisma.TestSuiteUncheckedCreateInput) => prisma.testSuite.create({ data }),
 
+  updateSuite: (id: string, data: Prisma.TestSuiteUpdateInput) =>
+    prisma.testSuite.update({ where: { id }, data }),
+
+  hardDeleteSuite: (id: string) => prisma.testSuite.delete({ where: { id } }),
+
+  listSuites: (projectId: string, skip = 0, take = 20) =>
+    prisma.testSuite.findMany({
+      where: { projectId },
+      skip,
+      take,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        _count: { select: { testSuiteItems: true, testRuns: true } },
+      },
+    }),
+
+  countSuites: (projectId: string) => prisma.testSuite.count({ where: { projectId } }),
+
+  findSuiteItem: (id: string) => prisma.testSuiteItem.findUnique({ where: { id } }),
+
+  removeSuiteItem: (id: string) => prisma.testSuiteItem.delete({ where: { id } }),
+
   addSuiteItems: (testSuiteId: string, items: Array<{ testCaseId: string; order: number }>) =>
     prisma.$transaction(
       items.map((item) =>

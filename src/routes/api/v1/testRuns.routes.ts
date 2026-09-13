@@ -5,10 +5,16 @@ import {
   getTestRunResults,
   cancelTestRun,
   scheduleTestRun,
+  listTestRuns,
 } from '../../../controllers/testRuns';
 import { authenticate, tenantMiddleware, validate, requirePermission } from '../../../middleware';
 import { Permissions } from '../../../constants/permissions';
-import { runTestsSchema, scheduleTestRunSchema, testRunParamsSchema } from '../../../validators';
+import {
+  runTestsSchema,
+  scheduleTestRunSchema,
+  testRunParamsSchema,
+  listTestRunsQuerySchema,
+} from '../../../validators';
 
 const router = Router();
 
@@ -20,6 +26,12 @@ router.post(
   requirePermission(Permissions.TEST_EXECUTE),
   validate(scheduleTestRunSchema),
   scheduleTestRun
+);
+router.get(
+  '/',
+  requirePermission(Permissions.TEST_READ),
+  validate(listTestRunsQuerySchema, 'query'),
+  listTestRuns
 );
 router.get(
   '/:testRunId',

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { authService } from '../../services/auth/authService';
+import { auditService } from '../../services/audit/auditTrailService';
 import { created } from '../../utils/formatters';
 import { Messages } from '../../constants/messages';
 
@@ -11,5 +12,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     organizationName?: string;
   };
   const result = await authService.register({ email, password, name, organizationName }, req.ip);
+  await auditService.log(
+    {
+      organizationId: result.organization.id,
+      userId: result.user.id,
+      actionType: 'AUTHENTICATION',
+      resourceType: 'auth',
+      resourceId: result.user.id,
+      metadata: { action: 'register', email: result.user.email, organizationName },
+    },
+    req
+  );
   res.status(201).json(created(result, { message: Messages.AUTH.REGISTERED }));
 };

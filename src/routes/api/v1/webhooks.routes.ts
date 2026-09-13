@@ -6,10 +6,17 @@ import {
   deleteWebhook,
   listWebhooks,
   testWebhook,
+  listWebhookDeliveries,
+  redeliverWebhookDelivery,
 } from '../../../controllers/webhooks';
 import { authenticate, tenantMiddleware, validate, requirePermission } from '../../../middleware';
 import { Permissions } from '../../../constants/permissions';
-import { createWebhookSchema, updateWebhookSchema, webhookParamsSchema } from '../../../validators';
+import {
+  createWebhookSchema,
+  updateWebhookSchema,
+  webhookParamsSchema,
+  webhookDeliveryParamsSchema,
+} from '../../../validators';
 
 const router = Router();
 
@@ -41,6 +48,18 @@ router.post(
   requirePermission(Permissions.WEBHOOK_MANAGE),
   validate(webhookParamsSchema, 'params'),
   testWebhook
+);
+router.get(
+  '/:webhookId/deliveries',
+  requirePermission(Permissions.WEBHOOK_READ),
+  validate(webhookParamsSchema, 'params'),
+  listWebhookDeliveries
+);
+router.post(
+  '/:webhookId/deliveries/:deliveryId/redeliver',
+  requirePermission(Permissions.WEBHOOK_MANAGE),
+  validate(webhookDeliveryParamsSchema, 'params'),
+  redeliverWebhookDelivery
 );
 
 export default router;
