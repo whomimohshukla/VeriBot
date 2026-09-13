@@ -26,7 +26,10 @@ const objectUrl = (key: string): string => {
 };
 
 export const s3Service = {
-  async uploadBuffer(buffer: Buffer, options: { prefix?: string; contentType?: string; extension?: string } = {}): Promise<UploadResult> {
+  async uploadBuffer(
+    buffer: Buffer,
+    options: { prefix?: string; contentType?: string; extension?: string } = {}
+  ): Promise<UploadResult> {
     const key = options.prefix
       ? `${options.prefix}/${generateId()}${options.extension ?? ''}`
       : `${generateId()}${options.extension ?? ''}`;
@@ -44,21 +47,23 @@ export const s3Service = {
     return { key, url: objectUrl(key), size: buffer.byteLength, contentType };
   },
 
-  async uploadFile(path: string, buffer: Buffer, options: { prefix?: string; contentType?: string; extension?: string } = {}): Promise<UploadResult> {
+  async uploadFile(
+    path: string,
+    buffer: Buffer,
+    options: { prefix?: string; contentType?: string; extension?: string } = {}
+  ): Promise<UploadResult> {
     const name = path.split('/').pop() ?? 'file';
     const result = await s3Service.uploadBuffer(buffer, {
       prefix: options.prefix,
       contentType: options.contentType,
-      extension: options.extension ?? name.includes('.') ? `.${name.split('.').pop()}` : '',
+      extension: (options.extension ?? name.includes('.')) ? `.${name.split('.').pop()}` : '',
     });
     return result;
   },
 
   async getObject(key: string): Promise<S3Object | null> {
     try {
-      const result = await s3Client.send(
-        new GetObjectCommand({ Bucket: s3Bucket, Key: key })
-      );
+      const result = await s3Client.send(new GetObjectCommand({ Bucket: s3Bucket, Key: key }));
       const body = await result.Body?.transformToByteArray();
       if (!body) return null;
       return { body: Buffer.from(body), contentType: result.ContentType };
@@ -72,11 +77,9 @@ export const s3Service = {
   },
 
   async getSignedDownloadUrl(key: string, expiresInSeconds = 3600): Promise<string> {
-    return getSignedUrl(
-      s3Client,
-      new GetObjectCommand({ Bucket: s3Bucket, Key: key }),
-      { expiresIn: expiresInSeconds }
-    );
+    return getSignedUrl(s3Client, new GetObjectCommand({ Bucket: s3Bucket, Key: key }), {
+      expiresIn: expiresInSeconds,
+    });
   },
 
   async getSignedUploadUrl(key: string, contentType: string, expiresInSeconds = 600): Promise<string> {

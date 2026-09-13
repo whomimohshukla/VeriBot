@@ -16,7 +16,9 @@ const getSecretForType = (type: TokenType): string => {
 
 export const signToken = (payload: JwtPayload, type: TokenType): string => {
   const options: jwt.SignOptions = {
-    expiresIn: (type === 'access' ? env.JWT_ACCESS_EXPIRES_IN : env.JWT_REFRESH_EXPIRES_IN) as jwt.SignOptions['expiresIn'],
+    expiresIn: (type === 'access'
+      ? env.JWT_ACCESS_EXPIRES_IN
+      : env.JWT_REFRESH_EXPIRES_IN) as jwt.SignOptions['expiresIn'],
     issuer: env.JWT_ISSUER,
   };
   return jwt.sign(payload, getSecretForType(type), options);

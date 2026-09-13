@@ -39,9 +39,9 @@ export const webhookService = {
     return webhookRepository.update(webhookId, params);
   },
 
-  async softDelete(webhookId: string): Promise<void> {
+  async hardDelete(webhookId: string): Promise<void> {
     await webhookService.get(webhookId);
-    await webhookRepository.softDelete(webhookId);
+    await webhookRepository.hardDelete(webhookId);
   },
 
   async list(organizationId: string, projectId?: string | null): Promise<Webhook[]> {
@@ -122,7 +122,11 @@ export const webhookService = {
     }
   },
 
-  async sendDelivery(webhook: Webhook, payload: WebhookPayload, deliveryId?: string): Promise<{ status: number; ok: boolean }> {
+  async sendDelivery(
+    webhook: Webhook,
+    payload: WebhookPayload,
+    deliveryId?: string
+  ): Promise<{ status: number; ok: boolean }> {
     const body = JSON.stringify(payload);
     const signature = webhookService.sign(body, webhook.secret);
     try {
@@ -147,7 +151,10 @@ export const webhookService = {
       if (response.ok) {
         await webhookRepository.update(webhook.id, { lastTriggeredAt: new Date(), failureCount: 0 });
       } else {
-        await webhookRepository.update(webhook.id, { lastTriggeredAt: new Date(), failureCount: { increment: 1 } });
+        await webhookRepository.update(webhook.id, {
+          lastTriggeredAt: new Date(),
+          failureCount: { increment: 1 },
+        });
       }
       return { status: response.status, ok: response.ok };
     } catch (error) {

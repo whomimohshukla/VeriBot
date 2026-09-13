@@ -17,9 +17,30 @@ router.use(authenticate(), tenantMiddleware);
 
 router.post('/', requirePermission(Permissions.WEBHOOK_MANAGE), validate(createWebhookSchema), createWebhook);
 router.get('/', requirePermission(Permissions.WEBHOOK_READ), listWebhooks);
-router.get('/:webhookId', requirePermission(Permissions.WEBHOOK_READ), validate(webhookParamsSchema, 'params'), getWebhook);
-router.patch('/:webhookId', requirePermission(Permissions.WEBHOOK_MANAGE), validate(webhookParamsSchema, 'params'), validate(updateWebhookSchema), updateWebhook);
-router.delete('/:webhookId', requirePermission(Permissions.WEBHOOK_MANAGE), validate(webhookParamsSchema, 'params'), deleteWebhook);
-router.post('/:webhookId/test', requirePermission(Permissions.WEBHOOK_MANAGE), validate(webhookParamsSchema, 'params'), testWebhook);
+router.get(
+  '/:webhookId',
+  requirePermission(Permissions.WEBHOOK_READ),
+  validate(webhookParamsSchema, 'params'),
+  getWebhook
+);
+router.patch(
+  '/:webhookId',
+  requirePermission(Permissions.WEBHOOK_MANAGE),
+  validate(webhookParamsSchema, 'params'),
+  validate(updateWebhookSchema),
+  updateWebhook
+);
+router.delete(
+  '/:webhookId',
+  requirePermission(Permissions.WEBHOOK_MANAGE),
+  validate(webhookParamsSchema, 'params'),
+  deleteWebhook
+);
+router.post(
+  '/:webhookId/test',
+  requirePermission(Permissions.WEBHOOK_MANAGE),
+  validate(webhookParamsSchema, 'params'),
+  testWebhook
+);
 
 export default router;

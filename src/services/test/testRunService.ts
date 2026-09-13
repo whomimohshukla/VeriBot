@@ -125,11 +125,7 @@ export const testRunService = {
     return { scheduled: true };
   },
 
-  async list(
-    where: Prisma.TestRunWhereInput,
-    page = 1,
-    pageSize = 20
-  ): Promise<ListResponse<TestRun>> {
+  async list(where: Prisma.TestRunWhereInput, page = 1, pageSize = 20): Promise<ListResponse<TestRun>> {
     const skip = (page - 1) * pageSize;
     const { status, projectId } = where;
     const [items, total] = await Promise.all([

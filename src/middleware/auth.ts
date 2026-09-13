@@ -54,9 +54,7 @@ export const authenticate = (options: AuthenticateOptions = {}) => {
       }
 
       const roles = payload.roles.length > 0 ? payload.roles : [membership.role];
-      const permissions = Array.from(
-        new Set(roles.flatMap((role) => ROLE_PERMISSIONS[role] ?? []))
-      );
+      const permissions = Array.from(new Set(roles.flatMap((role) => ROLE_PERMISSIONS[role] ?? [])));
 
       const authUser: AuthUser = {
         id: user.id,
@@ -84,6 +82,8 @@ export const requireAuth = (req: Request, _res: Response, next: NextFunction): v
   return next();
 };
 
-export const hasPermission = (permission: string) => (user: AuthUser): boolean => {
-  return roleHasPermission(user.roles[0], permission);
-};
+export const hasPermission =
+  (permission: string) =>
+  (user: AuthUser): boolean => {
+    return roleHasPermission(user.roles[0], permission);
+  };

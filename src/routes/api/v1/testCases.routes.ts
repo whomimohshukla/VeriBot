@@ -56,12 +56,48 @@ const generateTests = async (req: Request, res: Response): Promise<void> => {
 };
 
 router.post('/', requirePermission(Permissions.TEST_CREATE), validate(createTestCaseSchema), createTestCase);
-router.get('/', requirePermission(Permissions.TEST_READ), validate(listTestCasesQuerySchema, 'query'), listTestCases);
-router.post('/generate', requirePermission(Permissions.TEST_CREATE), validate(generateTestsSchema), generateTests);
-router.get('/:testCaseId', requirePermission(Permissions.TEST_READ), validate(testCaseParamsSchema, 'params'), getTestCase);
-router.patch('/:testCaseId', requirePermission(Permissions.TEST_UPDATE), validate(testCaseParamsSchema, 'params'), validate(updateTestCaseSchema), updateTestCase);
-router.delete('/:testCaseId', requirePermission(Permissions.TEST_DELETE), validate(testCaseParamsSchema, 'params'), deleteTestCase);
-router.post('/:testCaseId/duplicate', requirePermission(Permissions.TEST_CREATE), validate(testCaseParamsSchema, 'params'), duplicateTestCase);
-router.patch('/:testCaseId/archive', requirePermission(Permissions.TEST_UPDATE), validate(testCaseParamsSchema, 'params'), archiveTestCase);
+router.get(
+  '/',
+  requirePermission(Permissions.TEST_READ),
+  validate(listTestCasesQuerySchema, 'query'),
+  listTestCases
+);
+router.post(
+  '/generate',
+  requirePermission(Permissions.TEST_CREATE),
+  validate(generateTestsSchema),
+  generateTests
+);
+router.get(
+  '/:testCaseId',
+  requirePermission(Permissions.TEST_READ),
+  validate(testCaseParamsSchema, 'params'),
+  getTestCase
+);
+router.patch(
+  '/:testCaseId',
+  requirePermission(Permissions.TEST_UPDATE),
+  validate(testCaseParamsSchema, 'params'),
+  validate(updateTestCaseSchema),
+  updateTestCase
+);
+router.delete(
+  '/:testCaseId',
+  requirePermission(Permissions.TEST_DELETE),
+  validate(testCaseParamsSchema, 'params'),
+  deleteTestCase
+);
+router.post(
+  '/:testCaseId/duplicate',
+  requirePermission(Permissions.TEST_CREATE),
+  validate(testCaseParamsSchema, 'params'),
+  duplicateTestCase
+);
+router.patch(
+  '/:testCaseId/archive',
+  requirePermission(Permissions.TEST_UPDATE),
+  validate(testCaseParamsSchema, 'params'),
+  archiveTestCase
+);
 
 export default router;

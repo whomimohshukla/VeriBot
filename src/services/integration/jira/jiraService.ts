@@ -40,7 +40,10 @@ export const jiraService = {
     }
   },
 
-  async createIssue(config: IntegrationConfig, params: CreateJiraIssueParams): Promise<{ issueKey: string; issueUrl: string }> {
+  async createIssue(
+    config: IntegrationConfig,
+    params: CreateJiraIssueParams
+  ): Promise<{ issueKey: string; issueUrl: string }> {
     const jira = getConfig(config);
     const response = await fetch(`https://${jira.domain}/rest/api/3/issue`, {
       method: 'POST',
@@ -62,6 +65,9 @@ export const jiraService = {
       throw new UpstreamError(`Jira failed to create issue (${response.status})`, text.slice(0, 500));
     }
     const issue = (await response.json()) as { key: string; self: string };
-    return { issueKey: issue.key, issueUrl: `${jira.domain}/browse/${issue.key}`.replace(/^https?:\/\//, 'https://') };
+    return {
+      issueKey: issue.key,
+      issueUrl: `${jira.domain}/browse/${issue.key}`.replace(/^https?:\/\//, 'https://'),
+    };
   },
 };

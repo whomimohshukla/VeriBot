@@ -108,12 +108,17 @@ export const browserService = {
           } else if (element.hasAttribute('role')) {
             type = `role:${element.getAttribute('role')}`;
           }
-          const interesting = ['input', 'textarea', 'select', 'button', 'a', 'form', 'table', 'nav'].includes(tag) || element.hasAttribute('role');
+          const interesting =
+            ['input', 'textarea', 'select', 'button', 'a', 'form', 'table', 'nav'].includes(tag) ||
+            element.hasAttribute('role');
           if (interesting) {
             const selector = buildCssSelector(element);
             if (selector && !seen.has(selector)) {
               seen.add(selector);
-              const name = element.getAttribute('aria-label') || element.getAttribute('name') || element.textContent?.trim()?.slice(0, 80);
+              const name =
+                element.getAttribute('aria-label') ||
+                element.getAttribute('name') ||
+                element.textContent?.trim()?.slice(0, 80);
               results.push({ name: name || null, selector, type });
             }
           }

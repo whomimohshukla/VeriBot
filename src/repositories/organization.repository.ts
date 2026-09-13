@@ -2,20 +2,16 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database';
 
 export const organizationRepository = {
-  findById: (id: string) =>
-    prisma.organization.findFirst({ where: { id, deletedAt: null } }),
+  findById: (id: string) => prisma.organization.findFirst({ where: { id, deletedAt: null } }),
 
-  findBySlug: (slug: string) =>
-    prisma.organization.findFirst({ where: { slug, deletedAt: null } }),
+  findBySlug: (slug: string) => prisma.organization.findFirst({ where: { slug, deletedAt: null } }),
 
-  create: (data: Prisma.OrganizationCreateInput) =>
-    prisma.organization.create({ data }),
+  create: (data: Prisma.OrganizationCreateInput) => prisma.organization.create({ data }),
 
   update: (id: string, data: Prisma.OrganizationUpdateInput) =>
     prisma.organization.update({ where: { id }, data }),
 
-  softDelete: (id: string) =>
-    prisma.organization.update({ where: { id }, data: { deletedAt: new Date() } }),
+  softDelete: (id: string) => prisma.organization.update({ where: { id }, data: { deletedAt: new Date() } }),
 
   listMembers: (organizationId: string) =>
     prisma.membership.findMany({
@@ -35,8 +31,7 @@ export const organizationRepository = {
       orderBy: { joinedAt: 'asc' },
     }),
 
-  addMember: (data: Prisma.MembershipUncheckedCreateInput) =>
-    prisma.membership.create({ data }),
+  addMember: (data: Prisma.MembershipUncheckedCreateInput) => prisma.membership.create({ data }),
 
   updateMemberRole: (membershipId: string, role: Prisma.MembershipUpdateInput['role']) =>
     prisma.membership.update({

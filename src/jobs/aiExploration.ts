@@ -12,7 +12,12 @@ export const processAiExplorationJob = async (job: Job<AiJobData>): Promise<void
     return;
   }
 
-  const data = job.data as { applicationId: string; environmentId?: string; testUserId?: string; maxPages?: number };
+  const data = job.data as {
+    applicationId: string;
+    environmentId?: string;
+    testUserId?: string;
+    maxPages?: number;
+  };
   const application = await applicationRepository.findById(data.applicationId);
   if (!application) {
     throw new NotFoundError(Messages.APPLICATION.NOT_FOUND);

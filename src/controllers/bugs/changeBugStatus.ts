@@ -7,7 +7,9 @@ import { prisma } from '../../config/database';
 
 export const changeBugStatus = async (req: Request, res: Response): Promise<void> => {
   const { bugId } = req.params as { bugId: string };
-  const { status } = req.body as { status: 'OPEN' | 'IN_PROGRESS' | 'FIXED' | 'VERIFIED' | 'CLOSED' | 'REJECTED' | 'DUPLICATE' };
+  const { status } = req.body as {
+    status: 'OPEN' | 'IN_PROGRESS' | 'FIXED' | 'VERIFIED' | 'CLOSED' | 'REJECTED' | 'DUPLICATE';
+  };
   const existing = await bugService.get(bugId);
   const project = await prisma.project.findUnique({ where: { id: existing.projectId } });
   if (req.orgId && project?.organizationId !== req.orgId) {

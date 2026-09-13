@@ -33,11 +33,7 @@ export type AiJobData =
     };
 
 export type AiJobNames =
-  | 'explore-application'
-  | 'analyze-failure'
-  | 'generate-tests'
-  | 'run-agent'
-  | 'track-ai-cost';
+  'explore-application' | 'analyze-failure' | 'generate-tests' | 'run-agent' | 'track-ai-cost';
 
 export const aiQueue = new Queue<AiJobData>('ai', queueConfig);
 

@@ -67,9 +67,9 @@ export const testCaseService = {
     return testCaseRepository.update(testCaseId, data);
   },
 
-  async softDelete(testCaseId: string): Promise<void> {
+  async hardDelete(testCaseId: string): Promise<void> {
     await testCaseService.get(testCaseId);
-    await testCaseRepository.softDelete(testCaseId);
+    await testCaseRepository.hardDelete(testCaseId);
   },
 
   async archive(testCaseId: string): Promise<TestCase> {
@@ -94,11 +94,7 @@ export const testCaseService = {
     });
   },
 
-  async list(
-    where: Prisma.TestCaseWhereInput,
-    page = 1,
-    pageSize = 20
-  ): Promise<ListResponse<TestCase>> {
+  async list(where: Prisma.TestCaseWhereInput, page = 1, pageSize = 20): Promise<ListResponse<TestCase>> {
     const skip = (page - 1) * pageSize;
     const [items, total] = await Promise.all([
       testCaseRepository.list(where, skip, pageSize),

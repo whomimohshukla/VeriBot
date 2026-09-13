@@ -55,12 +55,12 @@ export const projectService = {
     });
   },
 
-  async softDelete(projectId: string): Promise<void> {
+  async hardDelete(projectId: string): Promise<void> {
     const existing = await projectRepository.findById(projectId);
     if (!existing) {
       throw new NotFoundError(Messages.PROJECT.NOT_FOUND);
     }
-    await projectRepository.softDelete(projectId);
+    await projectRepository.hardDelete(projectId);
   },
 
   async archive(projectId: string): Promise<Project> {
@@ -91,15 +91,14 @@ export const projectService = {
   async getDashboard(projectId: string) {
     const project = await projectService.getIncludingArchived(projectId);
 
-    const [totalTests, totalRuns, passedTests, failedTests, openBugs, recentRuns] =
-      await Promise.all([
-        testCaseRepository.count({ projectId }),
-        testRunRepository.count({ projectId }),
-        testRunRepository.count({ projectId, status: 'PASSED' }),
-        testRunRepository.count({ projectId, status: 'FAILED' }),
-        bugRepository.count({ projectId, status: { not: 'CLOSED' } } as Prisma.BugWhereInput),
-        testRunRepository.list(projectId, 0, 10),
-      ]);
+    const [totalTests, totalRuns, passedTests, failedTests, openBugs, recentRuns] = await Promise.all([
+      testCaseRepository.count({ projectId }),
+      testRunRepository.count({ projectId }),
+      testRunRepository.count({ projectId, status: 'PASSED' }),
+      testRunRepository.count({ projectId, status: 'FAILED' }),
+      bugRepository.count({ projectId, status: { not: 'CLOSED' } } as Prisma.BugWhereInput),
+      testRunRepository.list(projectId, 0, 10),
+    ]);
 
     return {
       project: {

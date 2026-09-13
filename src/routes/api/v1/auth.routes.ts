@@ -27,8 +27,18 @@ router.post('/login', authRateLimiter, validate(loginSchema), login);
 router.post('/refresh-token', authRateLimiter, validate(refreshTokenSchema), refreshToken);
 router.post('/logout', authenticate({ optional: true }), logout);
 router.post('/verify-email', validate(verifyEmailSchema), verifyEmailController);
-router.post('/resend-verification', authRateLimiter, validate(requestResetPasswordSchema), resendVerificationController);
-router.post('/request-password-reset', authRateLimiter, validate(requestResetPasswordSchema), requestResetPassword);
+router.post(
+  '/resend-verification',
+  authRateLimiter,
+  validate(requestResetPasswordSchema),
+  resendVerificationController
+);
+router.post(
+  '/request-password-reset',
+  authRateLimiter,
+  validate(requestResetPasswordSchema),
+  requestResetPassword
+);
 router.post('/reset-password', authRateLimiter, validate(resetPasswordSchema), resetPassword);
 
 export default router;

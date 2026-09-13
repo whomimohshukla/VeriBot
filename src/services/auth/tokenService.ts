@@ -62,7 +62,12 @@ export const tokenService = {
 
     const redis = getRedis();
     const expiresInSeconds = 7 * 24 * 60 * 60;
-    await redis.set(`${REFRESH_PREFIX}${jti}`, JSON.stringify({ userId: options.userId, orgId: options.orgId }), 'EX', expiresInSeconds);
+    await redis.set(
+      `${REFRESH_PREFIX}${jti}`,
+      JSON.stringify({ userId: options.userId, orgId: options.orgId }),
+      'EX',
+      expiresInSeconds
+    );
     await recordUserToken(options.userId, jti, expiresInSeconds);
 
     return {

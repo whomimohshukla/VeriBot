@@ -46,7 +46,12 @@ export const githubService = {
     if (!response.ok) {
       throw new UpstreamError(`GitHub API returned ${response.status}`);
     }
-    return (await response.json()) as Array<{ full_name: string; name: string; html_url: string; default_branch: string }>;
+    return (await response.json()) as Array<{
+      full_name: string;
+      name: string;
+      html_url: string;
+      default_branch: string;
+    }>;
   },
 
   async createIssue(config: IntegrationConfig, params: CreateIssueParams): Promise<{ issueUrl: string }> {

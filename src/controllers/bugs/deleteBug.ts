@@ -12,6 +12,6 @@ export const deleteBug = async (req: Request, res: Response): Promise<void> => {
   if (req.orgId && project?.organizationId !== req.orgId) {
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
-  await bugService.softDelete(bugId);
+  await bugService.hardDelete(bugId);
   res.status(200).json(ok(null, { message: Messages.BUG.DELETED }));
 };

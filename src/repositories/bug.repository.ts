@@ -12,14 +12,11 @@ export const bugRepository = {
       },
     }),
 
-  create: (data: Prisma.BugUncheckedCreateInput) =>
-    prisma.bug.create({ data }),
+  create: (data: Prisma.BugUncheckedCreateInput) => prisma.bug.create({ data }),
 
-  update: (id: string, data: Prisma.BugUncheckedUpdateInput) =>
-    prisma.bug.update({ where: { id }, data }),
+  update: (id: string, data: Prisma.BugUncheckedUpdateInput) => prisma.bug.update({ where: { id }, data }),
 
-  softDelete: (id: string) =>
-    prisma.bug.delete({ where: { id } }),
+  hardDelete: (id: string) => prisma.bug.delete({ where: { id } }),
 
   changeStatus: (id: string, status: Prisma.BugUpdateInput['status']) =>
     prisma.bug.update({
@@ -30,11 +27,9 @@ export const bugRepository = {
       },
     }),
 
-  assign: (id: string, assigneeId: string) =>
-    prisma.bug.update({ where: { id }, data: { assigneeId } }),
+  assign: (id: string, assigneeId: string) => prisma.bug.update({ where: { id }, data: { assigneeId } }),
 
-  addComment: (data: Prisma.BugCommentUncheckedCreateInput) =>
-    prisma.bugComment.create({ data }),
+  addComment: (data: Prisma.BugCommentUncheckedCreateInput) => prisma.bugComment.create({ data }),
 
   list: (projectId: string, skip = 0, take = 20, status?: string, severity?: string) =>
     prisma.bug.findMany({
@@ -48,6 +43,5 @@ export const bugRepository = {
       orderBy: { createdAt: 'desc' },
     }),
 
-  count: (where: Prisma.BugWhereInput = {}) =>
-    prisma.bug.count({ where }),
+  count: (where: Prisma.BugWhereInput = {}) => prisma.bug.count({ where }),
 };

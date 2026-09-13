@@ -69,7 +69,11 @@ export const agentOrchestrator = {
   },
 };
 
-const dispatch = async (agentType: AgentType, context: AgentContext, input: AgentInput): Promise<AgentResult<unknown>> => {
+const dispatch = async (
+  agentType: AgentType,
+  context: AgentContext,
+  input: AgentInput
+): Promise<AgentResult<unknown>> => {
   switch (agentType) {
     case 'EXPLORER':
       return explorerAgent.execute(context, input as ExplorerInput);

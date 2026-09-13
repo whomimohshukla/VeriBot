@@ -15,15 +15,16 @@ export interface DetectBugsParams {
 
 export const bugDetectionService = {
   async detect(params: DetectBugsParams): Promise<{ bugsCreated: number }> {
-    const failingEntries = params.failingResults && params.failingResults.length > 0
-      ? params.failingResults
-      : [
-          {
-            testResultId: params.testResultId ?? '',
-            testCaseId: params.testCaseId ?? '',
-            testCaseTitle: '',
-          },
-        ];
+    const failingEntries =
+      params.failingResults && params.failingResults.length > 0
+        ? params.failingResults
+        : [
+            {
+              testResultId: params.testResultId ?? '',
+              testCaseId: params.testCaseId ?? '',
+              testCaseTitle: '',
+            },
+          ];
 
     let bugsCreated = 0;
     for (const failing of failingEntries) {

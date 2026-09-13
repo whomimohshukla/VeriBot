@@ -13,7 +13,17 @@ export const createTestCase = async (req: Request, res: Response): Promise<void>
     projectId: string;
     title: string;
     description?: string;
-    type: 'FUNCTIONAL' | 'HAPPY_PATH' | 'NEGATIVE' | 'EDGE_CASE' | 'BOUNDARY' | 'REGRESSION' | 'SMOKE' | 'SECURITY' | 'ACCESSIBILITY' | 'API';
+    type:
+      | 'FUNCTIONAL'
+      | 'HAPPY_PATH'
+      | 'NEGATIVE'
+      | 'EDGE_CASE'
+      | 'BOUNDARY'
+      | 'REGRESSION'
+      | 'SMOKE'
+      | 'SECURITY'
+      | 'ACCESSIBILITY'
+      | 'API';
     priority: 'high' | 'medium' | 'low';
     steps: unknown[];
     expectedResult?: string;

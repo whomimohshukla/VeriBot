@@ -12,6 +12,6 @@ export const deleteTestCase = async (req: Request, res: Response): Promise<void>
   if (req.orgId && project?.organizationId !== req.orgId) {
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
-  await testCaseService.softDelete(testCaseId);
+  await testCaseService.hardDelete(testCaseId);
   res.status(200).json(ok(null, { message: Messages.TEST.DELETED }));
 };

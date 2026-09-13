@@ -9,7 +9,20 @@ export const createBug = async (req: Request, res: Response): Promise<void> => {
   if (!req.user || !req.orgId) {
     throw new UnauthorizedError(Messages.AUTH.UNAUTHORIZED);
   }
-  const { projectId, applicationId, testCaseId, title, description, severity, priority, status, rootCause, reproductionSteps, expectedBehavior, actualBehavior } = req.body as {
+  const {
+    projectId,
+    applicationId,
+    testCaseId,
+    title,
+    description,
+    severity,
+    priority,
+    status,
+    rootCause,
+    reproductionSteps,
+    expectedBehavior,
+    actualBehavior,
+  } = req.body as {
     projectId: string;
     applicationId?: string;
     testCaseId?: string;

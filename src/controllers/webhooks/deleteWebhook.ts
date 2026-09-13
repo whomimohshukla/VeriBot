@@ -10,6 +10,6 @@ export const deleteWebhook = async (req: Request, res: Response): Promise<void> 
   if (req.orgId && existing.organizationId !== req.orgId) {
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
-  await webhookService.softDelete(webhookId);
+  await webhookService.hardDelete(webhookId);
   res.status(200).json(ok(null, { message: Messages.WEBHOOK.DELETED }));
 };

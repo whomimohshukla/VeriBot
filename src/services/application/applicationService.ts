@@ -80,12 +80,12 @@ export const applicationService = {
     });
   },
 
-  async softDelete(applicationId: string): Promise<void> {
+  async hardDelete(applicationId: string): Promise<void> {
     const existing = await applicationRepository.findById(applicationId);
     if (!existing) {
       throw new NotFoundError(Messages.APPLICATION.NOT_FOUND);
     }
-    await applicationRepository.softDelete(applicationId);
+    await applicationRepository.hardDelete(applicationId);
   },
 
   async listByProject(projectId: string): Promise<Application[]> {

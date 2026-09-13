@@ -44,9 +44,9 @@ export const bugService = {
     return bugRepository.update(bugId, params);
   },
 
-  async softDelete(bugId: string): Promise<void> {
+  async hardDelete(bugId: string): Promise<void> {
     await bugService.get(bugId);
-    await bugRepository.softDelete(bugId);
+    await bugRepository.hardDelete(bugId);
   },
 
   async changeStatus(bugId: string, status: Prisma.BugUpdateInput['status']): Promise<Bug> {
@@ -77,7 +77,11 @@ export const bugService = {
     const skip = (page - 1) * pageSize;
     const [items, total] = await Promise.all([
       bugRepository.list(projectId, skip, pageSize, filters.status, filters.severity),
-      bugRepository.count({ projectId, ...(filters.status ? { status: filters.status as Prisma.BugWhereInput['status'] } : {}), ...(filters.severity ? { severity: filters.severity as Prisma.BugWhereInput['severity'] } : {}) }),
+      bugRepository.count({
+        projectId,
+        ...(filters.status ? { status: filters.status as Prisma.BugWhereInput['status'] } : {}),
+        ...(filters.severity ? { severity: filters.severity as Prisma.BugWhereInput['severity'] } : {}),
+      }),
     ]);
     return pagination(items, total, { page, pageSize });
   },

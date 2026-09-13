@@ -33,7 +33,8 @@ export const toSlug = (value: string): string => {
 
 export const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const isEmptyString = (value: unknown): value is string => typeof value === 'string' && value.trim() === '';
+export const isEmptyString = (value: unknown): value is string =>
+  typeof value === 'string' && value.trim() === '';
 
 export const safeJsonParse = <T>(value: string, fallback: T | null = null): T | null => {
   try {

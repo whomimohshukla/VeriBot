@@ -33,11 +33,7 @@ export const testExecutionService = {
 
     for (const testResult of testRun.testResults) {
       try {
-        const outcome = await testExecutionService.executeTestCase(
-          testResult.testCase,
-          testRun,
-          context
-        );
+        const outcome = await testExecutionService.executeTestCase(testResult.testCase, testRun, context);
         await testResultRepository.upsert(context.testRunId, testResult.testCaseId, {
           status: outcome.status,
           duration: outcome.duration,
@@ -89,33 +85,30 @@ export const testExecutionService = {
         testResultId: failedResults[0].testResultId,
         organizationId: context.organizationId,
         projectId: context.projectId,
-        ...(failedResults.length > 1
-          ? { failingResults: failedResults }
-          : {}),
+        ...(failedResults.length > 1 ? { failingResults: failedResults } : {}),
       });
     }
 
-    await webhookService.dispatch(context.organizationId, finalStatus === 'PASSED' ? 'TEST_COMPLETED' : 'TEST_FAILED', {
-      testRunId: context.testRunId,
-      projectId: context.projectId,
-      status: finalStatus,
-      passedTests,
-      failedTests: failedCount,
-      skippedTests,
-      duration: Date.now() - startedAt,
-    });
-
-    logger.info(
-      { testRunId: context.testRunId, passedTests, failedTests: failedCount },
-      'test run finished'
+    await webhookService.dispatch(
+      context.organizationId,
+      finalStatus === 'PASSED' ? 'TEST_COMPLETED' : 'TEST_FAILED',
+      {
+        testRunId: context.testRunId,
+        projectId: context.projectId,
+        status: finalStatus,
+        passedTests,
+        failedTests: failedCount,
+        skippedTests,
+        duration: Date.now() - startedAt,
+      }
     );
+
+    logger.info({ testRunId: context.testRunId, passedTests, failedTests: failedCount }, 'test run finished');
   },
 
   async executeTestCase(testCase: TestCase, testRun: TestRun, context: ExecutionContext) {
     const steps = (testCase.steps as unknown as TestStep[]) ?? [];
-    const baseUrl = testRun.environmentId
-      ? await getEnvironmentUrl(testRun.environmentId)
-      : undefined;
+    const baseUrl = testRun.environmentId ? await getEnvironmentUrl(testRun.environmentId) : undefined;
 
     const browserContext = await browserService.newContext();
     const page = await browserContext.newPage();
@@ -143,17 +136,20 @@ export const testExecutionService = {
       const failedStep = results.find((r) => !r.success);
 
       const screenshotPath = failedStep ? `/tmp/veribot-${context.testRunId}-${testCase.id}.png` : null;
-      const screenshotUrl = failedStep && screenshotPath ? await pageService.captureScreenshot(page, screenshotPath) : null;
+      const screenshotUrl =
+        failedStep && screenshotPath ? await pageService.captureScreenshot(page, screenshotPath) : null;
 
-      const domSnapshot = await page.evaluate(() => {
-        const title = document.title;
-        const locationUrl = window.location.href;
-        try {
-          return { title, locationUrl, text: document.body?.innerText?.slice(0, 50000) ?? '' };
-        } catch {
-          return null;
-        }
-      }).catch(() => null);
+      const domSnapshot = await page
+        .evaluate(() => {
+          const title = document.title;
+          const locationUrl = window.location.href;
+          try {
+            return { title, locationUrl, text: document.body?.innerText?.slice(0, 50000) ?? '' };
+          } catch {
+            return null;
+          }
+        })
+        .catch(() => null);
 
       const bodyText = domSnapshot ? String((domSnapshot as { text: string }).text ?? '') : '';
 

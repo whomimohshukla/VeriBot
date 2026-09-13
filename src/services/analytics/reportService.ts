@@ -33,9 +33,7 @@ export const reportService = {
       metricsService.getTestMetrics({ projectId: params.projectId }),
       metricsService.getBugMetrics(params.projectId),
       metricsService.getAgentMetrics(params.organizationId),
-      params.testRunId
-        ? prisma.testRun.findUnique({ where: { id: params.testRunId } })
-        : null,
+      params.testRunId ? prisma.testRun.findUnique({ where: { id: params.testRunId } }) : null,
     ]);
 
     logger.info({ projectId: params.projectId }, 'report generated');

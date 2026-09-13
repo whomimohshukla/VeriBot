@@ -28,8 +28,7 @@ export const testResultRepository = {
   update: (id: string, data: Prisma.TestResultUncheckedUpdateInput) =>
     prisma.testResult.update({ where: { id }, data }),
 
-  create: (data: Prisma.TestResultUncheckedCreateInput) =>
-    prisma.testResult.create({ data }),
+  create: (data: Prisma.TestResultUncheckedCreateInput) => prisma.testResult.create({ data }),
 
   listByRun: (testRunId: string) =>
     prisma.testResult.findMany({

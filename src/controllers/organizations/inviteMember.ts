@@ -9,7 +9,10 @@ export const inviteMember = async (req: Request, res: Response): Promise<void> =
     throw new UnauthorizedError(Messages.AUTH.UNAUTHORIZED);
   }
   const { organizationId } = req.params as { organizationId: string };
-  const { email, role } = req.body as { email: string; role: 'OWNER' | 'ADMIN' | 'QA_MANAGER' | 'DEVELOPER' | 'TESTER' | 'VIEWER' };
+  const { email, role } = req.body as {
+    email: string;
+    role: 'OWNER' | 'ADMIN' | 'QA_MANAGER' | 'DEVELOPER' | 'TESTER' | 'VIEWER';
+  };
   const membership = await organizationService.inviteMember({
     organizationId,
     email,

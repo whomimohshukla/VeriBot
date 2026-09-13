@@ -6,7 +6,11 @@ import { s3Service, type UploadResult } from './s3Service';
 export type FileKind = 'screenshot' | 'video' | 'attachment' | 'trace' | 'report';
 
 export const fileService = {
-  async storeBuffer(kind: FileKind, buffer: Buffer, options: { contentType?: string; extension?: string; actorId?: string } = {}): Promise<UploadResult> {
+  async storeBuffer(
+    kind: FileKind,
+    buffer: Buffer,
+    options: { contentType?: string; extension?: string; actorId?: string } = {}
+  ): Promise<UploadResult> {
     if (await s3Service.isConfigured()) {
       return s3Service.uploadBuffer(buffer, {
         prefix: `${kind}${options.actorId ? `/${options.actorId}` : ''}`,
@@ -33,7 +37,11 @@ export const fileService = {
   },
 };
 
-const storeLocally = (kind: FileKind, buffer: Buffer, options: { contentType?: string; extension?: string; actorId?: string } = {}): UploadResult => {
+const storeLocally = (
+  kind: FileKind,
+  buffer: Buffer,
+  options: { contentType?: string; extension?: string; actorId?: string } = {}
+): UploadResult => {
   const dir = path.resolve(process.cwd(), 'storage', kind, options.actorId ?? 'anonymous');
   fs.mkdirSync(dir, { recursive: true });
   const extension = options.extension ?? inferExtension(options.contentType);

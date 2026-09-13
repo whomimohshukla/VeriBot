@@ -75,9 +75,7 @@ export const llmService = {
           messages,
           temperature: options.temperature ?? config.temperature,
           max_tokens: options.maxTokens ?? config.maxTokens,
-          ...(options.responseFormat === 'json_object'
-            ? { response_format: { type: 'json_object' } }
-            : {}),
+          ...(options.responseFormat === 'json_object' ? { response_format: { type: 'json_object' } } : {}),
         }),
       });
 
@@ -96,7 +94,9 @@ export const llmService = {
       const inputTokens = data.usage?.prompt_tokens ?? 0;
       const outputTokens = data.usage?.completion_tokens ?? 0;
       const totalTokens = data.usage?.total_tokens ?? inputTokens + outputTokens;
-      const costUsd = (inputTokens / 1_000_000) * COST_PER_MILLION.input + (outputTokens / 1_000_000) * COST_PER_MILLION.output;
+      const costUsd =
+        (inputTokens / 1_000_000) * COST_PER_MILLION.input +
+        (outputTokens / 1_000_000) * COST_PER_MILLION.output;
 
       return {
         content,

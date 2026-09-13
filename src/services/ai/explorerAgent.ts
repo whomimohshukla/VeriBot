@@ -41,10 +41,7 @@ export const explorerAgent = {
 
   async execute(context: AgentContext, input: ExplorerInput): Promise<AgentResult<ExplorerOutput>> {
     const map = await applicationRepository.getMap(input.applicationId);
-    const messages = buildPrompt(
-      map ? { pages: map.pages, workflows: map.workflows } : null,
-      input.baseUrl
-    );
+    const messages = buildPrompt(map ? { pages: map.pages, workflows: map.workflows } : null, input.baseUrl);
 
     if (!llmService.isConfigured()) {
       return {
@@ -58,7 +55,10 @@ export const explorerAgent = {
     }
 
     const response = await llmService.chatJson<ExplorerOutput>(messages);
-    logger.info({ applicationId: input.applicationId, agentRunId: context.agentRunId }, 'explorer agent complete');
+    logger.info(
+      { applicationId: input.applicationId, agentRunId: context.agentRunId },
+      'explorer agent complete'
+    );
     return { output: response.data, usage: response.usage, messages };
   },
 };

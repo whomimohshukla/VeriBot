@@ -1,4 +1,4 @@
-export { 
+export {
   registerSchema,
   loginSchema,
   refreshTokenSchema,

@@ -9,13 +9,7 @@ import { setupWorkers } from './workers';
 import routes from './routes';
 import { logger } from './config/logger';
 import { apiRateLimiter } from './middleware/rateLimiter';
-import {
-  corsMiddleware,
-  errorHandler,
-  helmetMiddleware,
-  requestId,
-  requestLogger,
-} from './middleware';
+import { corsMiddleware, errorHandler, helmetMiddleware, requestId, requestLogger } from './middleware';
 
 const app = express();
 

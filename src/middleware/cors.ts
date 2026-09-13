@@ -3,7 +3,9 @@ import { env } from '../config/environment';
 
 const parseOrigins = (): string[] | true => {
   if (env.CORS_ORIGINS === '*') return true;
-  return env.CORS_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean);
+  return env.CORS_ORIGINS.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 };
 
 export const corsMiddleware = cors({

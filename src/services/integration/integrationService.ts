@@ -37,17 +37,19 @@ const isEncryptedValue = (value: string): boolean => {
   try {
     const buffer = Buffer.from(value, 'base64');
     const parsed = JSON.parse(buffer.toString('utf8'));
-    return typeof parsed === 'object' && parsed !== null && typeof parsed.data === 'string' && typeof parsed.iv === 'string';
+    return (
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      typeof parsed.data === 'string' &&
+      typeof parsed.iv === 'string'
+    );
   } catch {
     return false;
   }
 };
 
 export const integrationService = {
-  async connect(
-    organizationId: string,
-    params: ConnectIntegrationInput
-  ): Promise<Integration> {
+  async connect(organizationId: string, params: ConnectIntegrationInput): Promise<Integration> {
     const existing = await integrationRepository.findByType(organizationId, params.type, params.projectId);
     if (existing) {
       throw new ConflictError('This integration is already connected.');
@@ -77,7 +79,7 @@ export const integrationService = {
     const integration = await integrationService.get(integrationId);
     const redis = getRedis();
     await redis.del(`integration:${integration.id}`);
-    await integrationRepository.softDelete(integrationId);
+    await integrationRepository.hardDelete(integrationId);
   },
 
   async list(organizationId: string, projectId?: string | null): Promise<Integration[]> {
@@ -110,7 +112,10 @@ export const integrationService = {
           return { ok: result.ok, message: result.message };
         }
         default:
-          return { ok: true, message: `${integration.type} integration exists but has no connectivity test.` };
+          return {
+            ok: true,
+            message: `${integration.type} integration exists but has no connectivity test.`,
+          };
       }
     } catch (error) {
       return {

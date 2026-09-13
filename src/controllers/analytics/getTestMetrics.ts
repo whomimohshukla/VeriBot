@@ -15,7 +15,9 @@ export const getTestMetrics = async (req: Request, res: Response): Promise<void>
   if (projectId) {
     const project = await prisma.project.findUnique({ where: { id: projectId } });
     if (!project || project.organizationId !== req.orgId) {
-      res.status(403).json({ success: false, error: { code: 'FORBIDDEN', message: Messages.AUTH.FORBIDDEN } });
+      res
+        .status(403)
+        .json({ success: false, error: { code: 'FORBIDDEN', message: Messages.AUTH.FORBIDDEN } });
       return;
     }
   }

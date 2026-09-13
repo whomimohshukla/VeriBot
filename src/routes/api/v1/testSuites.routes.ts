@@ -8,6 +8,11 @@ const router = Router();
 
 router.use(authenticate(), tenantMiddleware);
 
-router.post('/', requirePermission(Permissions.TEST_CREATE), validate(createTestSuiteSchema), createTestSuite);
+router.post(
+  '/',
+  requirePermission(Permissions.TEST_CREATE),
+  validate(createTestSuiteSchema),
+  createTestSuite
+);
 
 export default router;

@@ -12,12 +12,7 @@ export const queues = {
 };
 
 export const closeAllQueues = async (): Promise<void> => {
-  await Promise.all([
-    testQueue.close(),
-    aiQueue.close(),
-    reportQueue.close(),
-    webhookQueue.close(),
-  ]);
+  await Promise.all([testQueue.close(), aiQueue.close(), reportQueue.close(), webhookQueue.close()]);
 };
 
 export type { TestJobData, TestJobNames } from './testQueue';

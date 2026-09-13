@@ -15,9 +15,29 @@ const router = Router();
 router.use(authenticate(), tenantMiddleware);
 
 router.post('/', requirePermission(Permissions.TEST_EXECUTE), validate(runTestsSchema), runTests);
-router.post('/scheduled', requirePermission(Permissions.TEST_EXECUTE), validate(scheduleTestRunSchema), scheduleTestRun);
-router.get('/:testRunId', requirePermission(Permissions.TEST_READ), validate(testRunParamsSchema, 'params'), getTestRun);
-router.get('/:testRunId/results', requirePermission(Permissions.TEST_READ), validate(testRunParamsSchema, 'params'), getTestRunResults);
-router.post('/:testRunId/cancel', requirePermission(Permissions.TEST_EXECUTE), validate(testRunParamsSchema, 'params'), cancelTestRun);
+router.post(
+  '/scheduled',
+  requirePermission(Permissions.TEST_EXECUTE),
+  validate(scheduleTestRunSchema),
+  scheduleTestRun
+);
+router.get(
+  '/:testRunId',
+  requirePermission(Permissions.TEST_READ),
+  validate(testRunParamsSchema, 'params'),
+  getTestRun
+);
+router.get(
+  '/:testRunId/results',
+  requirePermission(Permissions.TEST_READ),
+  validate(testRunParamsSchema, 'params'),
+  getTestRunResults
+);
+router.post(
+  '/:testRunId/cancel',
+  requirePermission(Permissions.TEST_EXECUTE),
+  validate(testRunParamsSchema, 'params'),
+  cancelTestRun
+);
 
 export default router;

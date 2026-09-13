@@ -3,12 +3,14 @@ import { env } from '../config/environment';
 import { Messages } from '../constants/messages';
 import type { ErrorCode } from '../types/errors.types';
 
-export const createRateLimiter = (options: {
-  windowMs?: number;
-  max?: number;
-  code?: ErrorCode;
-  message?: string;
-} = {}): RateLimitRequestHandler => {
+export const createRateLimiter = (
+  options: {
+    windowMs?: number;
+    max?: number;
+    code?: ErrorCode;
+    message?: string;
+  } = {}
+): RateLimitRequestHandler => {
   return rateLimit({
     windowMs: options.windowMs ?? env.RATE_LIMIT_WINDOW_MS,
     max: options.max ?? env.RATE_LIMIT_MAX,

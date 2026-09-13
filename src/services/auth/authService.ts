@@ -196,9 +196,7 @@ export const authService = {
       throw new UnauthorizedError(Messages.AUTH.INVALID_TOKEN);
     }
     const roles = [membership.role];
-    const permissions = Array.from(
-      new Set(roles.flatMap((role) => ROLE_PERMISSIONS[role] ?? []))
-    );
+    const permissions = Array.from(new Set(roles.flatMap((role) => ROLE_PERMISSIONS[role] ?? [])));
     return {
       id: user.id,
       email: user.email,

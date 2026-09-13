@@ -9,10 +9,7 @@ export const created = <T>(data: T, meta?: Record<string, unknown>): ApiResponse
   return ok(data, meta);
 };
 
-export const errorResponse = (
-  error: ErrorPayload,
-  requestId?: string
-): ApiErrorResponse => {
+export const errorResponse = (error: ErrorPayload, requestId?: string): ApiErrorResponse => {
   return {
     success: false,
     error: {
@@ -24,11 +21,7 @@ export const errorResponse = (
   };
 };
 
-export const pagination = <T>(
-  items: T[],
-  total: number,
-  params: PaginationParams
-): ListResponse<T> => {
+export const pagination = <T>(items: T[], total: number, params: PaginationParams): ListResponse<T> => {
   const page = params.page ?? 1;
   const pageSize = params.pageSize ?? 20;
   const size = Math.max(1, pageSize);
@@ -40,4 +33,4 @@ export const pagination = <T>(
     pageSize: size,
     totalPages,
   };
-}
+};

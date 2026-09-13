@@ -15,12 +15,17 @@ export const generateReport = async (req: Request, res: Response): Promise<void>
   if (!projectId) {
     const testRun = testRunId ? await prisma.testRun.findUnique({ where: { id: testRunId } }) : null;
     if (!testRun) {
-      res.status(400).json({ success: false, error: { code: 'BAD_REQUEST', message: 'projectId or testRunId is required.' } });
+      res.status(400).json({
+        success: false,
+        error: { code: 'BAD_REQUEST', message: 'projectId or testRunId is required.' },
+      });
       return;
     }
     const project = await prisma.project.findUnique({ where: { id: testRun.projectId } });
     if (!project || project.organizationId !== req.orgId) {
-      res.status(403).json({ success: false, error: { code: 'FORBIDDEN', message: Messages.AUTH.FORBIDDEN } });
+      res
+        .status(403)
+        .json({ success: false, error: { code: 'FORBIDDEN', message: Messages.AUTH.FORBIDDEN } });
       return;
     }
     const start = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1));

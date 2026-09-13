@@ -11,6 +11,6 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
   if (req.orgId && project?.organizationId !== req.orgId) {
     throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
   }
-  await projectService.softDelete(projectId);
+  await projectService.hardDelete(projectId);
   res.status(200).json(ok(null, { message: Messages.PROJECT.DELETED }));
 };

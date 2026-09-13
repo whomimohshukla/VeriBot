@@ -69,8 +69,9 @@ export const metricsService = {
     const avgAgeDays =
       recently.length > 0
         ? Math.round(
-            (recently.reduce((sum, bug) => sum + (Date.now() - bug.createdAt.getTime()), 0) / recently.length) /
-              (24 * 60 * 60 * 1000) *
+            (recently.reduce((sum, bug) => sum + (Date.now() - bug.createdAt.getTime()), 0) /
+              recently.length /
+              (24 * 60 * 60 * 1000)) *
               10
           ) / 10
         : 0;

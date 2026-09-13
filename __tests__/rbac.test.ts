@@ -19,7 +19,7 @@ const makeReq = (claims: { user?: AuthUser }): Partial<Request> => ({
   ...(claims.user ? { user: claims.user } : {}),
 });
 
-const makeRes = () => ({} as Response);
+const makeRes = () => ({}) as Response;
 
 const makeNext = () => {
   const next = jest.fn() as jest.Mock & Next;

@@ -5,7 +5,16 @@ export type JsonObject = Prisma.JsonObject;
 export type InputJsonValue = Prisma.InputJsonValue;
 
 export interface TestStep {
-  action: 'goto' | 'click' | 'fill' | 'press' | 'waitForSelector' | 'waitForTimeout' | 'expectVisible' | 'expectText' | 'screenshot';
+  action:
+    | 'goto'
+    | 'click'
+    | 'fill'
+    | 'press'
+    | 'waitForSelector'
+    | 'waitForTimeout'
+    | 'expectVisible'
+    | 'expectText'
+    | 'screenshot';
   selector?: string;
   value?: string;
   text?: string;

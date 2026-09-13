@@ -168,7 +168,10 @@ export const organizationService = {
     if (!actorMembership) {
       throw new ForbiddenError(Messages.ORG.MEMBER_NOT_FOUND);
     }
-    if (!canManageRole(actorMembership.role, targetMembership.role) || !canManageRole(actorMembership.role, newRole)) {
+    if (
+      !canManageRole(actorMembership.role, targetMembership.role) ||
+      !canManageRole(actorMembership.role, newRole)
+    ) {
       throw new ForbiddenError(Messages.AUTH.FORBIDDEN);
     }
 

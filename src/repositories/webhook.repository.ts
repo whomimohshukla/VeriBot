@@ -2,17 +2,13 @@ import { Prisma, WebhookEventType } from '@prisma/client';
 import { prisma } from '../config/database';
 
 export const webhookRepository = {
-  findById: (id: string) =>
-    prisma.webhook.findUnique({ where: { id } }),
+  findById: (id: string) => prisma.webhook.findUnique({ where: { id } }),
 
-  create: (data: Prisma.WebhookUncheckedCreateInput) =>
-    prisma.webhook.create({ data }),
+  create: (data: Prisma.WebhookUncheckedCreateInput) => prisma.webhook.create({ data }),
 
-  update: (id: string, data: Prisma.WebhookUpdateInput) =>
-    prisma.webhook.update({ where: { id }, data }),
+  update: (id: string, data: Prisma.WebhookUpdateInput) => prisma.webhook.update({ where: { id }, data }),
 
-  softDelete: (id: string) =>
-    prisma.webhook.delete({ where: { id } }),
+  hardDelete: (id: string) => prisma.webhook.delete({ where: { id } }),
 
   list: (organizationId: string, projectId?: string | null) =>
     prisma.webhook.findMany({

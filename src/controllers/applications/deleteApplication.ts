@@ -10,6 +10,6 @@ export const deleteApplication = async (req: Request, res: Response): Promise<vo
   }
   const { applicationId } = req.params as { applicationId: string };
   await applicationService.assertProjectAccess(req.orgId, applicationId);
-  await applicationService.softDelete(applicationId);
+  await applicationService.hardDelete(applicationId);
   res.status(200).json(ok(null, { message: Messages.APPLICATION.DELETED }));
 };

@@ -19,8 +19,6 @@ export const listBugs = async (req: Request, res: Response): Promise<void> => {
     }
   }
 
-  const result = projectId
-    ? await bugService.list(projectId, page, pageSize, { status, severity })
-    : [];
+  const result = projectId ? await bugService.list(projectId, page, pageSize, { status, severity }) : [];
   res.status(200).json(ok(result));
 };

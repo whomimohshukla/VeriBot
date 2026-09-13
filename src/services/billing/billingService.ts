@@ -28,9 +28,9 @@ interface StripeEvent {
 }
 
 const PLAN_BY_STRIPE_PRODUCT: Record<string, SubscriptionPlan> = {
-  'prod_pro': 'PRO',
-  'prod_business': 'BUSINESS',
-  'prod_enterprise': 'ENTERPRISE',
+  prod_pro: 'PRO',
+  prod_business: 'BUSINESS',
+  prod_enterprise: 'ENTERPRISE',
 };
 
 const STRIPE_TIME_TOLERANCE_SECONDS = 3600;
@@ -90,7 +90,10 @@ export const billingService = {
     });
   },
 
-  async updateSubscription(organizationId: string, data: Prisma.SubscriptionUpdateInput): Promise<Subscription> {
+  async updateSubscription(
+    organizationId: string,
+    data: Prisma.SubscriptionUpdateInput
+  ): Promise<Subscription> {
     await billingService.getSubscription(organizationId);
     return prisma.subscription.update({ where: { organizationId }, data });
   },
@@ -145,14 +148,18 @@ export const billingService = {
           const subscription = await db.subscription.findFirst({ where: { stripeCustomerId: sub.customer } });
           if (!subscription) return;
           const productId = sub.items?.data?.[0]?.price?.product;
-          const plan = productId ? (PLAN_BY_STRIPE_PRODUCT[productId] ?? subscription.plan) : subscription.plan;
+          const plan = productId
+            ? (PLAN_BY_STRIPE_PRODUCT[productId] ?? subscription.plan)
+            : subscription.plan;
           await db.subscription.update({
             where: { id: subscription.id },
             data: {
               plan,
               stripeSubscriptionId: sub.id ?? subscription.stripeSubscriptionId,
               status: 'ACTIVE',
-              currentPeriodStart: sub.current_period_start ? new Date(sub.current_period_start * 1000) : undefined,
+              currentPeriodStart: sub.current_period_start
+                ? new Date(sub.current_period_start * 1000)
+                : undefined,
               currentPeriodEnd: sub.current_period_end ? new Date(sub.current_period_end * 1000) : undefined,
               cancelledAt: sub.cancel_at_period_end ? new Date() : null,
             },

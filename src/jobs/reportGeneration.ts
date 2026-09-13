@@ -14,7 +14,10 @@ export const processReportGenerationJob = async (job: Job<ReportJobData>): Promi
         periodStart: job.data.periodStart,
         periodEnd: job.data.periodEnd,
       });
-      logger.info({ organizationId: job.data.organizationId, projectId: job.data.projectId }, 'report generated');
+      logger.info(
+        { organizationId: job.data.organizationId, projectId: job.data.projectId },
+        'report generated'
+      );
       return;
     default:
       logger.warn({ jobName: job.name }, 'unhandled report queue job name');

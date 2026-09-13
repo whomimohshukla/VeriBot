@@ -54,7 +54,10 @@ export const fallbackAnalysis = (input: FailureAnalyzerInput): FailureAnalysis =
 export const failureAnalyzerAgent = {
   type: 'FAILURE_ANALYZER' as const,
 
-  async execute(context: AgentContext, input: FailureAnalyzerInput): Promise<AgentResult<FailureAnalyzerOutput>> {
+  async execute(
+    context: AgentContext,
+    input: FailureAnalyzerInput
+  ): Promise<AgentResult<FailureAnalyzerOutput>> {
     const messages = buildPrompt(input);
 
     if (!llmService.isConfigured()) {
