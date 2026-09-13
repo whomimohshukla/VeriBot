@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+coverage
+*.log
+.env*
+!.env.example
+__tests__
+jest.config.js
+jest.setup.js
+README.md

@@ -1,0 +1,23 @@
+import { Router } from 'express';
+import {
+  runTests,
+  getTestRun,
+  getTestRunResults,
+  cancelTestRun,
+  scheduleTestRun,
+} from '../../../controllers/testRuns';
+import { authenticate, tenantMiddleware, validate, requirePermission } from '../../../middleware';
+import { Permissions } from '../../../constants/permissions';
+import { runTestsSchema, scheduleTestRunSchema, testRunParamsSchema } from '../../../validators';
+
+const router = Router();
+
+router.use(authenticate(), tenantMiddleware);
+
+router.post('/', requirePermission(Permissions.TEST_EXECUTE), validate(runTestsSchema), runTests);
+router.post('/scheduled', requirePermission(Permissions.TEST_EXECUTE), validate(scheduleTestRunSchema), scheduleTestRun);
+router.get('/:testRunId', requirePermission(Permissions.TEST_READ), validate(testRunParamsSchema, 'params'), getTestRun);
+router.get('/:testRunId/results', requirePermission(Permissions.TEST_READ), validate(testRunParamsSchema, 'params'), getTestRunResults);
+router.post('/:testRunId/cancel', requirePermission(Permissions.TEST_EXECUTE), validate(testRunParamsSchema, 'params'), cancelTestRun);
+
+export default router;

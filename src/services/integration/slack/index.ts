@@ -1,0 +1,1 @@
+export { slackService, type SlackConfig } from './slackService';
