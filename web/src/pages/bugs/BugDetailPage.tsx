@@ -1,0 +1,287 @@
+import { useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { bugsApi, type BugComment } from '../../api';
+import { getErrorMessage } from '../../api/client';
+import Layout from '../../components/Layout';
+import {
+  PageLoader,
+  EmptyState,
+  BugStatusBadge,
+  SeverityBadge,
+  PriorityBadge,
+  InfoRow,
+  Button,
+} from '../../components/ui';
+import {
+  ArrowLeft,
+  Trash2,
+  MessageSquare,
+  User,
+  Bug,
+  Loader2,
+  Calendar,
+} from 'lucide-react';
+import toast from 'react-hot-toast';
+import type { BugStatus } from '../../types';
+
+const BUG_STATUSES: BugStatus[] = ['OPEN', 'IN_PROGRESS', 'FIXED', 'VERIFIED', 'CLOSED', 'WONT_FIX'];
+
+const getRelativeTime = (date: string) => {
+  const diff = Date.now() - new Date(date).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  return new Date(date).toLocaleDateString();
+};
+
+export default function BugDetailPage() {
+  const { bugId } = useParams<{ bugId: string }>();
+  const navigate = useNavigate();
+  const [comment, setComment] = useState('');
+  const queryClient = useQueryClient();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['bug', bugId],
+    queryFn: () => bugsApi.get(bugId as string),
+    enabled: !!bugId,
+  });
+
+  const { data: commentsData } = useQuery({
+    queryKey: ['bug-comments', bugId],
+    queryFn: () => bugsApi.comments(bugId as string),
+    enabled: !!bugId,
+  });
+
+  const comments = commentsData?.items ?? [];
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => bugsApi.remove(id),
+    onSuccess: () => {
+      toast.success('Bug deleted');
+      navigate('/bugs');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error));
+    },
+  });
+
+  const changeStatusMutation = useMutation({
+    mutationFn: (status: BugStatus) => bugsApi.changeStatus(bugId as string, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bug', bugId] });
+      queryClient.invalidateQueries({ queryKey: ['bugs'] });
+      toast.success('Bug status updated');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error));
+    },
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: (content: string) => bugsApi.addComment(bugId as string, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bug-comments', bugId] });
+      queryClient.invalidateQueries({ queryKey: ['bug', bugId] });
+      setComment('');
+      toast.success('Comment added');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error));
+    },
+  });
+
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+    addCommentMutation.mutate(comment.trim());
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Delete bug "${bug?.title}"?`)) {
+      deleteMutation.mutate(bugId as string);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <PageLoader label="Loading bug..." />
+      </Layout>
+    );
+  }
+
+  const bug = data;
+
+  if (!bug) {
+    return (
+      <Layout>
+        <EmptyState icon={Bug} title="Bug not found" description="This bug may have been deleted." />
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <Link
+              to="/bugs"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Bugs
+            </Link>
+            <div className="flex items-center gap-3 mb-2">
+              <BugStatusBadge status={bug.status} />
+              <h1 className="text-4xl font-bold gradient-text">{bug.title}</h1>
+            </div>
+          </div>
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-destructive hover:bg-destructive/90 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+          >
+            {deleteMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Trash2 className="w-4 h-4" />
+            )}
+            Delete
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main panel */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Description */}
+            <div className="glass p-6 rounded-xl">
+              <h3 className="text-lg font-semibold mb-3">Description</h3>
+              <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                {bug.description || 'No description provided.'}
+              </p>
+            </div>
+
+            {/* Status */}
+            <div className="glass p-6 rounded-xl">
+              <h3 className="text-lg font-semibold mb-4">Status</h3>
+              <div className="flex flex-wrap gap-2">
+                {BUG_STATUSES.map((status) => (
+                  <Button
+                    key={status}
+                    size="sm"
+                    variant={bug.status === status ? 'default' : 'outline'}
+                    disabled={changeStatusMutation.isPending}
+                    onClick={() => changeStatusMutation.mutate(status)}
+                  >
+                    {status.replace('_', ' ')}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            {/* Comments */}
+            <div className="glass p-6 rounded-xl">
+              <div className="flex items-center gap-2 mb-4">
+                <MessageSquare className="w-5 h-5 text-primary" />
+                <h3 className="text-lg font-semibold">Comments</h3>
+              </div>
+
+              {comments.length === 0 && (
+                <EmptyState
+                  icon={MessageSquare}
+                  title="No comments yet"
+                  description="Be the first to comment on this bug."
+                />
+              )}
+
+              <div className="space-y-4 mb-6">
+                {comments.map((item: BugComment) => (
+                  <div key={item.id} className="flex gap-3">
+                    <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
+                      {item.creator?.name?.[0]?.toUpperCase() ||
+                        item.creator?.email?.[0]?.toUpperCase() ||
+                        'U'}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium">
+                          {item.creator?.name || item.creator?.email || 'Unknown user'}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {getRelativeTime(item.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{item.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <form onSubmit={handleAddComment} className="space-y-3">
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  placeholder="Add a comment..."
+                  rows={3}
+                  disabled={addCommentMutation.isPending}
+                />
+                <Button
+                  type="submit"
+                  disabled={addCommentMutation.isPending || !comment.trim()}
+                >
+                  {addCommentMutation.isPending && <Loader2 className="animate-spin" />}
+                  Add Comment
+                </Button>
+              </form>
+            </div>
+          </div>
+
+          {/* Info panel */}
+          <div className="glass p-6 rounded-xl h-fit">
+            <h3 className="text-lg font-semibold mb-4">Details</h3>
+            <div className="divide-y divide-border">
+              <InfoRow
+                icon={Bug}
+                label="Severity"
+                value={<SeverityBadge severity={bug.severity} />}
+              />
+              <InfoRow
+                label="Priority"
+                value={<PriorityBadge priority={bug.priority} />}
+              />
+              <InfoRow label="Project id" value={<span className="font-mono">{bug.projectId.slice(0, 8)}</span>} />
+              <InfoRow
+                icon={User}
+                label="Assignee"
+                value={bug.assignee?.name ?? 'Unassigned'}
+              />
+              <InfoRow
+                icon={Calendar}
+                label="Created"
+                value={new Date(bug.createdAt).toLocaleString()}
+              />
+              <InfoRow
+                icon={Calendar}
+                label="Updated"
+                value={new Date(bug.updatedAt).toLocaleString()}
+              />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </Layout>
+  );
+}
