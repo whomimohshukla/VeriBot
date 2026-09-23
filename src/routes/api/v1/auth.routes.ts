@@ -8,6 +8,7 @@ import {
   resetPassword,
   verifyEmail as verifyEmailController,
   resendVerification as resendVerificationController,
+  oauthCallback,
 } from '../../../controllers/auth';
 import {
   registerSchema,
@@ -19,6 +20,7 @@ import {
 } from '../../../validators';
 import { validate } from '../../../middleware';
 import { authRateLimiter, authenticate } from '../../../middleware';
+import { asyncHandler } from '../../../middleware/asyncHandler';
 
 const router = Router();
 
@@ -40,5 +42,8 @@ router.post(
   requestResetPassword
 );
 router.post('/reset-password', authRateLimiter, validate(resetPasswordSchema), resetPassword);
+
+// OAuth routes
+router.get('/oauth/:provider/callback', authRateLimiter, asyncHandler(oauthCallback));
 
 export default router;
