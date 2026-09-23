@@ -39,7 +39,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 7%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 82% 58%;
+    --primary: 165 100% 96%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 4% 12%;
     --secondary-foreground: 0 0% 98%;
@@ -51,7 +51,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 0 3% 15%;
     --input: 0 3% 16%;
-    --ring: 0 82% 58%;
+    --ring: 176 95% 48%;
     --radius: 0.5rem;
   }
 }
@@ -85,11 +85,11 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-red-500 via-red-400 to-white bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent;
   }
 
   .gradient-text-red {
-    @apply bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent;
+    @apply text-white;
   }
 
   /* Dotted grid backdrop (Eraser-style) */

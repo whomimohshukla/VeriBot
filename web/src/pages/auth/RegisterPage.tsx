@@ -78,7 +78,7 @@ export default function RegisterPage() {
                 <Bot className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold gradient-text">VeriBot</h2>
+
                 <p className="text-sm text-muted-foreground">QA Automation</p>
               </div>
             </div>

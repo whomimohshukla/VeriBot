@@ -38,16 +38,16 @@ export function FloatingNavbar() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className={`w-full max-w-5xl rounded-full border px-4 py-2.5 backdrop-blur-2xl transition-all duration-300 ${
           scrolled
-            ? 'border-red-500/50 bg-black/90 shadow-2xl shadow-red-500/30'
+            ? 'border-red-500/50 bg-black/90 shadow-2xl shadow-teal-500/30'
             : 'border-white/10 bg-black/50'
         }`}
       >
         <div className="flex items-center justify-between gap-2">
           <Link to="/" className="flex items-center gap-2 pl-1">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-700 shadow-lg shadow-red-500/40">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600 shadow-lg shadow-teal-500/40">
               <Bot className="h-5 w-5 text-white" />
             </div>
-            <span className="text-lg font-extrabold tracking-tight gradient-text">VeriBot</span>
+
           </Link>
 
           <nav className="hidden lg:flex items-center gap-0.5">
@@ -79,7 +79,7 @@ export function FloatingNavbar() {
             </Link>
             <Link
               to="/auth/register"
-              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-500 to-red-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-red-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-teal-500/30 hover:shadow-red-500/50 hover:-translate-y-0.5 transition-all"
             >
               Start for free
               <ArrowRight className="h-3.5 w-3.5" />
@@ -120,7 +120,7 @@ export function FloatingNavbar() {
               </Link>
               <Link
                 to="/auth/register"
-                className="flex-1 rounded-lg bg-gradient-to-r from-red-500 to-red-600 px-3 py-2 text-center text-sm font-semibold text-white"
+                className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-semibold text-white"
               >
                 Start for free
               </Link>

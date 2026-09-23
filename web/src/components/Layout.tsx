@@ -81,7 +81,7 @@ export default function Layout({ children }: LayoutProps) {
               <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
                 <Bot className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold gradient-text hidden sm:inline">VeriBot</span>
+
             </Link>
             {organization && (
               <div className="hidden md:flex items-center gap-2 ml-2 pl-4 border-l border-border">
