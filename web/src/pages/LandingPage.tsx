@@ -17,12 +17,11 @@ import {
   MessagesSquare,
   ListTodo,
   Play,
-  Menu,
-  X,
   Flame,
 } from 'lucide-react';
 import { useState } from 'react';
 import { GitHubIcon } from '../components/ui/social-icons';
+import { FloatingNavbar } from '../components/FloatingNavbar';
 
 const navLinks = [
   { label: 'Features', href: '#features' },
@@ -241,93 +240,13 @@ const stagger = {
 };
 
 export default function LandingPage() {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* ===== NAV ===== */}
-      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <a href="#" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-purple-600 shadow-lg shadow-primary/25">
-                <Bot className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl font-extrabold tracking-tight">
-                <span className="gradient-text">VeriBot</span>
-              </span>
-            </a>
+      {/* ===== NAV (Aceternity floating pill) ===== */}
+      <FloatingNavbar />
 
-            <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-
-            <div className="hidden lg:flex items-center gap-3">
-              <Link
-                to="/auth/login"
-                className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Sign in
-              </Link>
-              <Link
-                to="/auth/register"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all hover:shadow-primary/35"
-              >
-                Start for free
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors"
-              aria-label="Toggle navigation"
-            >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </div>
-
-        {mobileOpen && (
-          <div className="lg:hidden border-t border-border/60 bg-background/95 backdrop-blur-xl">
-            <div className="container px-4 py-4 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="flex gap-3 mt-3 pt-3 border-t border-border/60">
-                <Link
-                  to="/auth/login"
-                  className="flex-1 text-center rounded-lg border border-border px-4 py-2.5 text-sm font-medium hover:bg-secondary/50 transition-colors"
-                >
-                  Sign in
-                </Link>
-                <Link
-                  to="/auth/register"
-                  className="flex-1 text-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
-                >
-                  Start for free
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </header>
 
       {/* ===== HERO ===== */}
       <section className="relative">
