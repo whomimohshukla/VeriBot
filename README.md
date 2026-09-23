@@ -1,22 +1,99 @@
-# VeriBot
+# VeriBot 🤖
 
 VeriBot is an AI-powered QA SaaS platform that autonomously explores web applications, generates tests, runs them in a browser, analyzes failures, detects bugs, and helps engineers fix issues with AI-assisted workflows.
 
 This project is designed as a strong portfolio-grade SaaS product and a serious real-world engineering challenge. It combines full-stack development, browser automation, AI agents, DevOps, and production architecture.
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- Docker & Docker Compose
+- PostgreSQL (via Docker)
+- Redis (via Docker)
+
+### Start Development Environment
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd VeriBot
+
+# Install dependencies
+npm install
+cd web && npm install && cd ..
+
+# Start Docker services (PostgreSQL & Redis)
+docker compose up -d postgres redis
+
+# Run database migrations
+npm run prisma:migrate
+
+# Start both backend and frontend
+./start-dev.sh
+```
+
+**Backend API:** `http://localhost:4000`  
+**Frontend App:** `http://localhost:5173`
+
+Or start them separately:
+
+```bash
+# Terminal 1 - Backend
+npm run dev
+
+# Terminal 2 - Frontend
+cd web && npm run dev
+```
+
+## ✅ Project Status
+
+### **Backend: 90% Complete** 🟢
+- ✅ Authentication (JWT, OAuth GitHub)
+- ✅ User & Organization Management
+- ✅ Projects & Applications
+- ✅ Test Cases & Test Runs
+- ✅ Bug Management
+- ✅ AI-Powered Features (Test Gen, Analysis, Fix Suggestions)
+- ✅ Integrations (GitHub, Jira, Slack)
+- ✅ Email Notifications (SendGrid)
+- ✅ Billing & Subscriptions (Stripe)
+- ✅ Analytics & Reporting
+- ✅ Browser Automation (Playwright)
+- ✅ Workflow Discovery
+- ✅ Flaky Test Detection
+- ✅ Release Risk Scoring
+
+### **Frontend: 100% Complete** 🎉
+- ✅ Modern React 18 + TypeScript
+- ✅ Dark Theme with Purple Accent
+- ✅ Authentication Pages (Login/Register)
+- ✅ Dashboard with Charts & Analytics
+- ✅ Projects Management
+- ✅ Test Runs Viewer
+- ✅ Bug Tracker
+- ✅ Responsive Design (Mobile/Tablet/Desktop)
+- ✅ Animations & Loading States
+- ✅ Toast Notifications
+- ✅ API Integration with React Query
+- ✅ State Management (Zustand)
+- ✅ Production Build Ready
+
+**See:** [FRONTEND_IMPLEMENTATION_COMPLETE.md](./FRONTEND_IMPLEMENTATION_COMPLETE.md)
+
 ## Why this project is strong
 
 This project demonstrates a complete product stack:
 
-- Frontend: Next.js, TypeScript, dashboard UI
-- Backend: Node.js, Express, API architecture
-- Database: PostgreSQL + Prisma
-- Queues: Redis + BullMQ
-- Browser automation: Playwright
-- AI: LLMs, agents, tool calling, RAG, pgvector
-- Integrations: GitHub, Jira, Slack
-- Infrastructure: Docker, Kubernetes, Terraform, AWS
-- SaaS business features: authentication, orgs, RBAC, usage, billing
+- **Frontend:** React 18, TypeScript, Tailwind CSS, Vite
+- **Backend:** Node.js, Express, TypeScript
+- **Database:** PostgreSQL + Prisma
+- **Queues:** Redis + BullMQ
+- **Browser automation:** Playwright
+- **AI:** LLMs, agents, tool calling, RAG, pgvector
+- **Integrations:** GitHub, Jira, Slack
+- **Infrastructure:** Docker, Kubernetes, Terraform, AWS
+- **SaaS features:** Authentication, organizations, RBAC, billing, analytics
 
 This is not just a chatbot or a toy demo. It is a production-style AI QA platform.
 
