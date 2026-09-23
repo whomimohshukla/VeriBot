@@ -57,7 +57,7 @@ export default function RegisterPage() {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-black p-4 relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
@@ -74,7 +74,7 @@ export default function RegisterPage() {
         >
           <div className="glass p-8 rounded-2xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
                 <Bot className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -100,9 +100,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-8 pt-6 border-t border-border">
-              <p className="text-sm text-muted-foreground italic">
-                "VeriBot reduced our testing time by 70% and caught bugs we would have missed manually."
-              </p>
+
               <p className="text-sm text-primary font-medium mt-2">- QA Team Lead, TechCorp</p>
             </div>
           </div>
@@ -116,7 +114,7 @@ export default function RegisterPage() {
         >
           {/* Mobile Logo */}
           <div className="text-center mb-6 md:hidden">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary to-primary/80 rounded-xl mb-3">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-red-600 to-primary/80 rounded-xl mb-3">
               <Bot className="w-7 h-7 text-white" />
             </div>
             <h1 className="text-3xl font-bold flex items-center justify-center">
@@ -199,7 +197,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+              className="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
             >
               {isLoading ? (
                 <>

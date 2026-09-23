@@ -139,37 +139,54 @@ export default function LandingPage() {
               <div className="relative">
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm text-zinc-400">
-                    <Network className="h-4 w-4 text-red-400" /> Test architecture
+                    <Network className="h-4 w-4 text-red-400" /> Live test flow
                   </div>
                   <span className="flex items-center gap-1.5 rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-medium text-zinc-400">
                     <RefreshCcw className="h-3 w-3" /> live
                   </span>
                 </div>
 
-                <div className="space-y-3">
-                  {/* Entity rows connected by dotted lines */}
+                <div className="relative min-h-[360px]">
+                  {/* dotted backdrop */}
+                  <div className="dotted-grid absolute inset-0 opacity-40 pointer-events-none" />
+                  {/* box-inside-box frames */}
+                  <div className="absolute inset-0 rounded-xl border border-white/10" />
+                  <div className="absolute inset-[14px] rounded-lg border border-dashed border-red-500/30" />
+                  <div className="absolute inset-[30px] rounded-md border border-white/8 bg-black/40" />
+
                   {[
-                    { icon: Boxes, name: 'Application', sub: 'app.veribot.ai' },
-                    { icon: Database, name: 'Test Suite', sub: '12 suites · 340 cases' },
-                    { icon: Cpu, name: 'AI Agents', sub: 'explore · bug-hunt · analyze' },
-                    { icon: MousePointerClick, name: 'Executed Steps', sub: '32 pass · 0 fail · 2 flaky' },
-                    { icon: Bot, name: 'Analyzed Bugs', sub: '6 reported · root cause found' },
-                  ].map((row, i) => {
-                    const Icon = row.icon;
+                    { icon: Boxes, label: 'App', sub: 'app.veribot.ai', top:'6%', left:'6%' },
+                    { icon: Database, label: 'Suites', sub: '12·340', top:'34%', left:'52%' },
+                    { icon: Cpu, label: 'AI Agents', sub: 'explore·hunt·analyze', top:'58%', left:'8%' },
+                    { icon: MousePointerClick, label: 'Steps', sub: '32 pass·2 flaky', top:'78%', left:'48%' },
+                  ].map((n,i)=>{
+                    const Icon=n.icon;
                     return (
-                      <motion.div key={row.name} initial={{opacity:0,x:14}} animate={{opacity:1,x:0}} transition={{delay:0.5+i*0.12}}
-                        className="group flex items-center gap-3 rounded-xl border border-white/12 bg-black/70 px-4 py-3 hover:border-red-500/40 hover:bg-black transition-all">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-white/5">
-                          <Icon className="h-4 w-4 text-red-400 group-hover:text-red-300 transition-colors" />
+                      <motion.div key={n.label} initial={{opacity:0,scale:0.6}} animate={{opacity:1,scale:1}}
+                        whileHover={{scale:1.08,zIndex:30}} transition={{type:'spring',stiffness:220,damping:16,delay:0.5+i*0.15}}
+                        className="absolute z-20 flex items-center gap-2.5 rounded-xl border border-white/15 bg-black/85 px-3.5 py-2.5 hover:border-red-500/50"
+                        style={{top:n.top,left:n.left}}>
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-600/15">
+                          <Icon className="h-4 w-4 text-red-400" />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-white">{row.name}</p>
-                          <p className="text-xs text-zinc-500">{row.sub}</p>
+                        <div>
+                          <p className="text-sm font-semibold text-white">{n.label}</p>
+                          <p className="text-[10px] text-zinc-500">{n.sub}</p>
                         </div>
-                        {i < 4 && <ChevronDown className="h-3 w-3 text-zinc-600" />}
                       </motion.div>
                     );
                   })}
+
+                  {/* dashed connectors */}
+                  <svg className="absolute inset-0 h-full w-full" fill="none" pointerEvents="none">
+                    <line x1="38%" y1="16%" x2="67%" y2="42%" stroke="rgba(239,68,68,0.45)" strokeWidth="1.5" strokeDasharray="6 5" />
+                    <line x1="79%" y1="52%" x2="20%" y2="66%" stroke="rgba(239,68,68,0.35)" strokeWidth="1.5" strokeDasharray="6 5" />
+                    <line x1="24%" y1="76%" x2="60%" y2="84%" stroke="rgba(239,68,68,0.35)" strokeWidth="1.5" strokeDasharray="6 5" />
+                    <circle cx="38%" cy="16%" r="4" fill="rgba(239,68,68,0.5)" />
+                    <circle cx="67%" cy="42%" r="4" fill="rgba(239,68,68,0.4)" />
+                    <circle cx="20%" cy="66%" r="4" fill="rgba(239,68,68,0.35)" />
+                    <circle cx="60%" cy="84%" r="4" fill="rgba(239,68,68,0.3)" />
+                  </svg>
                 </div>
 
                 <div className="mt-5 grid grid-cols-3 gap-2 text-center">
