@@ -11,6 +11,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(4000),
   API_PREFIX: z.string().default('/api/v1'),
   APP_ORIGIN: z.string().default('http://localhost:3000'),
+  FRONTEND_ORIGIN: z.string().default('http://localhost:5173'),
 
   DATABASE_URL: z.string().min(1),
   REDIS_URL: z.string().default('redis://localhost:6379'),
@@ -43,6 +44,10 @@ const envSchema = z.object({
 
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
+
+  EMAIL_PROVIDER: z.enum(['sendgrid', 'ses', 'smtp']).default('smtp'),
+  SENDGRID_API_KEY: z.string().optional(),
+  EMAIL_FROM: z.string().default('notifications@veribot.ai'),
 
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),

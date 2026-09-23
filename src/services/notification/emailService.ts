@@ -683,6 +683,71 @@ export const emailService = {
   },
   
   /**
+   * Send bug created notification
+   */
+  async sendBugCreatedEmail(
+    to: string,
+    data: {
+      bugTitle: string;
+      severity: string;
+      priority: string;
+      projectName: string;
+      bugUrl: string;
+      description?: string;
+    }
+  ): Promise<void> {
+    const subject = `🐛 New Bug Reported: ${data.bugTitle}`;
+
+    const severityColors: Record<string, string> = {
+      CRITICAL: '#dc2626',
+      HIGH: '#ea580c',
+      MEDIUM: '#eab308',
+      LOW: '#16a34a',
+    };
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<body style="${EMAIL_STYLES.body}">
+  <div style="${EMAIL_STYLES.container}">
+    <div style="background: ${severityColors[data.severity] || '#667eea'}; color: white; padding: 30px 20px; text-align: center;">
+      <h1 style="margin: 0; font-size: 28px;">🐛 New Bug Reported</h1>
+    </div>
+
+    <div style="${EMAIL_STYLES.content}">
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0;">
+        <h3 style="margin: 0 0 15px 0;">${data.bugTitle}</h3>
+        <div>
+          <span style="${EMAIL_STYLES.badge} background: ${severityColors[data.severity]}; color: white;">
+            ${data.severity}
+          </span>
+          <span style="${EMAIL_STYLES.badge} background: #e9ecef; color: #495057;">
+            ${data.priority}
+          </span>
+        </div>
+        <p style="margin: 15px 0 0 0; color: #666;">
+          <strong>Project:</strong> ${data.projectName}
+        </p>
+        ${data.description ? `<p style="margin: 15px 0 0 0; color: #555;">${data.description}</p>` : ''}
+      </div>
+
+      <center>
+        <a href="${data.bugUrl}" style="${EMAIL_STYLES.button}">View Bug Details</a>
+      </center>
+    </div>
+
+    <div style="${EMAIL_STYLES.footer}">
+      <p style="margin: 0;">VeriBot - AI-Powered QA Automation</p>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+
+    await this.sendEmail({ to, subject, html });
+  },
+
+  /**
    * Send bug assignment notification
    */
   async sendBugAssignedEmail(

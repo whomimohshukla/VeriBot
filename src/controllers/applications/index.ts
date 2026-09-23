@@ -1,3 +1,4 @@
+export { listApplications } from './listApplications';
 export { createApplication } from './createApplication';
 export { getApplication } from './getApplication';
 export { updateApplication } from './updateApplication';

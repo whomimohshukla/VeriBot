@@ -55,7 +55,6 @@ export const flakyTestService = {
       
       const passed = results.filter((r) => r.status === 'PASSED').length;
       const failed = results.filter((r) => r.status === 'FAILED').length;
-      const skipped = results.filter((r) => r.status === 'SKIPPED').length;
       
       // Skip if all passed or all failed (not flaky, just consistently good/bad)
       if (passed === 0 || failed === 0) continue;
@@ -273,30 +272,32 @@ export const flakyTestService = {
    * Get flaky tests for a project
    */
   async getFlakyTests(projectId: string): Promise<FlakyTestAnalysis[]> {
-    const records = await prisma.flakyTestRecord.findMany({
-      where: {
-        flakyScore: { gte: 15 },
-      },
-      include: {
-        testCase: {
-          where: {
-            projectId,
-            archivedAt: null,
-          },
-          select: {
-            id: true,
-            title: true,
-          },
+    const [records, testCases] = await Promise.all([
+      prisma.flakyTestRecord.findMany({
+        where: {
+          flakyScore: { gte: 15 },
         },
-      },
-      orderBy: { flakyScore: 'desc' },
-    });
-    
+        orderBy: { flakyScore: 'desc' },
+      }),
+      prisma.testCase.findMany({
+        where: {
+          projectId,
+          archivedAt: null,
+        },
+        select: {
+          id: true,
+          title: true,
+        },
+      }),
+    ]);
+
+    const titleById = new Map(testCases.map((tc) => [tc.id, tc.title]));
+
     return records
-      .filter((r) => r.testCase)
+      .filter((r) => titleById.has(r.testCaseId))
       .map((r) => ({
         testCaseId: r.testCaseId,
-        testCaseTitle: r.testCase?.title || 'Unknown',
+        testCaseTitle: titleById.get(r.testCaseId) || 'Unknown',
         totalRuns: r.totalRuns,
         passCount: r.passCount,
         failCount: r.failCount,

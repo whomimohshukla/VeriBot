@@ -9,6 +9,7 @@ import {
   verifyEmail as verifyEmailController,
   resendVerification as resendVerificationController,
   oauthCallback,
+  oauthAuthorize,
 } from '../../../controllers/auth';
 import {
   registerSchema,
@@ -44,6 +45,7 @@ router.post(
 router.post('/reset-password', authRateLimiter, validate(resetPasswordSchema), resetPassword);
 
 // OAuth routes
+router.get('/oauth/:provider/authorize', authRateLimiter, asyncHandler(oauthAuthorize));
 router.get('/oauth/:provider/callback', authRateLimiter, asyncHandler(oauthCallback));
 
 export default router;

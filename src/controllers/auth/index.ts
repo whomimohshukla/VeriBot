@@ -7,3 +7,4 @@ export { changePassword } from './changePassword';
 export { verifyEmail } from './verifyEmail';
 export { resendVerification } from './resendVerification';
 export { oauthCallback } from './oauthCallback';
+export { oauthAuthorize } from './oauthAuthorize';

@@ -93,7 +93,6 @@ export const githubService = {
     },
     repository: string
   ): Promise<{ issueUrl: string }> {
-    const client = getClient(config);
     
     // Format reproduction steps
     let reproSteps = '';

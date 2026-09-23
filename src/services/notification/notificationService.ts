@@ -378,7 +378,6 @@ export const notificationService = {
       
       for (const user of users) {
         // Get user's stats for the week
-        const organizationIds = user.memberships.map((m) => m.organizationId);
         const projectIds = user.memberships.flatMap((m) => m.organization.projects.map((p) => p.id));
         
         if (projectIds.length === 0) continue;
@@ -411,7 +410,6 @@ export const notificationService = {
             .flatMap((m) => m.organization.projects)
             .find((p) => p.id === projectId);
           
-          const runs = projectRuns.length;
           const passed = projectRuns.reduce((sum, tr) => sum + tr.passedTests, 0);
           const total = projectRuns.reduce((sum, tr) => sum + tr.totalTests, 0);
           

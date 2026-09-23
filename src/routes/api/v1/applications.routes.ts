@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  listApplications,
   createApplication,
   getApplication,
   updateApplication,
@@ -29,6 +30,11 @@ router.post(
   requirePermission(Permissions.APPLICATION_CREATE),
   validate(createApplicationSchema),
   createApplication
+);
+router.get(
+  '/',
+  requirePermission(Permissions.APPLICATION_READ),
+  listApplications
 );
 router.get(
   '/:applicationId/map',
