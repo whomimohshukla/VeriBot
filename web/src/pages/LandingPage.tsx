@@ -2,48 +2,20 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  Bot, Sparkles, Shield, Zap, Brain, Bug, LineChart, GitBranch, Terminal,
+  CheckCircle2, Star, GitPullRequestArrow, MessagesSquare, ListTodo, Play,
+  Menu, X, Flame, Check, Plus, ArrowRight, ArrowLeft, Eye, Lock, Database,
+  Boxes, Network, MousePointerClick, Search, Cpu, RefreshCcw, Network as N3,
+  Database as DB3, Boxes as B3, Cpu as C3, MousePointerClick as M3,
   ChevronDown,
-  Bot, ArrowRight, Sparkles, Shield, Zap, Brain, Bug, LineChart, GitBranch,
-  Terminal, CheckCircle2, Star, GitPullRequestArrow, MessagesSquare, ListTodo,
-  Play, Menu, X, Flame, Check, Plus, ArrowLeft, Eye, Lock, Database,
-  Boxes, Network, MousePointerClick, Search, Cpu, RefreshCcw,
 } from 'lucide-react';
 import { FloatingNavbar } from '../components/FloatingNavbar';
-import { GitHubIcon } from '../components/ui/social-icons';
-
-const navLinks = [
-  { label: 'Features', href: '#features', id: 'features' },
-  { label: 'How it works', href: '#how-it-works', id: 'how-it-works' },
-  { label: 'AI Agents', href: '#agents', id: 'agents' },
-  { label: 'Pricing', href: '#pricing', id: 'pricing' },
-  { label: 'FAQ', href: '#faq', id: 'faq' },
-];
 
 const features = [
-  {
-    icon: Brain,
-    title: 'AI Test Generation',
-    description: 'VeriBot explores your app, maps flows, and writes resilient test suites automatically.',
-    bullets: ['Natural-language authoring', 'Self-healing selectors', 'Edge-case discovery'],
-  },
-  {
-    icon: Bug,
-    title: 'Automatic Bug Detection',
-    description: 'Every failure is analyzed and enriched with screenshots, video, and AI root-cause analysis.',
-    bullets: ['Video + screenshot evidence', 'Severity auto-triage', 'One-click issue creation'],
-  },
-  {
-    icon: LineChart,
-    title: 'Live Quality Analytics',
-    description: 'Track pass rates and flaky tests on a live dashboard. Know when you are safe to ship.',
-    bullets: ['Flaky test detection', 'Release risk scoring', 'Weekly digests'],
-  },
-  {
-    icon: GitBranch,
-    title: 'Seamless CI/CD',
-    description: 'Trigger runs from any pipeline. Isolated environments report results back instantly.',
-    bullets: ['GitHub Actions-ready', 'Webhook-driven runs', 'Parallel execution'],
-  },
+  { icon: Brain, title: 'AI Test Generation', description: 'VeriBot explores your app, maps flows, and writes resilient test suites automatically.', bullets: ['Natural-language authoring', 'Self-healing selectors', 'Edge-case discovery'] },
+  { icon: Bug, title: 'Automatic Bug Detection', description: 'Every failure is analyzed and enriched with screenshots, video, and AI root-cause analysis.', bullets: ['Video + screenshot evidence', 'Severity auto-triage', 'One-click issue creation'] },
+  { icon: LineChart, title: 'Live Quality Analytics', description: 'Track pass rates and flaky tests on a live dashboard. Know when you are safe to ship.', bullets: ['Flaky test detection', 'Release risk scoring', 'Weekly digests'] },
+  { icon: GitBranch, title: 'Seamless CI/CD', description: 'Trigger runs from any pipeline. Isolated environments report results back instantly.', bullets: ['GitHub Actions-ready', 'Webhook-driven runs', 'Parallel execution'] },
 ];
 
 const steps = [
@@ -60,148 +32,124 @@ const agents = [
 ];
 
 const plans = [
-  {
-    name: 'Starter', monthly: 0, cta: 'Start for free', highlight: false,
-    description: 'For individual developers exploring AI testing.',
-    features: ['500 runs / month', '1 project', 'AI test generation', 'Community support'],
-  },
-  {
-    name: 'Pro', monthly: 79, cta: 'Start 14-day trial', highlight: true,
-    description: 'For growing teams that ship fast with guardrails.',
-    features: ['10,000 runs / month', 'Unlimited projects', 'All AI agents', 'Flaky analysis', 'Priority support'],
-  },
-  {
-    name: 'Enterprise', monthly: null, cta: 'Contact sales', highlight: false,
-    description: 'For organizations with advanced security and scale needs.',
-    features: ['Unlimited runs', 'SSO & SAML', 'Dedicated infra', 'Custom AI tuning'],
-  },
+  { name: 'Starter', monthly: 0, description: 'For solo developers trying AI QA.', features: ['1 project', '100 test runs / month', '3 AI agents', 'Community support'], cta: 'Start free', highlight: false },
+  { name: 'Pro', monthly: 79, description: 'For teams shipping every week.', features: ['Unlimited projects', '10,000 test runs / month', 'All AI agents', 'Priority support', 'CI/CD integrations'], cta: 'Start 14-day trial', highlight: true },
+  { name: 'Enterprise', monthly: null, description: 'For orgs with strict SLAs.', features: ['Unlimited runs', 'SSO & audit logs', 'Dedicated infra', 'Custom AI agents'], cta: 'Contact sales', highlight: false },
 ];
 
 const faqs = [
-  { q: 'How does VeriBot generate tests with AI?', a: 'VeriBot maps pages and interactions, then writes resilient Playwright test cases. Describe behavior in plain language and the AI authors the rest.' },
-  { q: 'Do I need to write any code?', a: 'No. Tests are generated automatically)Skip. Failures include screenshots, video, and AI-written root-cause summaries.' },
-  { q: 'Which apps does it support?', a: 'Any web app. It runs on Playwright, integrates with GitHub, GitLab, Slack, Jira, and CI/CD via webhooks.' },
-  { q: 'How accurate is the AI bug analysis?', a: 'It combines structured evidence with AI reasoning to triage failures with far fewer false positives.' },
+  { q: 'How does VeriBot generate tests?', a: 'Our agents crawl your deployed app, map every page and interaction, then write resilient tests that self-heal when selectors change.' },
+  { q: 'Does the AI actually find bugs?', a: 'Yes. Agents adversarially explore edge cases, watch console and network, and flag probable bugs with screenshots and root-cause.' },
+  { q: 'Can it run in CI/CD?', a: 'VeriBot ships Playwright runners with CLI + GitHub Actions support, so suites run on every push.' },
+  { q: 'How is this different from plain Playwright?', a: 'You describe the outcome; agents handle exploration, authoring, maintenance, and analysis for you.' },
 ];
+
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
 
 export default function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  function scrollTo(id: string) {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  }
+  const heroNodes = [
+    { icon: Boxes, label: 'App', sub: 'app.veribot.ai' },
+    { icon: Database, label: 'Suites', sub: '12 · 340' },
+    { icon: Cpu, label: 'AI Agents', sub: 'explore · hunt · analyze' },
+    { icon: MousePointerClick, label: 'Steps', sub: '32 pass · 2 flaky' },
+  ];
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden antialiased">
+    <div className="min-h-screen bg-black text-white antialiased selection:bg-red-500/30">
+      {/* zero-gradient, logo-only nav */}
       <FloatingNavbar />
 
-      {/* ===== HERO (split L/R, no gradients) ===== */}
-      <section id="home" className="relative min-h-screen flex items-center">
-        <div className="dotted-grid absolute inset-0 opacity-40 pointer-events-none" />
-        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-28 lg:py-32">
-          <div className="grid items-center gap-14 lg:grid-cols-2">
-            {/* LEFT: big animated headline */}
-            <div>
+      {/* ===== HERO / SPLIT ===== */}
+      <section className="relative overflow-hidden pt-32 pb-24 lg:pt-40 lg:pb-32">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 dotted-grid opacity-40" />
+          <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-red-600/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/4 h-80 w-80 rounded-full bg-red-600/5 blur-3xl" />
+        </div>
 
-              <motion.h1 initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:0.15,duration:0.6}}
-                className="mt-6 text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
-                <span className="block">Test</span>
-                <span className="block text-white">your app</span>
-                <span className="block">
-                  with <span className="text-red-500">AI</span>
-                </span>
-              </motion.h1>
-
-              <motion.p initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} transition={{delay:0.3}}
-                className="mt-6 max-w-md text-lg text-zinc-400">
-                VeriBot explores your product, writes comprehensive tests, and hands you AI root-cause analysis before anything breaks.
-              </motion.p>
-
-              <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.45}}
-                className="mt-8 flex flex-col sm:flex-row gap-3">
-                <Link to="/auth/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-red-600/30 hover:bg-red-500 hover:-translate-y-0.5 transition-all group">
-                  Start testing free
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <button onClick={() => scrollTo('how-it-works')}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-6 py-3.5 text-base font-semibold text-zinc-200 hover:bg-white/5 hover:border-white/25 transition-all">
-                  <Play className="h-5 w-5 text-red-400" /> See how it works
-                </button>
-              </motion.div>
-            </div>
-
-            {/* RIGHT: dotted ER / flow diagram (Eraser-style animated) */}
-            <motion.div initial={{opacity:0,scale:0.96}} animate={{opacity:1,scale:1}} transition={{delay:0.35,duration:0.6}}
-              className="relative rounded-2xl border border-white/12 bg-black/60 p-5 overflow-hidden">
-              <div className="dotted-grid absolute inset-0 opacity-30 pointer-events-none" />
-              <div className="relative">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-zinc-400">
-                    <Network className="h-4 w-4 text-red-400" /> Live test flow
-                  </div>
-                  <span className="flex items-center gap-1.5 rounded-full border border-white/10 px-2 py-0.5 text-[10px] font-medium text-zinc-400">
-                    <RefreshCcw className="h-3 w-3" /> live
-                  </span>
-                </div>
-
-                <div className="relative min-h-[360px]">
-                  {/* dotted backdrop */}
-                  <div className="dotted-grid absolute inset-0 opacity-40 pointer-events-none" />
-                  {/* box-inside-box frames */}
-                  <div className="absolute inset-0 rounded-xl border border-white/10" />
-                  <div className="absolute inset-[14px] rounded-lg border border-dashed border-red-500/30" />
-                  <div className="absolute inset-[30px] rounded-md border border-white/8 bg-black/40" />
-
-                  {[
-                    { icon: Boxes, label: 'App', sub: 'app.veribot.ai', top:'6%', left:'6%' },
-                    { icon: Database, label: 'Suites', sub: '12·340', top:'34%', left:'52%' },
-                    { icon: Cpu, label: 'AI Agents', sub: 'explore·hunt·analyze', top:'58%', left:'8%' },
-                    { icon: MousePointerClick, label: 'Steps', sub: '32 pass·2 flaky', top:'78%', left:'48%' },
-                  ].map((n,i)=>{
-                    const Icon=n.icon;
-                    return (
-                      <motion.div key={n.label} initial={{opacity:0,scale:0.6}} animate={{opacity:1,scale:1}}
-                        whileHover={{scale:1.08,zIndex:30}} transition={{type:'spring',stiffness:220,damping:16,delay:0.5+i*0.15}}
-                        className="absolute z-20 flex items-center gap-2.5 rounded-xl border border-white/15 bg-black/85 px-3.5 py-2.5 hover:border-red-500/50"
-                        style={{top:n.top,left:n.left}}>
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-600/15">
-                          <Icon className="h-4 w-4 text-red-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-white">{n.label}</p>
-                          <p className="text-[10px] text-zinc-500">{n.sub}</p>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-
-                  {/* dashed connectors */}
-                  <svg className="absolute inset-0 h-full w-full" fill="none" pointerEvents="none">
-                    <line x1="38%" y1="16%" x2="67%" y2="42%" stroke="rgba(239,68,68,0.45)" strokeWidth="1.5" strokeDasharray="6 5" />
-                    <line x1="79%" y1="52%" x2="20%" y2="66%" stroke="rgba(239,68,68,0.35)" strokeWidth="1.5" strokeDasharray="6 5" />
-                    <line x1="24%" y1="76%" x2="60%" y2="84%" stroke="rgba(239,68,68,0.35)" strokeWidth="1.5" strokeDasharray="6 5" />
-                    <circle cx="38%" cy="16%" r="4" fill="rgba(239,68,68,0.5)" />
-                    <circle cx="67%" cy="42%" r="4" fill="rgba(239,68,68,0.4)" />
-                    <circle cx="20%" cy="66%" r="4" fill="rgba(239,68,68,0.35)" />
-                    <circle cx="60%" cy="84%" r="4" fill="rgba(239,68,68,0.3)" />
-                  </svg>
-                </div>
-
-                <div className="mt-5 grid grid-cols-3 gap-2 text-center">
-                  {[['VeriBot','AI engine'],['Playwright','runner'],['CI/CD','ready']].map(([a,b]) => (
-                    <div key={a} className="rounded-lg border border-white/10 bg-black/60 px-2 py-2">
-                      <p className="text-xs font-bold text-white">{a}</p>
-                      <p className="text-[10px] text-zinc-500">{b}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        <div className="relative mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:px-8 lg:grid-cols-2 lg:items-center">
+          {/* ---- LEFT: animated cursive headline ---- */}
+          <motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:0.6}}>
+            <motion.h1 initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.1,duration:0.7}}
+              className="text-5xl sm:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight">
+              <span className="block">Test</span>
+              <span className="block text-white">your app,</span>
+              <motion.span className="block italic font-serif text-red-500"
+                initial={{opacity:0,x:-8}} animate={{opacity:1,x:0}} transition={{delay:0.45,duration:0.7}}>
+                with AI.
+              </motion.span>
+            </motion.h1>
+            <motion.p initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.3,duration:0.6}}
+              className="mt-6 max-w-md text-lg font-light text-zinc-400">
+              VeriBot explores your product, writes the tests, and shows you where it fails — before anything ships.
+            </motion.p>
+            <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.45,duration:0.6}}
+              className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link to="/auth/register"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-6 py-3.5 text-base font-semibold text-white hover:bg-red-500 hover:-translate-y-0.5 transition-all">
+                Start testing free <ArrowRight className="h-5 w-5" />
+              </Link>
+              <button onClick={() => scrollTo('how-it-works')}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-6 py-3.5 text-base font-semibold text-zinc-200 hover:bg-white/5 transition-all">
+                <Play className="h-5 w-5 text-red-400" /> See how it works
+              </button>
             </motion.div>
-          </div>
+          </motion.div>
+
+          {/* ---- RIGHT: dotted ER / box-inside-box flow ---- */}
+          <motion.div initial={{opacity:0,scale:0.96}} animate={{opacity:1,scale:1}} transition={{delay:0.3,duration:0.6}}
+            className="relative overflow-hidden rounded-2xl border border-white/12 bg-black/60 p-5">
+            <div className="dotted-grid absolute inset-0 opacity-25 pointer-events-none" />
+            <div className="relative rounded-xl border border-white/10">
+              <div className="absolute inset-2 rounded-lg border border-dashed border-red-500/30" />
+              <div className="absolute inset-5 rounded-md border border-white/10 bg-black/40" />
+              <div className="space-y-3 p-5">
+                {heroNodes.map((n, i) => {
+                  const Icon = n.icon;
+                  return (
+                    <motion.div key={n.label} initial={{opacity:0,x:14}} animate={{opacity:1,x:0}} transition={{delay:0.5+i*0.12}}
+                      whileHover={{scale:1.05}} className="group flex items-center gap-3 rounded-xl border border-white/10 bg-black/70 px-4 py-3 hover:border-red-500/40 transition-all">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 group-hover:border-red-500/30">
+                        <Icon className="h-4 w-4 text-red-400" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-white">{n.label}</p>
+                        <p className="text-xs text-zinc-500">{n.sub}</p>
+                      </div>
+                      <ChevronDown className="h-3 w-3 text-zinc-600" />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+              {[['VeriBot','AI engine'],['Playwright','runner'],['CI/CD','ready']].map(([a, b]) => (
+                <div key={a} className="rounded-lg border border-white/10 bg-black/60 px-2 py-2">
+                  <p className="text-xs font-bold text-white">{a}</p>
+                  <p className="text-[10px] text-zinc-500">{b}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* ===== LOGOS / TRUST STRIP ===== */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="border-y border-white/10 py-8">
+          <p className="text-center text-xs uppercase tracking-widest text-zinc-500">Built by engineers who ship daily</p>
+          <div className="mt-6 grid grid-cols-3 gap-4 sm:grid-cols-6">
+            {['Acme','Nimbus','Vertex','Foundry','Quanta','Orbit'].map((c) => (
+              <div key={c} className="text-center text-lg font-bold text-zinc-600">{c}</div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ===== FEATURES ===== */}
       <section id="features" className="py-24 lg:py-32">
@@ -260,20 +208,21 @@ export default function LandingPage() {
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-sm font-semibold text-red-500 uppercase tracking-widest">AI Agents</span>
             <h2 className="mt-3 text-3xl sm:text-5xl font-extrabold tracking-tight">A team of AI agents working around the clock</h2>
+            <p className="mt-4 text-lg text-zinc-400">Each agent has one job: keep your product verified.</p>
           </div>
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {agents.map((a) => {
               const Icon = a.icon;
               return (
-                <div key={a.name} className="group rounded-2xl border border-white/10 bg-black/50 p-6 hover:border-red-500/40 hover:bg-black transition-all">
-                  <div className="flex items-center justify-between">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/12 bg-white/5 group-hover:border-red-500/40">
-                      <Icon className="h-5 w-5 text-red-400" />
-                    </div>
-                    <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{a.tag}</span>
+                <div key={a.name} className="group rounded-2xl border border-white/10 bg-black/50 p-6 hover:border-red-500/40 transition-all">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/12 bg-white/5 group-hover:border-red-500/30">
+                    <Icon className="h-5 w-5 text-red-400" />
                   </div>
-                  <h3 className="mt-4 font-bold">{a.name}</h3>
+                  <div className="mt-4 flex items-center justify-between">
+                    <h3 className="font-bold">{a.name}</h3>
+                  </div>
                   <p className="mt-2 text-sm text-zinc-400">{a.description}</p>
+                  <span className="mt-4 inline-block rounded-full border border-white/10 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-zinc-500">{a.tag}</span>
                 </div>
               );
             })}
@@ -291,19 +240,41 @@ export default function LandingPage() {
           </div>
           <div className="mt-16 grid gap-6 lg:grid-cols-3 items-stretch">
             {plans.map((plan) => (
-              <div key={plan.name} className={`relative flex flex-col rounded-2xl border p-8 ${plan.highlight ? 'border-red-500/50 bg-white/[0.03] shadow-2xl shadow-red-900/20' : 'border-white/10 bg-black/50'}`}>
+              <div key={plan.name} className={`relative flex flex-col rounded-2xl border p-8 ${plan.highlight ? 'border-red-500/50 bg-black/50' : 'border-white/10 bg-black/50'}`}>
                 {plan.highlight && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-red-600 px-4 py-1 text-xs font-bold text-white">Most popular</span>}
                 <h3 className="text-lg font-bold">{plan.name}</h3>
                 <p className="mt-1 text-sm text-zinc-400">{plan.description}</p>
-                <div className="mt-6 flex items-baseline gap-1">
-                  {plan.monthly === null ? <span className="text-4xl font-extrabold">Custom</span> : (<><span className="text-4xl font-extrabold">${plan.monthly}</span><span className="text-sm text-zinc-500">/ month</span></>)}
-                </div>
+                {plan.monthly === null ? (
+                  <p className="mt-6 text-4xl font-extrabold">Custom</p>
+                ) : (
+                  <p className="mt-6 text-4xl font-extrabold">${plan.monthly}<span className="text-sm text-zinc-500">/mo</span></p>
+                )}
                 <ul className="mt-8 flex-1 space-y-3">
-                  {plan.features.map((f) => (<li key={f} className="flex items-start gap-2 text-sm"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />{f}</li>))}
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-zinc-400">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" /> {f}
+                    </li>
+                  ))}
                 </ul>
                 <Link to="/auth/register" className={`mt-8 inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold ${plan.highlight ? 'bg-red-600 text-white hover:bg-red-500' : 'border border-white/15 text-white hover:bg-white/5'}`}>{plan.cta}</Link>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CTA ===== */}
+      <section id="cta" className="py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/60 px-6 py-16 text-center sm:px-16">
+            <div className="dotted-grid absolute inset-0 opacity-25 pointer-events-none" />
+            <div className="relative">
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">Ship with confidence, every time</h2>
+              <p className="mx-auto mt-4 max-w-xl text-lg text-zinc-400">Let AI agents explore, generate, and explain your QA — starting today.</p>
+              <Link to="/auth/register" className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-8 py-3.5 text-base font-semibold text-white hover:bg-red-500 transition-all">
+                Start testing free <ArrowRight className="h-5 w-5" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -336,7 +307,6 @@ export default function LandingPage() {
             <div className="max-w-sm">
               <a className="flex items-center gap-2.5">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600"><Bot className="h-5 w-5 text-white" /></div>
-
               </a>
               <p className="mt-4 text-sm text-zinc-400">Let agents generate, run, and analyze your tests.</p>
             </div>
