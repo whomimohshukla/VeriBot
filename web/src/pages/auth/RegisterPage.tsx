@@ -83,7 +83,7 @@ export default function RegisterPage() {
               </div>
             </div>
             
-            <h3 className="text-xl font-semibold mb-4">Why teams love VeriBot:</h3>
+            <h3 className="text-xl font-semibold mb-4">Free 14-day trial:</h3>
             <div className="space-y-4">
               {features.map((feature, index) => (
                 <motion.div
@@ -119,8 +119,7 @@ export default function RegisterPage() {
             <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary to-primary/80 rounded-xl mb-3">
               <Bot className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-3xl font-bold gradient-text flex items-center justify-center gap-2">
-              VeriBot
+            <h1 className="text-3xl font-bold flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-primary animate-pulse" />
             </h1>
           </div>

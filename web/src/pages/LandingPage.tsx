@@ -103,10 +103,6 @@ export default function LandingPage() {
           <div className="grid items-center gap-14 lg:grid-cols-2">
             {/* LEFT: big animated headline */}
             <div>
-              <motion.p initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{delay:0.1}}
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 text-xs font-medium text-zinc-300">
-                <Sparkles className="h-3 w-3 text-red-400" /> AI-Powered QA Automation
-              </motion.p>
 
               <motion.h1 initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{delay:0.15,duration:0.6}}
                 className="mt-6 text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
@@ -325,7 +321,7 @@ export default function LandingPage() {
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-600"><Bot className="h-5 w-5 text-white" /></div>
 
               </a>
-              <p className="mt-4 text-sm text-zinc-400">AI-Powered QA Automation. Let agents generate, run, and analyze your tests.</p>
+              <p className="mt-4 text-sm text-zinc-400">Let agents generate, run, and analyze your tests.</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-10">
               <div><h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">Product</h4><ul className="mt-4 space-y-3 text-sm">{[['Features','#features'],['Pricing','#pricing'],['FAQ','#faq']].map(([l,h])=>(<li key={l}><a href={h} className="text-zinc-500 hover:text-white">{l}</a></li>))}</ul></div>
