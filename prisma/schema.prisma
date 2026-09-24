@@ -164,6 +164,7 @@ model User {
   passwordHash          String?
   emailVerified         DateTime?
   avatar                String?
+  notificationPreferences Json?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   deletedAt             DateTime?
@@ -175,6 +176,8 @@ model User {
   bugComments           BugComment[]
   agentMessages         AgentMessage[]
   testRunCreatedBy      TestRun[]     @relation("CreatedBy")
+  bugAssignments        Bug[]         @relation("BugAssignee")
+  bugsCreated           Bug[]         @relation("BugCreator")
 
   @@index([email])
   @@index([deletedAt])
@@ -607,6 +610,7 @@ model Bug {
   expectedBehavior      String?
   actualBehavior        String?
   assigneeId            String?
+  createdById           String?
   githubIssueUrl        String?
   metadata              Json?
   createdAt             DateTime  @default(now())
@@ -618,6 +622,8 @@ model Bug {
   organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   application           Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
   testCase              TestCase? @relation(fields: [testCaseId], references: [id], onDelete: SetNull)
+  assignee              User? @relation("BugAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  creator               User? @relation("BugCreator", fields: [createdById], references: [id], onDelete: SetNull)
   comments              BugComment[]
   attachments           BugAttachment[]
   testResults           TestResult[]
