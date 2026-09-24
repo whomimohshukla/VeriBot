@@ -119,7 +119,7 @@ export default function ApplicationsPage() {
           <button
             onClick={() => setShowCreateModal(true)}
             disabled={!selectedProjectId}
-            className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="w-5 h-5" />
             New Application
@@ -131,7 +131,7 @@ export default function ApplicationsPage() {
           <select
             value={selectedProjectId ?? ''}
             onChange={(e) => setSelectedProjectId(e.target.value || null)}
-            className="w-full md:w-64 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full md:w-64 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             <option value="">Select a project…</option>
             {(projectsData?.items ?? []).map((project) => (
@@ -163,7 +163,7 @@ export default function ApplicationsPage() {
             action={
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium inline-flex items-center gap-2"
+                className="px-4 py-2 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium inline-flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 New Application
@@ -184,8 +184,8 @@ export default function ApplicationsPage() {
                 className="glass p-6 rounded-xl hover:shadow-lg transition-all"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Globe className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 bg-red-600/10 rounded-lg flex items-center justify-center">
+                    <Globe className="w-6 h-6 text-red-500" />
                   </div>
                   <Badge variant={app.isActive ? 'success' : 'destructive'}>
                     {app.isActive ? 'Active' : 'Inactive'}
@@ -197,7 +197,7 @@ export default function ApplicationsPage() {
                   to={app.baseUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-primary hover:underline mb-3 truncate block"
+                  className="text-sm text-red-500 hover:underline mb-3 truncate block"
                 >
                   {app.baseUrl}
                 </Link>
@@ -217,7 +217,7 @@ export default function ApplicationsPage() {
                   <button
                     onClick={() => scanMutation.mutate(app.id)}
                     disabled={scanMutation.isPending}
-                    className="flex-1 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-600/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {scanMutation.isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -257,7 +257,7 @@ export default function ApplicationsPage() {
                   type="text"
                   value={newApp.name}
                   onChange={(e) => setNewApp({ ...newApp, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="Storefront Web"
                   required
                   disabled={createMutation.isPending}
@@ -270,7 +270,7 @@ export default function ApplicationsPage() {
                   type="url"
                   value={newApp.baseUrl}
                   onChange={(e) => setNewApp({ ...newApp, baseUrl: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="https://example.com"
                   required
                   disabled={createMutation.isPending}
@@ -282,7 +282,7 @@ export default function ApplicationsPage() {
                 <textarea
                   value={newApp.description}
                   onChange={(e) => setNewApp({ ...newApp, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                   placeholder="Short description of the application..."
                   rows={3}
                   disabled={createMutation.isPending}
@@ -294,7 +294,7 @@ export default function ApplicationsPage() {
                 <select
                   value={newApp.type}
                   onChange={(e) => setNewApp({ ...newApp, type: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   disabled={createMutation.isPending}
                 >
                   {APPLICATION_TYPES.map((type) => (
@@ -317,7 +317,7 @@ export default function ApplicationsPage() {
                 <button
                   type="submit"
                   disabled={createMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createMutation.isPending ? (
                     <>

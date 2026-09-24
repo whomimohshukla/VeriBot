@@ -120,14 +120,14 @@ export default function ProjectDetailPage() {
             <div className="flex flex-wrap gap-3 mb-8">
               <Link
                 to={`/tests?projectId=${projectId}`}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium"
               >
                 <FlaskConical className="w-4 h-4" />
                 New Test Case
               </Link>
               <Link
                 to={`/runs?projectId=${projectId}`}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium"
               >
                 <PlaySquare className="w-4 h-4" />
                 New Run
@@ -155,7 +155,7 @@ export default function ProjectDetailPage() {
                 {recentRuns.length > 0 && (
                   <button
                     onClick={() => navigate(`/runs?projectId=${projectId}`)}
-                    className="text-sm text-primary hover:underline"
+                    className="text-sm text-red-500 hover:underline"
                   >
                     View all
                   </button>
@@ -182,7 +182,7 @@ export default function ProjectDetailPage() {
                     {recentRuns.map((run) => (
                       <TableRow key={run.id} className="cursor-pointer" onClick={() => navigate(`/runs/${run.id}`)}>
                         <TableCell>
-                          <Link to={`/runs/${run.id}`} className="text-primary hover:underline font-mono text-sm">
+                          <Link to={`/runs/${run.id}`} className="text-red-500 hover:underline font-mono text-sm">
                             {run.id.slice(0, 8)}
                           </Link>
                         </TableCell>

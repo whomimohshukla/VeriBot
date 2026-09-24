@@ -39,12 +39,12 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  FUNCTIONAL: 'text-sky-400 bg-sky-500/10 border-sky-500/20',
-  HAPPY_PATH: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+  FUNCTIONAL: 'text-red-400 bg-red-500/10 border-sky-500/20',
+  HAPPY_PATH: 'text-red-400 bg-red-500/10 border-emerald-500/20',
   NEGATIVE: 'text-red-400 bg-red-500/10 border-red-500/20',
-  EDGE_CASE: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-  REGRESSION: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
-  SMOKE: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
+  EDGE_CASE: 'text-red-400 bg-red-500/10 border-amber-500/20',
+  REGRESSION: 'text-red-400 bg-red-500/10 border-red-500/20',
+  SMOKE: 'text-red-400 bg-red-500/10 border-orange-500/20',
 };
 
 export default function TestCasesPage() {
@@ -142,7 +142,7 @@ export default function TestCasesPage() {
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
           >
             <Plus className="w-5 h-5" />
             New Test Case
@@ -155,7 +155,7 @@ export default function TestCasesPage() {
           <select
             value={selectedProjectId}
             onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             <option value="">All Projects</option>
             {(projectList?.items ?? []).map((project) => (
@@ -182,7 +182,7 @@ export default function TestCasesPage() {
             action={
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
               >
                 <Plus className="w-5 h-5" />
                 New Test Case
@@ -285,7 +285,7 @@ export default function TestCasesPage() {
                   type="text"
                   value={newTestCase.title}
                   onChange={(e) => setNewTestCase({ ...newTestCase, title: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="Verify user can checkout"
                   required
                   disabled={createTestCaseMutation.isPending}
@@ -297,7 +297,7 @@ export default function TestCasesPage() {
                 <textarea
                   value={newTestCase.description}
                   onChange={(e) => setNewTestCase({ ...newTestCase, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                   placeholder="Steps and expected behavior..."
                   rows={3}
                   disabled={createTestCaseMutation.isPending}
@@ -310,7 +310,7 @@ export default function TestCasesPage() {
                   <select
                     value={newTestCase.type}
                     onChange={(e) => setNewTestCase({ ...newTestCase, type: e.target.value as TestCaseType })}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     disabled={createTestCaseMutation.isPending}
                   >
                     {TEST_TYPES.map((type) => (
@@ -326,7 +326,7 @@ export default function TestCasesPage() {
                   <select
                     value={newTestCase.priority}
                     onChange={(e) => setNewTestCase({ ...newTestCase, priority: e.target.value })}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     disabled={createTestCaseMutation.isPending}
                   >
                     {['P0', 'P1', 'P2', 'P3'].map((priority) => (
@@ -343,7 +343,7 @@ export default function TestCasesPage() {
                 <select
                   value={newTestCase.projectId}
                   onChange={(e) => setNewTestCase({ ...newTestCase, projectId: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   required
                   disabled={createTestCaseMutation.isPending}
                 >
@@ -368,7 +368,7 @@ export default function TestCasesPage() {
                 <button
                   type="submit"
                   disabled={createTestCaseMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createTestCaseMutation.isPending ? (
                     <>

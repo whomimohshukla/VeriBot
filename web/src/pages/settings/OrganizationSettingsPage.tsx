@@ -59,8 +59,8 @@ export default function OrganizationSettingsPage() {
     >
       <div className="glass p-6 rounded-xl max-w-2xl">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <Building2 className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-full bg-red-600/10 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-red-500" />
           </div>
           <div>
             <h2 className="text-lg font-semibold">Organization</h2>
@@ -75,7 +75,7 @@ export default function OrganizationSettingsPage() {
               type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Acme Corp"
               disabled={updateOrgMutation.isPending}
               required
@@ -89,7 +89,7 @@ export default function OrganizationSettingsPage() {
               value={org?.slug ?? ''}
               disabled
               readOnly
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary opacity-60"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 opacity-60"
             />
             <p className="text-xs text-muted-foreground mt-1">Slug is fixed</p>
           </div>
@@ -100,7 +100,7 @@ export default function OrganizationSettingsPage() {
               type="text"
               value={form.logo}
               onChange={(e) => setForm({ ...form, logo: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="https://example.com/logo.png"
               disabled={updateOrgMutation.isPending}
             />
@@ -111,7 +111,7 @@ export default function OrganizationSettingsPage() {
             <button
               type="submit"
               disabled={updateOrgMutation.isPending || !orgId}
-              className="px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center gap-2"
             >
               {updateOrgMutation.isPending ? (
                 <>

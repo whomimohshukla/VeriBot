@@ -59,10 +59,10 @@ interface StatCardProps {
 
 const accentMap: Record<NonNullable<StatCardProps['accent']>, string> = {
   default: 'text-foreground',
-  success: 'text-emerald-400',
-  warning: 'text-amber-400',
+  success: 'text-red-400',
+  warning: 'text-red-400',
   danger: 'text-red-400',
-  info: 'text-sky-400',
+  info: 'text-red-400',
 };
 
 export function StatCard({ label, value, icon: Icon, hint, accent = 'default', isLoading }: StatCardProps) {

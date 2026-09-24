@@ -172,7 +172,7 @@ export default function LandingPage() {
                   <ul className="mt-4 space-y-2">
                     {f.bullets.map((b) => (
                       <li key={b} className="flex items-start gap-2 text-sm text-zinc-400">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" /> {b}
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-red-500" /> {b}
                       </li>
                     ))}
                   </ul>
@@ -252,7 +252,7 @@ export default function LandingPage() {
                 <ul className="mt-8 flex-1 space-y-3">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-sm text-zinc-400">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" /> {f}
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-red-500" /> {f}
                     </li>
                   ))}
                 </ul>

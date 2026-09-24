@@ -12,13 +12,13 @@ export function BackendStatusChip() {
   let Icon = Loader2;
   let label = 'Connecting backend…';
   let ring = 'border-amber-500/40';
-  let dot = 'animate-spin text-amber-400';
+  let dot = 'animate-spin text-red-400';
 
   if (status === 'online') {
     Icon = CheckCircle2;
     label = `Backend online · ${hostFrom(base)}:${portFrom(base)}`;
     ring = 'border-emerald-500/40';
-    dot = 'text-emerald-400';
+    dot = 'text-red-400';
   } else if (status === 'offline') {
     Icon = XCircle;
     label = 'Backend offline · retry';

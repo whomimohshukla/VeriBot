@@ -84,7 +84,7 @@ export default function ProjectsPage() {
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
           >
             <Plus className="w-5 h-5" />
             New Project
@@ -100,7 +100,7 @@ export default function ProjectsPage() {
               placeholder="Search projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-12 pr-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function ProjectsPage() {
         {isLoading && (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+              <Loader2 className="w-12 h-12 text-red-500 animate-spin mx-auto mb-4" />
               <p className="text-muted-foreground">Loading projects...</p>
             </div>
           </div>
@@ -122,8 +122,8 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, scale: 1 }}
             className="glass p-12 rounded-xl text-center"
           >
-            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FolderKanban className="w-10 h-10 text-primary" />
+            <div className="w-20 h-20 bg-red-600/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FolderKanban className="w-10 h-10 text-red-500" />
             </div>
             <h3 className="text-xl font-semibold mb-2">No projects yet</h3>
             <p className="text-muted-foreground mb-6">
@@ -132,7 +132,7 @@ export default function ProjectsPage() {
             {!searchQuery && (
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium inline-flex items-center gap-2"
+                className="px-6 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium inline-flex items-center gap-2"
               >
                 <Plus className="w-5 h-5" />
                 Create Project
@@ -153,15 +153,15 @@ export default function ProjectsPage() {
                 className="glass p-6 rounded-xl hover:shadow-lg transition-all cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <FolderKanban className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 bg-red-600/10 rounded-lg flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
+                    <FolderKanban className="w-6 h-6 text-red-500" />
                   </div>
                   <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
                     <MoreVertical className="w-5 h-5 text-muted-foreground" />
                   </button>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-red-500 transition-colors">
                   {project.name}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
@@ -182,7 +182,7 @@ export default function ProjectsPage() {
                 <div className="flex gap-2 pt-4 border-t border-border">
                   <Link
                     to={`/projects/${project.id}`}
-                    className="flex-1 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-600/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Open
@@ -253,7 +253,7 @@ export default function ProjectsPage() {
                   type="text"
                   value={newProject.name}
                   onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="E-commerce Test Suite"
                   required
                   disabled={createProjectMutation.isPending}
@@ -265,7 +265,7 @@ export default function ProjectsPage() {
                 <textarea
                   value={newProject.description}
                   onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                   placeholder="Automated tests for checkout flow..."
                   rows={3}
                   disabled={createProjectMutation.isPending}
@@ -284,7 +284,7 @@ export default function ProjectsPage() {
                 <button
                   type="submit"
                   disabled={createProjectMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createProjectMutation.isPending ? (
                     <>

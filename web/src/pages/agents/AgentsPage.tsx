@@ -46,11 +46,11 @@ const AGENT_PROFILES: Record<string, { label: string; icon: LucideIcon; descript
 const AGENT_TYPE_ORDER = ['TEST_EXPLORER', 'BUG_HUNTER', 'REGRESSION_ANALYST', 'PERFORMANCE_AUDITOR'];
 
 const STATUS_MAP: Record<string, { label: string; className: string }> = {
-  COMPLETED: { label: 'Completed', className: 'bg-emerald-500/15 text-emerald-400' },
-  RUNNING: { label: 'Running', className: 'bg-sky-500/15 text-sky-400' },
+  COMPLETED: { label: 'Completed', className: 'bg-red-500/15 text-red-400' },
+  RUNNING: { label: 'Running', className: 'bg-red-500/15 text-red-400' },
   FAILED: { label: 'Failed', className: 'bg-red-500/15 text-red-400' },
-  PENDING: { label: 'Pending', className: 'bg-amber-500/15 text-amber-400' },
-  PAUSED: { label: 'Paused', className: 'bg-amber-500/15 text-amber-400' },
+  PENDING: { label: 'Pending', className: 'bg-red-500/15 text-red-400' },
+  PAUSED: { label: 'Paused', className: 'bg-red-500/15 text-red-400' },
   QUEUED: { label: 'Queued', className: 'bg-zinc-500/15 text-zinc-400' },
   CANCELLED: { label: 'Cancelled', className: 'bg-zinc-500/15 text-zinc-400' },
 };
@@ -142,7 +142,7 @@ export default function AgentsPage() {
             </button>
             <button
               onClick={() => setShowTriggerModal(true)}
-              className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+              className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
             >
               <Plus className="w-5 h-5" />
               Trigger Agent
@@ -163,8 +163,8 @@ export default function AgentsPage() {
                 transition={{ delay: 0.1 }}
                 className="glass p-5 rounded-xl"
               >
-                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-3">
-                  <Icon className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 bg-red-600/10 rounded-lg flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5 text-red-500" />
                 </div>
                 <h3 className="font-semibold mb-1">{profile.label}</h3>
                 <p className="text-sm text-muted-foreground">{profile.description}</p>
@@ -185,7 +185,7 @@ export default function AgentsPage() {
             action={
               <button
                 onClick={() => setShowTriggerModal(true)}
-                className="inline-flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
               >
                 <Plus className="w-5 h-5" />
                 Trigger Agent
@@ -278,11 +278,11 @@ export default function AgentsPage() {
                         onClick={() => setSelectedAgent(type)}
                         className={`flex items-start gap-3 p-4 rounded-xl border text-left transition-colors ${
                           isSelected
-                            ? 'border-primary bg-primary/10'
+                            ? 'border-red-500 bg-red-600/10'
                             : 'border-border bg-secondary/50 hover:bg-secondary/80'
                         }`}
                       >
-                        <Icon className={`w-5 h-5 mt-0.5 shrink-0 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <Icon className={`w-5 h-5 mt-0.5 shrink-0 ${isSelected ? 'text-red-500' : 'text-muted-foreground'}`} />
                         <span>
                           <span className="block text-sm font-semibold">{profile.label}</span>
                           <span className="block text-xs text-muted-foreground mt-1">{profile.description}</span>
@@ -298,7 +298,7 @@ export default function AgentsPage() {
                 <select
                   value={selectedProject}
                   onChange={(e) => setSelectedProject(e.target.value)}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   required
                   disabled={triggerMutation.isPending}
                 >
@@ -323,7 +323,7 @@ export default function AgentsPage() {
                 <button
                   type="submit"
                   disabled={triggerMutation.isPending || !selectedProject}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {triggerMutation.isPending ? (
                     <>

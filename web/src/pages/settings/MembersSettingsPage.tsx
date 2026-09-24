@@ -93,8 +93,8 @@ export default function MembersSettingsPage() {
     >
       <div className="glass p-6 rounded-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <Mail className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-full bg-red-600/10 flex items-center justify-center">
+            <Mail className="w-5 h-5 text-red-500" />
           </div>
           <div>
             <h2 className="text-lg font-semibold mb-1">Invite Member</h2>
@@ -108,14 +108,14 @@ export default function MembersSettingsPage() {
             value={invite.email}
             onChange={(e) => setInvite({ ...invite, email: e.target.value })}
             placeholder="teammate@company.com"
-            className="flex-1 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="flex-1 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             disabled={inviteMutation.isPending}
             required
           />
           <select
             value={invite.role}
             onChange={(e) => setInvite({ ...invite, role: e.target.value as MembershipRole })}
-            className="w-full md:w-56 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full md:w-56 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             disabled={inviteMutation.isPending}
           >
             {ROLES.map((role) => (
@@ -127,7 +127,7 @@ export default function MembersSettingsPage() {
           <button
             type="submit"
             disabled={inviteMutation.isPending}
-            className="px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+            className="px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {inviteMutation.isPending ? (
               <>
@@ -143,8 +143,8 @@ export default function MembersSettingsPage() {
 
       <div className="glass p-6 rounded-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <Users className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-full bg-red-600/10 flex items-center justify-center">
+            <Users className="w-5 h-5 text-red-500" />
           </div>
           <div>
             <h2 className="text-lg font-semibold mb-1">Members</h2>
@@ -184,7 +184,7 @@ export default function MembersSettingsPage() {
                               className="w-8 h-8 rounded-full object-cover"
                             />
                           ) : (
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-xs font-semibold text-white">
+                            <div className="w-8 h-8 rounded-full  from-red-600 to-red-700 flex items-center justify-center text-xs font-semibold text-white">
                               {(member.user?.name ?? member.user?.email ?? '?')[0]?.toUpperCase()}
                             </div>
                           )}
@@ -199,7 +199,7 @@ export default function MembersSettingsPage() {
                         <select
                           value={member.role}
                           onChange={(e) => handleRoleChange(member, e.target.value as MembershipRole)}
-                          className="px-3 py-2 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                          className="px-3 py-2 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"
                         >
                           {ROLES.map((role) => (
                             <option key={role} value={role}>

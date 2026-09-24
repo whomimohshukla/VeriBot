@@ -194,7 +194,7 @@ export default function BugDetailPage() {
             {/* Comments */}
             <div className="glass p-6 rounded-xl">
               <div className="flex items-center gap-2 mb-4">
-                <MessageSquare className="w-5 h-5 text-primary" />
+                <MessageSquare className="w-5 h-5 text-red-500" />
                 <h3 className="text-lg font-semibold">Comments</h3>
               </div>
 
@@ -209,7 +209,7 @@ export default function BugDetailPage() {
               <div className="space-y-4 mb-6">
                 {comments.map((item: BugComment) => (
                   <div key={item.id} className="flex gap-3">
-                    <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-red-600/10 flex items-center justify-center text-sm font-semibold text-red-500 shrink-0">
                       {item.creator?.name?.[0]?.toUpperCase() ||
                         item.creator?.email?.[0]?.toUpperCase() ||
                         'U'}
@@ -233,7 +233,7 @@ export default function BugDetailPage() {
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                   placeholder="Add a comment..."
                   rows={3}
                   disabled={addCommentMutation.isPending}

@@ -91,8 +91,8 @@ export default function BillingSettingsPage() {
     >
       <div className="glass p-6 rounded-xl">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <CreditCard className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-full bg-red-600/10 flex items-center justify-center">
+            <CreditCard className="w-5 h-5 text-red-500" />
           </div>
           <div>
             <h2 className="text-lg font-semibold mb-1">Usage</h2>
@@ -114,7 +114,7 @@ export default function BillingSettingsPage() {
             </div>
             <div className="h-3 bg-secondary/50 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full transition-all"
+                className="h-full  from-red-600 to-red-700 rounded-full transition-all"
                 style={{ width: `${percent}%` }}
               />
             </div>
@@ -136,7 +136,7 @@ export default function BillingSettingsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.08 }}
-                className={`glass p-6 rounded-xl flex flex-col ${isCurrent ? 'ring-2 ring-primary' : ''}`}
+                className={`glass p-6 rounded-xl flex flex-col ${isCurrent ? 'ring-2 ring-red-500' : ''}`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-lg font-semibold">{plan.name}</h4>
@@ -148,7 +148,7 @@ export default function BillingSettingsPage() {
                 <ul className="space-y-2 mb-6 flex-1">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-primary shrink-0" />
+                      <Check className="w-4 h-4 text-red-500 shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -165,7 +165,7 @@ export default function BillingSettingsPage() {
                   <button
                     onClick={() => updatePlanMutation.mutate(plan.key)}
                     disabled={isPending}
-                    className="px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isPending ? (
                       <>

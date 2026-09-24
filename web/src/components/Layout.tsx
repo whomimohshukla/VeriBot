@@ -78,7 +78,7 @@ export default function Layout({ children }: LayoutProps) {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+              <div className="w-9 h-9  from-red-600 to-red-600/80 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
                 <Bot className="w-5 h-5 text-white" />
               </div>
 
@@ -93,7 +93,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/projects')}
-              className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm bg-primary/10 text-primary rounded-lg hover:bg-primary/20 font-medium transition-colors"
+              className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm bg-red-600/10 text-red-500 rounded-lg hover:bg-red-600/20 font-medium transition-colors"
             >
               <PlaySquare className="w-4 h-4" />
               New Run
@@ -102,10 +102,10 @@ export default function Layout({ children }: LayoutProps) {
             <div className="relative">
               <button
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 rounded-full p-1 hover:ring-2 hover:ring-primary/50 transition-all"
+                className="flex items-center gap-2 rounded-full p-1 hover:ring-2 hover:ring-red-500/50 transition-all"
                 aria-label="Profile menu"
               >
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-sm font-semibold text-white">
+                <div className="w-9 h-9 rounded-full  from-red-600 to-red-700 flex items-center justify-center text-sm font-semibold text-white">
                   {initial}
                 </div>
                 <ChevronRight className="w-4 h-4 text-muted-foreground hidden sm:block rotate-90" />
@@ -178,7 +178,7 @@ export default function Layout({ children }: LayoutProps) {
                             onClick={() => setMobileMenuOpen(false)}
                             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors mb-1 ${
                               isActive(item.href)
-                                ? 'bg-primary text-primary-foreground'
+                                ? 'bg-red-600 text-red-500-foreground'
                                 : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
                             }`}
                           >
@@ -215,7 +215,7 @@ export default function Layout({ children }: LayoutProps) {
                         className={cn(
                           'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all mb-1 text-sm',
                           isActive(item.href)
-                            ? 'bg-primary/15 text-primary font-medium ring-1 ring-primary/30'
+                            ? 'bg-red-600/15 text-red-500 font-medium ring-1 ring-red-500/30'
                             : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground'
                         )}
                       >
@@ -232,7 +232,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="p-4 border-t border-border">
             <div className="glass p-4 rounded-lg">
               <p className="text-xs text-muted-foreground mb-2">Need help?</p>
-              <a href="#" className="text-sm text-primary hover:underline font-medium">
+              <a href="#" className="text-sm text-red-500 hover:underline font-medium">
                 View Documentation →
               </a>
             </div>

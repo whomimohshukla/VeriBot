@@ -17,9 +17,9 @@ function WebhookDeliveries({ webhookId }: { webhookId: string }) {
   });
 
   const statusColor = (status: WebhookDelivery['status']) => {
-    if (status === 'SUCCESS') return 'bg-emerald-500/15 text-emerald-400';
+    if (status === 'SUCCESS') return 'bg-red-500/15 text-red-400';
     if (status === 'FAILED') return 'bg-red-500/15 text-red-400';
-    return 'bg-amber-500/15 text-amber-400';
+    return 'bg-red-500/15 text-red-400';
   };
 
   return (
@@ -163,7 +163,7 @@ export default function WebhooksSettingsPage() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           New Webhook
@@ -174,8 +174,8 @@ export default function WebhooksSettingsPage() {
 
       {!isLoading && (!webhooks || webhooks.length === 0) && (
         <div className="glass p-12 rounded-xl text-center">
-          <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <WebhookIcon className="w-10 h-10 text-primary" />
+          <div className="w-20 h-20 bg-red-600/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <WebhookIcon className="w-10 h-10 text-red-500" />
           </div>
           <h3 className="text-xl font-semibold mb-2">No webhooks yet</h3>
           <p className="text-sm text-muted-foreground mb-6">
@@ -183,7 +183,7 @@ export default function WebhooksSettingsPage() {
           </p>
           <button
             onClick={() => setShowModal(true)}
-            className="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium inline-flex items-center gap-2"
+            className="px-6 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium inline-flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Create Webhook
@@ -227,7 +227,7 @@ export default function WebhooksSettingsPage() {
                     className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
                       webhook.isActive
                         ? 'bg-secondary hover:bg-secondary/80'
-                        : 'bg-primary hover:bg-primary/90 text-white'
+                        : 'bg-red-600 hover:bg-red-600/90 text-white'
                     }`}
                   >
                     {webhook.isActive ? 'Pause' : 'Activate'}
@@ -243,7 +243,7 @@ export default function WebhooksSettingsPage() {
                   <button
                     onClick={() => setExpandedId(expandedId === webhook.id ? null : webhook.id)}
                     className={`flex items-center gap-1.5 px-3 py-2 bg-secondary hover:bg-secondary/80 rounded-lg text-sm font-medium ${
-                      expandedId === webhook.id ? 'text-primary' : ''
+                      expandedId === webhook.id ? 'text-red-500' : ''
                     }`}
                   >
                     <ChevronDown
@@ -285,7 +285,7 @@ export default function WebhooksSettingsPage() {
                   type="url"
                   value={form.url}
                   onChange={(e) => setForm({ ...form, url: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="https://example.com/hooks/veribot"
                   disabled={createWebhookMutation.isPending}
                   required
@@ -298,7 +298,7 @@ export default function WebhooksSettingsPage() {
                   type="password"
                   value={form.secret}
                   onChange={(e) => setForm({ ...form, secret: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="Optional signing secret"
                   disabled={createWebhookMutation.isPending}
                 />
@@ -336,7 +336,7 @@ export default function WebhooksSettingsPage() {
                 <button
                   type="submit"
                   disabled={createWebhookMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createWebhookMutation.isPending ? (
                     <>

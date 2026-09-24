@@ -119,7 +119,7 @@ export default function BugsPage() {
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
           >
             <Plus className="w-5 h-5" />
             New Bug
@@ -135,14 +135,14 @@ export default function BugsPage() {
               placeholder="Search bugs by title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-12 pr-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
           </div>
 
           <select
             value={selectedProjectId}
             onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="w-full md:w-64 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full md:w-64 px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             <option value="">All Projects</option>
             {(projectsData?.items ?? []).map((project) => (
@@ -188,7 +188,7 @@ export default function BugsPage() {
                 {bugs.map((bug) => (
                   <TableRow key={bug.id}>
                     <TableCell>
-                      <Link to={`/bugs/${bug.id}`} className="text-primary hover:underline font-medium">
+                      <Link to={`/bugs/${bug.id}`} className="text-red-500 hover:underline font-medium">
                         {bug.title}
                       </Link>
                       {bug.description && (
@@ -242,7 +242,7 @@ export default function BugsPage() {
                   type="text"
                   value={newBug.title}
                   onChange={(e) => setNewBug({ ...newBug, title: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="Checkout crashes on submit"
                   required
                   disabled={createBugMutation.isPending}
@@ -254,7 +254,7 @@ export default function BugsPage() {
                 <textarea
                   value={newBug.description}
                   onChange={(e) => setNewBug({ ...newBug, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                   placeholder="Steps to reproduce, expected vs actual behavior..."
                   rows={3}
                   disabled={createBugMutation.isPending}
@@ -267,7 +267,7 @@ export default function BugsPage() {
                   <select
                     value={newBug.severity}
                     onChange={(e) => setNewBug({ ...newBug, severity: e.target.value as BugSeverity })}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     disabled={createBugMutation.isPending}
                   >
                     {SEVERITIES.map((severity) => (
@@ -283,7 +283,7 @@ export default function BugsPage() {
                   <select
                     value={newBug.priority}
                     onChange={(e) => setNewBug({ ...newBug, priority: e.target.value as BugPriority })}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     disabled={createBugMutation.isPending}
                   >
                     {PRIORITIES.map((priority) => (
@@ -300,7 +300,7 @@ export default function BugsPage() {
                 <select
                   value={newBug.projectId}
                   onChange={(e) => setNewBug({ ...newBug, projectId: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   required
                   disabled={createBugMutation.isPending}
                 >
@@ -325,7 +325,7 @@ export default function BugsPage() {
                 <button
                   type="submit"
                   disabled={createBugMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createBugMutation.isPending ? (
                     <>

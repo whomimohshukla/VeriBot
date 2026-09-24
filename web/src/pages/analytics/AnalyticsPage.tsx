@@ -140,7 +140,7 @@ export default function AnalyticsPage() {
                       </div>
                       <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-primary to-purple-500 transition-all"
+                          className="h-full rounded-full  from-red-600 to-red-700 transition-all"
                           style={{ width: `${Math.min(100, item.value)}%` }}
                         />
                       </div>
@@ -167,10 +167,10 @@ export default function AnalyticsPage() {
                           dash.risk.riskLevel === 'CRITICAL'
                             ? 'bg-red-500'
                             : dash.risk.riskLevel === 'HIGH'
-                              ? 'bg-amber-500'
+                              ? 'bg-red-500'
                               : dash.risk.riskLevel === 'MEDIUM'
                                 ? 'bg-yellow-400'
-                                : 'bg-emerald-500'
+                                : 'bg-red-500'
                         }`}
                         style={{ width: `${dash.risk.riskScore}%` }}
                       />
@@ -179,7 +179,7 @@ export default function AnalyticsPage() {
                 </div>
                 <div className="mt-5 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-lg bg-secondary/40 p-3">
-                    <p className="text-lg font-bold text-amber-400">{dash.risk.details.openCriticalBugs}</p>
+                    <p className="text-lg font-bold text-red-400">{dash.risk.details.openCriticalBugs}</p>
                     <p className="text-xs text-muted-foreground">Critical bugs</p>
                   </div>
                   <div className="rounded-lg bg-secondary/40 p-3">
@@ -236,7 +236,7 @@ export default function AnalyticsPage() {
             </div>
             <div className="glass p-5 rounded-xl">
               <p className="text-sm text-muted-foreground mb-1">Passed</p>
-              <p className="text-2xl font-bold text-emerald-500">{totals?.passed ?? 0}</p>
+              <p className="text-2xl font-bold text-red-500">{totals?.passed ?? 0}</p>
             </div>
             <div className="glass p-5 rounded-xl">
               <p className="text-sm text-muted-foreground mb-1">Failed</p>

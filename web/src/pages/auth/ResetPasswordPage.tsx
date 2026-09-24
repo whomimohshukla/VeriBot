@@ -39,11 +39,11 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center  from-background via-background to-red-600/5 p-4 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/5 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       <motion.div
@@ -58,13 +58,13 @@ export default function ResetPasswordPage() {
             initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/80 rounded-2xl mb-4"
+            className="inline-flex items-center justify-center w-16 h-16  from-red-600 to-red-600/80 rounded-2xl mb-4"
           >
             <Bot className="w-8 h-8 text-white" />
           </motion.div>
           <h1 className="text-4xl font-bold gradient-text mb-2 flex items-center justify-center gap-2">
             VeriBot
-            <Sparkles className="w-6 h-6 text-primary animate-pulse" />
+            <Sparkles className="w-6 h-6 text-red-500 animate-pulse" />
           </h1>
           <p className="text-muted-foreground">AI-Powered QA Automation Platform</p>
         </div>
@@ -87,7 +87,7 @@ export default function ResetPasswordPage() {
               </div>
             </div>
             <div className="text-center">
-              <Link to="/auth/forgot-password" className="text-primary hover:underline font-medium">
+              <Link to="/auth/forgot-password" className="text-red-500 hover:underline font-medium">
                 Request a new reset link
               </Link>
             </div>
@@ -117,7 +117,7 @@ export default function ResetPasswordPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="Min. 8 characters"
                   required
                   minLength={8}
@@ -134,7 +134,7 @@ export default function ResetPasswordPage() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="Re-enter your password"
                   required
                   minLength={8}
@@ -146,7 +146,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+              className="w-full py-3  from-red-600 to-red-600/80 hover:from-red-600/90 hover:to-red-600/70 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
             >
               {isLoading ? (
                 <>
@@ -163,7 +163,7 @@ export default function ResetPasswordPage() {
 
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                <Link to="/auth/login" className="text-primary hover:underline font-medium">
+                <Link to="/auth/login" className="text-red-500 hover:underline font-medium">
                   Back to sign in
                 </Link>
               </p>

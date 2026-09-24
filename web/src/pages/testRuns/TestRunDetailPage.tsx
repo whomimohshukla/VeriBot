@@ -30,10 +30,10 @@ import {
 import type { TestRun, TestResult } from '../../types';
 
 const RESULT_STATUS_COLORS: Record<string, string> = {
-  PASSED: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+  PASSED: 'text-red-400 bg-red-500/10 border-emerald-500/20',
   FAILED: 'text-red-400 bg-red-500/10 border-red-500/20',
   SKIPPED: 'text-gray-400 bg-gray-500/10 border-gray-500/20',
-  PENDING: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+  PENDING: 'text-red-400 bg-red-500/10 border-amber-500/20',
 };
 
 const formatDuration = (duration: number | null | undefined): string => {

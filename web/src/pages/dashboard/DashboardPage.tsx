@@ -74,7 +74,7 @@ export default function DashboardPage() {
         actions={
           <Link
             to="/tests"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-red-500-foreground shadow-lg shadow-primary/25 hover:bg-red-600/90 transition-colors"
           >
             <Plus className="h-4 w-4" />
             New Test Case
@@ -119,7 +119,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-primary to-purple-500 transition-all"
+                          className="h-full rounded-full  from-red-600 to-red-700 transition-all"
                           style={{ width: `${Math.min(100, item.value)}%` }}
                         />
                       </div>
@@ -146,10 +146,10 @@ export default function DashboardPage() {
                           dash.risk.riskLevel === 'CRITICAL'
                             ? 'bg-red-500'
                             : dash.risk.riskLevel === 'HIGH'
-                              ? 'bg-amber-500'
+                              ? 'bg-red-500'
                               : dash.risk.riskLevel === 'MEDIUM'
                                 ? 'bg-yellow-400'
-                                : 'bg-emerald-500'
+                                : 'bg-red-500'
                         }`}
                         style={{ width: `${dash.risk.riskScore}%` }}
                       />
@@ -158,7 +158,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="mt-5 grid grid-cols-3 gap-3 text-center">
                   <div className="rounded-lg bg-secondary/40 p-3">
-                    <p className="text-lg font-bold text-amber-400">{dash.risk.details.openCriticalBugs}</p>
+                    <p className="text-lg font-bold text-red-400">{dash.risk.details.openCriticalBugs}</p>
                     <p className="text-xs text-muted-foreground">Critical bugs</p>
                   </div>
                   <div className="rounded-lg bg-secondary/40 p-3">
@@ -199,7 +199,7 @@ export default function DashboardPage() {
                   <h3 className="font-semibold">Recent Test Runs</h3>
                   <p className="text-sm text-muted-foreground">Latest executions across projects</p>
                 </div>
-                <Link to="/runs" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                <Link to="/runs" className="inline-flex items-center gap-1 text-sm text-red-500 hover:underline">
                   View all <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                   title="No test runs yet"
                   description="Create a test case and run it to see results here."
                   action={
-                    <Link to="/tests" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                    <Link to="/tests" className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-red-500-foreground hover:bg-red-600/90">
                       <Plus className="h-4 w-4" /> Create test case
                     </Link>
                   }
@@ -227,7 +227,7 @@ export default function DashboardPage() {
                         <div
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
                             run.status === 'PASSED'
-                              ? 'bg-emerald-500/10 text-emerald-400'
+                              ? 'bg-red-500/10 text-red-400'
                               : run.status === 'FAILED'
                                 ? 'bg-red-500/10 text-red-400'
                                 : 'bg-secondary text-muted-foreground'
@@ -264,7 +264,7 @@ export default function DashboardPage() {
                   <h3 className="font-semibold">Projects</h3>
                   <p className="text-sm text-muted-foreground">Your active projects</p>
                 </div>
-                <Link to="/projects" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                <Link to="/projects" className="inline-flex items-center gap-1 text-sm text-red-500 hover:underline">
                   View all <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -275,7 +275,7 @@ export default function DashboardPage() {
                   title="No projects yet"
                   description="Create your first project to start automating tests."
                   action={
-                    <Link to="/projects" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                    <Link to="/projects" className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-red-500-foreground hover:bg-red-600/90">
                       <Plus className="h-4 w-4" /> New project
                     </Link>
                   }
@@ -288,7 +288,7 @@ export default function DashboardPage() {
                       to={`/projects/${project.id}`}
                       className="flex items-center gap-3 rounded-lg border border-border bg-secondary/20 p-3 transition-colors hover:bg-secondary/40"
                     >
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-600/10 text-red-500">
                         <FolderKanban className="h-4 w-4" />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -304,10 +304,10 @@ export default function DashboardPage() {
 
           {/* Alert banner if critical bugs */}
           {Number(dash?.openBugs) > 0 && (
-            <div className="flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-5">
-              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" />
+            <div className="flex items-start gap-3 rounded-xl border border-amber-500/30 bg-red-500/10 p-5">
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-400" />
               <div>
-                <p className="font-medium text-amber-400">
+                <p className="font-medium text-red-400">
                   {dash.openBugs} open bug{dash.openBugs === 1 ? '' : 's'} require attention
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -315,7 +315,7 @@ export default function DashboardPage() {
                 </p>
                 <Link
                   to="/bugs"
-                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-amber-500/20 px-4 py-2 text-sm font-semibold text-amber-400 hover:bg-amber-500/30 transition-colors"
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg bg-red-500/20 px-4 py-2 text-sm font-semibold text-red-400 hover:bg-red-500/30 transition-colors"
                 >
                   <ShieldAlert className="h-4 w-4" />
                   Review bugs

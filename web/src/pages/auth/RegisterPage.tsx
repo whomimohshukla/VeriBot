@@ -60,8 +60,8 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-black p-4 relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-red-600/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-red-600/5 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       <div className="w-full max-w-6xl relative z-10 grid md:grid-cols-2 gap-8 items-center">
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                   transition={{ delay: 0.2 + index * 0.1 }}
                   className="flex items-center gap-3"
                 >
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
                   <span className="text-muted-foreground">{feature}</span>
                 </motion.div>
               ))}
@@ -101,7 +101,7 @@ export default function RegisterPage() {
 
             <div className="mt-8 pt-6 border-t border-border">
 
-              <p className="text-sm text-primary font-medium mt-2">- QA Team Lead, TechCorp</p>
+              <p className="text-sm text-red-500 font-medium mt-2">- QA Team Lead, TechCorp</p>
             </div>
           </div>
         </motion.div>
@@ -114,11 +114,11 @@ export default function RegisterPage() {
         >
           {/* Mobile Logo */}
           <div className="text-center mb-6 md:hidden">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-red-600 to-primary/80 rounded-xl mb-3">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-red-600 to-red-600/80 rounded-xl mb-3">
               <Bot className="w-7 h-7 text-white" />
             </div>
             <h1 className="text-3xl font-bold flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+              <Sparkles className="w-5 h-5 text-red-500 animate-pulse" />
             </h1>
           </div>
 
@@ -138,7 +138,7 @@ export default function RegisterPage() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="John Doe"
                   disabled={isLoading}
                 />
@@ -153,7 +153,7 @@ export default function RegisterPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="you@example.com"
                   required
                   disabled={isLoading}
@@ -169,7 +169,7 @@ export default function RegisterPage() {
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="••••••••"
                   required
                   disabled={isLoading}
@@ -187,7 +187,7 @@ export default function RegisterPage() {
                   type="text"
                   value={formData.organizationName}
                   onChange={(e) => setFormData({...formData, organizationName: e.target.value})}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                   placeholder="Acme Inc"
                   disabled={isLoading}
                 />
@@ -215,7 +215,7 @@ export default function RegisterPage() {
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
-                <Link to="/auth/login" className="text-primary hover:underline font-medium">
+                <Link to="/auth/login" className="text-red-500 hover:underline font-medium">
                   Sign in
                 </Link>
               </p>

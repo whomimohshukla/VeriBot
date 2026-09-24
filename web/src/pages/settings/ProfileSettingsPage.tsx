@@ -86,7 +86,7 @@ export default function ProfileSettingsPage() {
     >
       <div className="glass p-6 rounded-xl">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full  from-red-600 to-red-700 flex items-center justify-center">
             <User className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -102,7 +102,7 @@ export default function ProfileSettingsPage() {
               type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Your name"
               disabled={updateProfileMutation.isPending}
             />
@@ -115,7 +115,7 @@ export default function ProfileSettingsPage() {
               value={me?.email ?? ''}
               readOnly
               disabled
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary opacity-60"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 opacity-60"
             />
             <p className="text-xs text-muted-foreground mt-1">Email cannot be changed here</p>
           </div>
@@ -126,7 +126,7 @@ export default function ProfileSettingsPage() {
               type="text"
               value={form.avatar}
               onChange={(e) => setForm({ ...form, avatar: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="https://example.com/avatar.png"
               disabled={updateProfileMutation.isPending}
             />
@@ -137,7 +137,7 @@ export default function ProfileSettingsPage() {
             <button
               type="submit"
               disabled={updateProfileMutation.isPending}
-              className="px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center gap-2"
             >
               {updateProfileMutation.isPending ? (
                 <>
@@ -154,8 +154,8 @@ export default function ProfileSettingsPage() {
 
       <div className="glass p-6 rounded-xl">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-            <KeyRound className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-full bg-red-600/10 flex items-center justify-center">
+            <KeyRound className="w-5 h-5 text-red-500" />
           </div>
           <div>
             <h2 className="text-lg font-semibold">Change Password</h2>
@@ -170,7 +170,7 @@ export default function ProfileSettingsPage() {
               type="password"
               value={passwordForm.currentPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="••••••••"
               disabled={changePasswordMutation.isPending}
               required
@@ -183,7 +183,7 @@ export default function ProfileSettingsPage() {
               type="password"
               value={passwordForm.newPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="At least 8 characters"
               minLength={8}
               disabled={changePasswordMutation.isPending}
@@ -197,7 +197,7 @@ export default function ProfileSettingsPage() {
               type="password"
               value={passwordForm.confirmNewPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, confirmNewPassword: e.target.value })}
-              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               placeholder="Re-enter new password"
               disabled={changePasswordMutation.isPending}
               required

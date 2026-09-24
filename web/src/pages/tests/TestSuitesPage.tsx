@@ -91,7 +91,7 @@ export default function TestSuitesPage() {
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
           >
             <Plus className="w-5 h-5" />
             New Test Suite
@@ -110,7 +110,7 @@ export default function TestSuitesPage() {
             action={
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="inline-flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
               >
                 <Plus className="w-5 h-5" />
                 New Test Suite
@@ -131,12 +131,12 @@ export default function TestSuitesPage() {
                 className="glass p-6 rounded-xl hover:shadow-lg transition-all group"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <ListChecks className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 bg-red-600/10 rounded-lg flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
+                    <ListChecks className="w-6 h-6 text-red-500" />
                   </div>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-red-500 transition-colors">
                   {suite.name}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
@@ -158,7 +158,7 @@ export default function TestSuitesPage() {
                   <button
                     onClick={() => runSuiteMutation.mutate(suite.id)}
                     disabled={runSuiteMutation.isPending}
-                    className="flex-1 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-600/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {runSuiteMutation.isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -202,7 +202,7 @@ export default function TestSuitesPage() {
                   type="text"
                   value={newSuite.name}
                   onChange={(e) => setNewSuite({ ...newSuite, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   placeholder="Checkout Regression Suite"
                   required
                   disabled={createSuiteMutation.isPending}
@@ -214,7 +214,7 @@ export default function TestSuitesPage() {
                 <textarea
                   value={newSuite.description}
                   onChange={(e) => setNewSuite({ ...newSuite, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
                   placeholder="Automated checks for the checkout flow..."
                   rows={3}
                   disabled={createSuiteMutation.isPending}
@@ -226,7 +226,7 @@ export default function TestSuitesPage() {
                 <select
                   value={newSuite.projectId}
                   onChange={(e) => setNewSuite({ ...newSuite, projectId: e.target.value })}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   required
                   disabled={createSuiteMutation.isPending}
                 >
@@ -251,7 +251,7 @@ export default function TestSuitesPage() {
                 <button
                   type="submit"
                   disabled={createSuiteMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createSuiteMutation.isPending ? (
                     <>

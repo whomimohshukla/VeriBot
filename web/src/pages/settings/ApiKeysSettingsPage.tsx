@@ -83,7 +83,7 @@ export default function ApiKeysSettingsPage() {
             setCreatedKey(null);
             setShowModal(true);
           }}
-          className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-600/90 text-white rounded-lg text-sm font-medium"
         >
           <Plus className="w-4 h-4" />
           Create Key
@@ -94,8 +94,8 @@ export default function ApiKeysSettingsPage() {
 
       {!isLoading && (!apiKeys || apiKeys.length === 0) && (
         <div className="glass p-12 rounded-xl text-center">
-          <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <KeyRound className="w-10 h-10 text-primary" />
+          <div className="w-20 h-20 bg-red-600/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <KeyRound className="w-10 h-10 text-red-500" />
           </div>
           <h3 className="text-xl font-semibold mb-2">No API keys yet</h3>
           <p className="text-sm text-muted-foreground mb-6">
@@ -107,7 +107,7 @@ export default function ApiKeysSettingsPage() {
               setCreatedKey(null);
               setShowModal(true);
             }}
-            className="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium inline-flex items-center gap-2"
+            className="px-6 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium inline-flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Create Key
@@ -180,14 +180,14 @@ export default function ApiKeysSettingsPage() {
                   </button>
                 </div>
 
-                <p className="text-sm text-amber-400 mt-4">
+                <p className="text-sm text-red-400 mt-4">
                   Store this key securely — it won't be shown again.
                 </p>
 
                 <div className="flex gap-3 pt-6">
                   <button
                     onClick={() => setShowModal(false)}
-                    className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors"
+                    className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors"
                   >
                     Done
                   </button>
@@ -207,7 +207,7 @@ export default function ApiKeysSettingsPage() {
                       type="text"
                       value={keyName}
                       onChange={(e) => setKeyName(e.target.value)}
-                      className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                       placeholder="e.g. CI pipeline"
                       disabled={createKeyMutation.isPending}
                       required
@@ -226,7 +226,7 @@ export default function ApiKeysSettingsPage() {
                     <button
                       type="submit"
                       disabled={createKeyMutation.isPending}
-                      className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {createKeyMutation.isPending ? (
                         <>

@@ -200,8 +200,8 @@ export default function IntegrationsPage() {
                   className="glass p-6 rounded-xl"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-red-600/10 rounded-lg flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-red-500" />
                     </div>
                     {isConnected ? (
                       <Badge variant="success">Connected</Badge>
@@ -228,7 +228,7 @@ export default function IntegrationsPage() {
                         <button
                           onClick={() => testMutation.mutate(item.id as string)}
                           disabled={testMutation.isPending}
-                          className="flex-1 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                          className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-600/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                         >
                           <ExternalLink className="w-4 h-4" />
                           Test
@@ -252,7 +252,7 @@ export default function IntegrationsPage() {
                           setConnectType(item.type);
                           setConfigForm({});
                         }}
-                        className="flex-1 px-3 py-2 bg-primary hover:bg-primary/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-600/90 text-white text-sm rounded-lg transition-colors flex items-center justify-center gap-2"
                       >
                         <PlugZap className="w-4 h-4" />
                         Connect
@@ -285,7 +285,7 @@ export default function IntegrationsPage() {
                     type={field.type ?? 'text'}
                     value={configForm[field.key] ?? ''}
                     onChange={(e) => setConfigForm((prev) => ({ ...prev, [field.key]: e.target.value }))}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     placeholder={field.placeholder}
                     required
                     disabled={connectMutation.isPending}
@@ -305,7 +305,7 @@ export default function IntegrationsPage() {
                 <button
                   type="submit"
                   disabled={connectMutation.isPending}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {connectMutation.isPending ? (
                     <>

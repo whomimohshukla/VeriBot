@@ -123,7 +123,7 @@ export default function TestRunsPage() {
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
           >
             <Plus className="w-5 h-5" />
             New Run
@@ -138,7 +138,7 @@ export default function TestRunsPage() {
               onClick={() => setStatusFilter(status)}
               className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 statusFilter === status
-                  ? 'bg-primary text-white'
+                  ? 'bg-red-600 text-white'
                   : 'bg-secondary hover:bg-secondary/80 text-muted-foreground'
               }`}
             >
@@ -164,7 +164,7 @@ export default function TestRunsPage() {
               statusFilter === 'ALL' ? (
                 <button
                   onClick={() => setShowCreateModal(true)}
-                  className="inline-flex items-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors font-medium"
                 >
                   <Plus className="w-5 h-5" />
                   New Run
@@ -205,7 +205,7 @@ export default function TestRunsPage() {
                         <ListChecks className="w-4 h-4 text-muted-foreground" />
                         {run.totalTests} total
                       </span>
-                      <span className="flex items-center gap-1.5 text-emerald-500">
+                      <span className="flex items-center gap-1.5 text-red-500">
                         <CheckCircle2 className="w-4 h-4" />
                         {run.passedTests} passed
                       </span>
@@ -233,7 +233,7 @@ export default function TestRunsPage() {
                     )}
                     <Link
                       to={`/runs/${run.id}`}
-                      className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm rounded-lg transition-colors flex items-center gap-2"
+                      className="px-4 py-2 bg-red-600 hover:bg-red-600/90 text-white text-sm rounded-lg transition-colors flex items-center gap-2"
                     >
                       <ExternalLink className="w-4 h-4" />
                       View
@@ -263,7 +263,7 @@ export default function TestRunsPage() {
                 <select
                   value={formProjectId}
                   onChange={(e) => handleSelectProject(e.target.value)}
-                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                   required
                   disabled={createRunMutation.isPending}
                 >
@@ -323,7 +323,7 @@ export default function TestRunsPage() {
                 <button
                   type="submit"
                   disabled={createRunMutation.isPending || !formProjectId}
-                  className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-600/90 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {createRunMutation.isPending ? (
                     <>
