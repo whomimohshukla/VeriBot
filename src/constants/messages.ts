@@ -16,6 +16,12 @@ export const Messages = {
     API_KEY_ORG_REQUIRED: 'Organization context required: send an X-Org-Id header with the API key.',
     UNAUTHORIZED: 'Authentication required.',
     FORBIDDEN: 'You do not have permission to perform this action.',
+    TWO_FACTOR_REQUIRED: 'Two-factor authentication is required.',
+    TWO_FACTOR_INVALID: 'The two-factor authentication code is invalid or expired.',
+    TWO_FACTOR_ALREADY_ENABLED: 'Two-factor authentication is already enabled.',
+    TWO_FACTOR_NOT_ENABLED: 'Two-factor authentication is not enabled.',
+    ACCOUNT_SUSPENDED: 'Your account is temporarily suspended.',
+    ACCOUNT_SUSPENDED_UNTIL: (date: string): string => `Your account is suspended until ${date}.`,
   },
   ORG: {
     CREATED: 'Organization created successfully.',

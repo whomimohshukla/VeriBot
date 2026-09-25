@@ -10,6 +10,10 @@ export const ErrorCodes = {
   BAD_REQUEST: 'BAD_REQUEST',
   INTERNAL_ERROR: 'INTERNAL_ERROR',
   UPSTREAM_ERROR: 'UPSTREAM_ERROR',
+  TWO_FACTOR_REQUIRED: 'TWO_FACTOR_REQUIRED',
+  TWO_FACTOR_INVALID: 'TWO_FACTOR_INVALID',
+  ACCOUNT_SUSPENDED: 'ACCOUNT_SUSPENDED',
+  EMAIL_NOT_VERIFIED: 'EMAIL_NOT_VERIFIED',
 } as const satisfies Record<string, ErrorCode>;
 
 export type ErrorCodeConstant = (typeof ErrorCodes)[keyof typeof ErrorCodes];

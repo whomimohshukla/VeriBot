@@ -10,7 +10,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'staging', 'production']).default('development'),
   PORT: z.coerce.number().default(4000),
   API_PREFIX: z.string().default('/api/v1'),
-  APP_ORIGIN: z.string().default('http://localhost:3000'),
+  APP_ORIGIN: z.string().default('http://localhost:5173'),
   FRONTEND_ORIGIN: z.string().default('http://localhost:5173'),
 
   DATABASE_URL: z.string().min(1),
@@ -36,8 +36,13 @@ const envSchema = z.object({
   AWS_S3_BUCKET: z.string().default('veribot-artifacts'),
   AWS_S3_ENDPOINT: z.string().optional(),
 
+  AI_PROVIDER: z.enum(['openai', 'gemini', 'huggingface', 'mock']).default('mock'),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_BASE_URL: z.string().default('https://api.openai.com/v1'),
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().default('gemini-2.0-flash-lite'),
+  HUGGINGFACE_API_KEY: z.string().optional(),
+  HUGGINGFACE_MODEL: z.string().default('meta-llama/Meta-Llama-3.1-8B-Instruct'),
   LLM_MODEL: z.string().default('gpt-4o-mini'),
   LLM_MAX_TOKENS: z.coerce.number().default(2048),
   LLM_TEMPERATURE: z.coerce.number().default(0.2),
@@ -45,9 +50,14 @@ const envSchema = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
 
-  EMAIL_PROVIDER: z.enum(['sendgrid', 'ses', 'smtp']).default('smtp'),
+  EMAIL_PROVIDER: z.enum(['sendgrid', 'ses', 'smtp', 'log']).default('log'),
   SENDGRID_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().default('notifications@veribot.ai'),
+  EMAIL_INBOX_FILE: z.string().default('.dev-mailbox.log'),
+  REQUIRE_EMAIL_VERIFICATION: z
+    .string()
+    .optional()
+    .transform((value) => value === undefined || value === '' || value.toLowerCase() !== 'false'),
 
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),
