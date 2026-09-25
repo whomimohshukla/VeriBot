@@ -2,6 +2,8 @@
 
 VeriBot is an AI-powered QA SaaS platform that autonomously explores web applications, generates tests, runs them in a browser, analyzes failures, detects bugs, and helps engineers fix issues with AI-assisted workflows.
 
+**Main purpose:** turn an untested web app into a continuously verified, regression-safe product. VeriBot discovers your app's pages and flows, generates and executes E2E tests in a real browser, hunts down flaky and failing behavior with AI root-cause analysis + a self-accumulating vector knowledge base, files bugs (optionally straight into GitHub), and reports quality trends so a small team gets enterprise-grade QA with no manual test writing.
+
 This project is designed as a strong portfolio-grade SaaS product and a serious real-world engineering challenge. It combines full-stack development, browser automation, AI agents, DevOps, and production architecture.
 
 ## 🚀 Quick Start
@@ -168,6 +170,82 @@ Regression validation and dashboard reporting
 
 ---
 
+## Complete product flow structure
+
+This is the end-to-end flow as actually implemented in the codebase — every step below is backed by a live API route and UI screen.
+
+```text
+1.  Sign up / sign in
+      └─ Auth: register + email verification gate, JWT access + refresh tokens,
+          optional 2FA, role-based permissions, organization membership
+
+2.  Set up organization + project
+      └─ Projects page → create project + add app (URL, environment, auth hints)
+
+3.  Add infrastructure & integrations
+      └─ Applications, test credentials, environments, test suites
+      └─ Integrations: GitHub (report bugs automatically), Jira, Slack,
+          Sentry, CircleCI (config is encrypted at rest)
+
+4.  AI app discovery (OPTIONAL)
+      └─ Explorer agent crawls the app URL → app map + suggested workflows
+
+5.  Test authoring
+      └─ Hand-written test cases (steps as JSON) or AI-generated via
+          the test-generation agent → saved to a test suite
+
+6.  Run tests
+      └─ Runs are queued (BullMQ) and executed in a real browser (Playwright)
+      └─ Runs record pass/fail/skip per case, duration, screenshots, console
+          logs, network + DOM snapshots, and triggerType metadata
+          (MANUAL / SCHEDULED / API / CI)
+
+7.  Analyze failures (AI, optional)
+      └─ Failure analyzer agent (LangGraph-style state-graph orchestrator)
+          produces root cause, category, confidence, suggested fix
+      └─ pgvector RAG: enriched with historically similar past failures;
+          every finished analysis is stored back in the vector knowledge base
+
+8.  Bug management
+      └─ Bugs are created from failing runs (auto) or manually
+      └─ Bug lifecycle: severity / priority / assignee / comments / status
+      └─ GitHub integration: bug is auto-mirrored as a GitHub issue, or
+          pushed on demand via "Report on GitHub" (idempotent, keeps issue URL)
+
+9.  Flaky detection + healing (AI, optional)
+      └─ Flaky test records detect flakiness scores over repeated runs
+      └─ Healing agent proposes repaired selectors for flaky locators
+
+10. Review, approve, report
+      └─ Quality dashboard: pass rate, trends, flaky/failing hotspots
+      └─ Analytics & reports; run replay and CI results (CircleCI)
+
+11. Secure platform loops
+      └─ Billing (Stripe plans), rate limiting, audit/notifications
+      └─ Scheduled + CI/CD-triggered runs keep regression coverage continuous
+```
+
+### Request lifecycle (backend)
+
+```text
+ HTTP request
+   → CORS + security headers
+   → rate limiter
+   → JWT authenticate + tenant middleware (resolves org + permissions)
+   → route-level validator (Zod)
+   → controller (business rules + permissions check)
+   → service layer (AI agents, test runner, billing, GitHub, etc.)
+   → repository / Prisma
+   → PostgreSQL (+ pgvector) / Redis / BullMQ queues / worker pool
+
+ Background workers
+   → run-test jobs execute in Playwright
+   → failure-analysis jobs run the agent graph
+   → notification + billing jobs update state asynchronously
+```
+
+---
+
 ## High-level system design
 
 ```text
@@ -225,61 +303,36 @@ LLM Tools            Playwright          Quality Reports
 
 ---
 
-## Recommended monorepo structure
+## Effective project structure
 
-This repo is already organized like a monorepo and that matches the product architecture well.
+The repo is a single Node package with the frontend under `web/`. The diagram below shows the layout it most closely resembles.
 
 ```text
 VeriBot/
-├── apps/
-│   ├── web/
-│   │   ├── app/
-│   │   ├── components/
-│   │   ├── hooks/
-│   │   ├── lib/
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+├── src/
 │   │   └── types/
 │   │
-│   ├── api/
-│   │   └── src/
-│   │       ├── controllers/
-│   │       ├── routes/
-│   │       ├── services/
-│   │       ├── middleware/
-│   │       ├── validators/
-│   │       ├── config/
-│   │       └── server.ts
-│   │
-│   ├── worker/
-│   │   └── src/
-│   │       ├── jobs/
-│   │       ├── queues/
-│   │       ├── workers/
-│   │       └── processors/
-│   │
-│   └── test-runner/
-│       └── src/
-│           ├── browser/
-│           ├── actions/
-│           ├── assertions/
-│           └── recorder/
-│
-├── packages/
-│   ├── ui/
-│   ├── types/
-│   ├── database/
-│   ├── ai/
+├── src/
+│   ├── controllers/
+│   ├── routes/
+│   ├── services/
+│   ├── middleware/
+│   ├── validators/
+│   ├── workers/
 │   ├── config/
-│   └── logger/
-│
-├── infrastructure/
-│   ├── docker/
-│   ├── kubernetes/
-│   └── terraform/
-│
-├── docs/
+│   └── server.ts
+├── web/            # React + TypeScript frontend
+│   └── src/
+│       ├── pages/
+│       ├── components/
+│       ├── hooks/
+│       └── lib/
+├── docs/           # design docs & guides
 ├── docker-compose.yml
 ├── package.json
-├── pnpm-workspace.yaml
 ├── tsconfig.json
 ├── README.md
 └── .gitignore
@@ -289,17 +342,12 @@ VeriBot/
 
 ## How the current repo maps to the product
 
-The repo already has the correct monorepo shape:
+The repo uses a single-package layout with a separate frontend under `web/`:
 
-- apps/api → backend API/service layer
-- apps/web → frontend web app
-- apps/worker → queue/background processing
-- packages/database → Prisma DB layer
-- packages/ai → AI logic and agents
-- packages/types → shared contracts and models
-- packages/ui → reusable frontend UI pieces
-
-This is a good foundation because it separates runtime services from shared libraries.
+- `src/` → backend API/service layer, queued workers, AI agents, Prisma schema
+- `web/` → React + TypeScript frontend (Vite, React Router, React Query)
+- `prisma/` → Prisma schema and migrations (PostgreSQL + pgvector)
+- `src/workers/` → BullMQ/Redis background processing (test runs, agent runs, reports, scheduled runs)
 
 ---
 
@@ -501,9 +549,11 @@ This is the recommended production deployment model for this repo.
 
 ## Roadmap
 
+> Status (2026-09-25): Phases 1-4 of the roadmap below are **implemented** end-to-end (auth, orgs, projects/apps, test cases/suites/runs, Playwright execution, AI test generation/failure analysis with Gemini/HuggingFace/mock providers, bug detection, GitHub issue mirroring, webhooks, scheduling). Phase 5 (AI fix flow) and Phase 6 (enterprise quality features) are partially implemented (flaky-tests detection, release-risk scoring, embeddings) with the remaining checklist items below still open.
+
 ## Phase 1: Foundation and MVP
 
-- [ ] create monorepo structure
+- [x] create backend + frontend structure
 - [ ] set up shared TypeScript config
 - [ ] configure pnpm workspace
 - [ ] build core API and health checks

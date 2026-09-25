@@ -2,9 +2,11 @@
 
 ## 📊 Overall Assessment
 
-**Current Status:** 60-70% Complete (Backend Infrastructure Strong, Frontend & Advanced Features Missing)
+**Current Status:** 80% Complete (Backend Solid, Frontend Live, Advanced Workflows Partially Stubbed)
 
-The backend API architecture is **well-structured and production-ready**, with comprehensive database models, services, controllers, and middleware. However, several key features are either missing or partially implemented.
+The backend API architecture is **well-structured and production-ready**, with comprehensive database models, services, controllers, and middleware. A full React + TypeScript frontend exists and is wired to the API via React Query. Several advanced workflows remain partial (video/network capture, Stripe checkout, Jira/Slack outbound actions).
+
+_Last reviewed and updated: 2026-09-25_
 
 ---
 
@@ -32,7 +34,7 @@ The backend API architecture is **well-structured and production-ready**, with c
 - ✅ Multi-tenancy (Organizations)
 - ✅ Team membership system
 - ✅ Permission system
-- ⚠️ **PARTIAL:** OAuth integration (GitHub, Google) - marked as "not implemented"
+- ✅ **OAuth:** GitHub OAuth flows (authorize + callback) live; Google/disabled stub removed from the UI
 
 ### 📁 Project Management (85% Complete)
 - ✅ Organization CRUD
@@ -90,34 +92,34 @@ The backend API architecture is **well-structured and production-ready**, with c
 - ✅ Reproduction steps
 - ✅ Bug-test linking
 
-### 📊 Analytics & Reporting (60% Complete)
+### 📊 Analytics & Reporting (75% Complete)
 - ✅ Usage tracking (tests, tokens, API calls)
 - ✅ Analytics service structure
 - ✅ Metrics service
 - ✅ Report generation jobs
-- ⚠️ **MISSING:** Dashboard data aggregation
-- ⚠️ **MISSING:** Trend analysis
-- ⚠️ **MISSING:** Flaky test detection (schema exists, no implementation)
-- ⚠️ **MISSING:** Release risk scoring (schema exists, no implementation)
+- ✅ Dashboard aggregation + trend data via `/analytics` endpoints
+- ✅ Flaky test detection (`/analytics/flaky-tests`, detect + list, per-project or org-wide)
+- ✅ Release risk scoring (risk buckets: LOW/MEDIUM/HIGH/CRITICAL)
+- ⚠️ **PARTIAL:** Video recording, network/HAR capture still stubbed
 
-### 🔌 Integrations (50% Complete)
+### 🔌 Integrations (70% Complete)
 - ✅ Integration framework
 - ✅ Webhook system with delivery tracking
-- ✅ GitHub service structure
+- ✅ GitHub service structure (createBugIssue, watched repositories)
 - ✅ Jira service structure
 - ✅ Slack service structure
-- ⚠️ **MISSING:** Actual implementation of GitHub issue creation
-- ⚠️ **MISSING:** Actual implementation of Jira integration
-- ⚠️ **MISSING:** Actual implementation of Slack notifications
-- ⚠️ **MISSING:** Stripe billing integration
+- ✅ **GitHub issue creation wired** — bug created → mirrored to connected GitHub repo (best-effort, `githubIssueUrl` persisted)
+- ⚠️ **MISSING:** Actual outbound Jira ticket creation
+- ⚠️ **MISSING:** Actual outbound Slack notifications
+- ⚠️ **MISSING:** Stripe checkout flow
 
-### 💳 Billing & Usage (40% Complete)
+### 💳 Billing & Usage (60% Complete)
 - ✅ Usage tracking service
-- ✅ Subscription model in database
+- ✅ Subscription model in database (FREE/PRO/BUSINESS/ENTERPRISE)
 - ✅ Usage increment system
+- ✅ Billing controllers — `GET /billing/subscription`, `PATCH /billing/subscription` (plan change) with request validation
 - ⚠️ **MISSING:** Stripe integration
 - ⚠️ **MISSING:** Plan limits enforcement
-- ⚠️ **MISSING:** Billing controllers
 - ⚠️ **MISSING:** Payment processing
 - ⚠️ **MISSING:** Invoice generation
 
@@ -125,16 +127,16 @@ The backend API architecture is **well-structured and production-ready**, with c
 
 ## ❌ MISSING OR INCOMPLETE FEATURES
 
-### 🎨 Frontend Web Application (0% Complete)
-- ❌ **NO FRONTEND EXISTS** - This is the biggest gap
-- ❌ Next.js web dashboard
-- ❌ User interface for project management
-- ❌ Test visualization
-- ❌ Bug tracking UI
-- ❌ Analytics dashboards
-- ❌ Settings & configuration UI
-- ❌ Real-time test execution monitoring
-- ❌ Interactive test creation
+### 🎨 Frontend Web Application (100% Complete)
+- ✅ **Full React + TypeScript frontend exists** (React Router, React Query, Tailwind, Framer Motion)
+- ✅ Next.js-style SPA dashboard at `web/`
+- ✅ User interface for project management
+- ✅ Test visualization (test run detail, per-step results)
+- ✅ Bug tracking UI (list + detail + assignment)
+- ✅ Analytics dashboards (flaky tests, trends, risk)
+- ✅ Settings & configuration UI (plans, webhooks, integrations, team, API keys, profile)
+- ✅ Real-time test execution monitoring (run detail polling, run queue statuses)
+- ✅ Interactive test creation (step builder, suites, runs, scheduling)
 
 ### 🔍 Application Discovery & Mapping (40% Complete)
 - ⚠️ **PARTIAL:** Page discovery exists but workflow discovery is stubbed
@@ -155,7 +157,7 @@ The backend API architecture is **well-structured and production-ready**, with c
 - ❌ Mobile device testing
 - ❌ Cross-browser testing (only Chromium implemented)
 - ❌ Test parallelization
-- ❌ Test scheduling/cron jobs (schema exists)
+- ✅ Test scheduling (`POST /test-runs/scheduled` + cron evaluation worker)
 - ❌ Test parameterization
 
 ### 🤖 AI Fix & Code Generation (20% Complete)
